@@ -14,14 +14,6 @@
     // BOOTSTRAP LOADER
     require_once(ROOT . DS . 'library' . DS . 'bootstrap.php');
     
-    require_once('asd.php');
-
-    $str = 'use asd\\A;';
-    eval($str);
-    
-    $a = new A();
-    $a->ciao();
-    //$str = 'use ';
 /*
     $str = 'class asd{public $dsa;function __construct($dsa){$this->dsa=$dsa;}}';
     eval($str);
