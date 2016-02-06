@@ -74,12 +74,16 @@
             $controller = ucwords($controller);
             $model = rtrim($controller, 's');
             $controller .= 'Controller';
-            //$dispatch = new $controller($model,$controllerName,$action);
+           
+            //Il model non va passato al costruttore :)
+            // $dispatch = new $controller($model,$controllerName,$action);
+            $dispatch = new $controller($model,$controllerName,$action);
 
             if((int)method_exists($controller, $action)){
                 call_user_func_array(array($dispatch,$action),$queryString);
             }else{
-                echo "non esiste la funzione controller: {$controller} con action: {$action}";
+                //echo "non esiste la funzione controller: {$controller} con action: {$action}";
+                echo "non esiste il controller: {$controller} con funzione: {$action}";
             }
         }
     }
