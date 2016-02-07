@@ -74,12 +74,7 @@
             $controller = ucwords($controller);
             $model = rtrim($controller, 's');
             $controller .= 'Controller';
-<<<<<<< HEAD
-=======
-           
-            //Il model non va passato al costruttore :)
-            // $dispatch = new $controller($model,$controllerName,$action);
->>>>>>> origin/master
+            
             $dispatch = new $controller($model,$controllerName,$action);
 
             if((int)method_exists($controller, $action)){
