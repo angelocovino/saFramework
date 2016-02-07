@@ -1,9 +1,0 @@
-!.gitignore
-config
-db.class.php
-*.jpg
-*.png
-*.bmp
-*.pdf
-*.psd
-*.ico
