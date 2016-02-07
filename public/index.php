@@ -7,9 +7,11 @@
     //$url = $_GET['url'];
     $url = isset($_GET['url'])?$_GET['url']:false;
     
+    /*
     if($url){
         echo "url: " . $url . "<br />";
     }
+    */
 
     // BOOTSTRAP LOADER
     require_once(ROOT . DS . 'library' . DS . 'bootstrap.php');
