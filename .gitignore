@@ -1,6 +1,6 @@
 !.gitignore
 config
-library\db.class.php
+db.class.php
 *.jpg
 *.png
 *.bmp
