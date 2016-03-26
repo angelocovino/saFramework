@@ -1,8 +1,10 @@
 <?php
+    use plugin\session\Session;
+    
     class Controller{
         protected $_model;
-        protected $_controller;
-        protected $_action;
+        protected $controllerName;
+        protected $actionName;
         protected $_template;
         
         // CONSTRUCT AND DESTRUCT FUNCTIONS
@@ -14,9 +16,12 @@
          */
         function __construct($model, $controller, $action){
             $this->_model = new $model;
-            $this->_controller = $controller;
-            $this->_action = $action;
-            $this->_template = new Template($controller,$action);
+            $this->controllerName = $controller;
+            $this->actionName = $action;
+            $this->_template = new Template($this->controllerName, $this->actionName);
+            
+            // SESSION MANAGEMENT
+            $this->sessionManagement();
         }
         /**
          * DESTRUCT FUNCTION
@@ -33,5 +38,26 @@
          */
         function setTemplate($key, $value){
             $this->_template->setVariable($key, $value);
+        }
+        /**
+         * SET TEMPLATE STYLE VARIABLES
+         * @param $name String className (with arbitrary extension)
+         */
+        function setStyle($name){
+            $this->_template->setStyle($name);
+        }
+        
+        // SESSION FUNCTIONS
+        function sessionManagement(){
+            /*
+            //$session->setDBSession($session->generateUniqueSessionID());
+            //$session->getDBSession(17);
+            if(!$session->checkSessionSet()){
+                $session->setSession(SESSION_DEFAULT_NAME, $this->controllerName);
+            }
+            echo $session->getSession(SESSION_DEFAULT_NAME);
+            */
+            // CREATE AN ISTANCE OF SESSION
+            Session::open();
         }
     }

@@ -27,17 +27,14 @@
 		// CONSTRUCT AND DESTRUCT FUNCTIONS
 		function __construct(){
             // CREDENTIALS VARS
-			$this->dbHost = "localhost";
-			$this->dbUser = "angelotm";
-			$this->dbPwd = "olegnatm";
-			$this->dbName = "prove";
+			$this->dbHost = DB_HOST;
+			$this->dbUser = DB_USER;
+			$this->dbPwd = DB_PASSWORD;
+			$this->dbName = DB_NAME;
             
             // CONNECTION VARS
 			$this->dbConn = false;
 			$this->dbIsConnActive = false;
-            
-            // CONNECTION
-            $this->connect();
 		}
 		function __destruct(){
             // DISCONNECTION
@@ -69,6 +66,7 @@
         
         // PDO FUNCTIONS
         protected function executeRes($query, $params, $isBoolRes = true, $transaction = true){
+            $this->connect();
             $res = false;
             try{
                 if($transaction){
@@ -91,24 +89,29 @@
                 }
                 echo "Error:  " . $e->getMessage();
             }
+			$this->disconnect();
             return $res;
         }
         protected function exec($query){
+            $this->connect();
             $affectedRows = 0;
             try{
                 $affectedRows = $this->dbConn->exec($query);
             }catch(PDOException $e){
                 echo "Error:  " . $e->getMessage();
             }
+			$this->disconnect();
             return ($affectedRows);
         }
         protected function query($query, $pdoFetchType = PDO::FETCH_ASSOC){
+            $this->connect();
             $res = false;
             try{
                 $res = $this->dbConn->query($query, $pdoFetchType);
             }catch(PDOException $e){
                 echo "Error:  " . $e->getMessage();
             }
+			$this->disconnect();
             return ($res);
         }
             // STATEMENT FUNCTIONS
@@ -135,6 +138,7 @@
                 return ($stmt);
             }
 	}
+    
     class joinClause{
         // JOIN CONSTANTS
         const INNERJOIN = "JOIN";
@@ -201,7 +205,6 @@
 		// CONSTRUCT AND DESTRUCT FUNCTIONS
         function __construct(){
 			parent::__construct();
-            //$this->table = $table;
             $this->tableStructure = false;
             $this->tableJoinsQuery = "";
             
@@ -220,6 +223,11 @@
         }
 		function __destruct(){
             parent::__destruct();
+        }
+        
+        // NEW DB OPENING FUNCTION
+        public static function open($tableName){
+            return ((new DB())->setTable($tableName));
         }
         
         // GENERAL FUNCTIONS
@@ -297,6 +305,10 @@
         }
         /* */
         
+        /*public function getRow($column = false){
+            $res = $this->get($column);
+            return ($res);
+        }*/
         public function getValue($column){
             $res = $this->get($column);
             return ($res[$column]);
@@ -485,6 +497,7 @@
         // TABLE FUNCTIONS
         public function setTable($table){
             $this->table = $table;
+            return ($this);
         }
         private function getTableStructure($table){
             try{
@@ -590,4 +603,3 @@
 		}
         */
 	}
-?>
