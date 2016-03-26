@@ -1,6 +1,5 @@
 <?php
     namespace plugin\form;
-
     use plugin\form\FormBuilder;
     use plugin\form\FormInput;
     use plugin\form\FormLabel;
