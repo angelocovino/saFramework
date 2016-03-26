@@ -6,14 +6,22 @@
         if(DEVELOPMENT_ENVIRONMENT == true){
             //error_reporting(E_ALL);
             ini_set('error_reporting', E_ALL);
-            ini_set('display_errors','On');
+            ini_set('display_errors', 'On');
         }else{
             //error_reporting(0);
             ini_set('error_reporting', 0);
-            ini_set('display_errors','Off');
+            ini_set('display_errors', 'Off');
         }
         ini_set('log_errors', 'On');
         ini_set('error_log', ROOT . DS . 'tmp' . DS . 'logs' . DS . 'error.log');
+    }
+    
+    /**
+     * PREVENT SESSIONS FROM HIJACKING
+     */
+    function preventHijacking(){
+        ini_set('session.use_only_cookies', true);				
+        ini_set('session.use_trans_sid', false);
     }
     
     /** 
@@ -44,7 +52,16 @@
      */
     function unsetRegisterGlobals(){
         if(ini_get('register_globals')){
-            $array = array('_SESSION', '_POST', '_GET', '_COOKIE', '_REQUEST', '_SERVER', '_ENV', '_FILES');
+            $array = array(
+                '_SESSION',
+                '_POST',
+                '_GET',
+                '_COOKIE',
+                '_REQUEST',
+                '_SERVER',
+                '_ENV',
+                '_FILES'
+            );
             foreach($array as $value){
                 foreach($GLOBALS[$value] as $key => $var){
                     if($var === $GLOBALS[$key]){
@@ -60,62 +77,91 @@
      * @param $url PATH TAKEN BY GET
      */
     function callBuilder($url){
-        if($url){
-            $urlArray = array();
-            $urlArray = explode("/",$url);
-
-            $controller = $urlArray[0];
-            array_shift($urlArray);
-            $action = $urlArray[0];
-            array_shift($urlArray);
-            $queryString = $urlArray;
-
-            $controllerName = $controller;
-            $controller = ucwords($controller);
+        if($url !== false){
+            $controllerName = $urlArray = $url;
+            $actionCheck = 1;
+            if(strpos($url, "/") !== false){
+                $urlArray = explode("/", $url);
+                $controllerName = array_shift($urlArray);
+                $actionCheck = 0;
+            }
+            if(is_array($urlArray) && count($urlArray>1) && !empty($urlArray[$actionCheck])){
+                $action = array_shift($urlArray);
+                $queryString = $urlArray;
+            }else{
+                $action = "index";
+                $queryString = array();
+            }
+            // MAKE UPPER CASE FIRST LETTER OF CONTROLLER NAME
+            $controller = ucwords($controllerName);
+            // TRIM THE LAST S FROM CONTROLLER NAME IN ORDER TO GET THE MODEL NAME
             $model = rtrim($controller, 's');
+            // CONTROLLER NAME CONCATENATION
             $controller .= 'Controller';
             
-            $dispatch = new $controller($model,$controllerName,$action);
-
-            if((int)method_exists($controller, $action)){
-                call_user_func_array(array($dispatch,$action),$queryString);
-            }else{
-                //echo "non esiste la funzione controller: {$controller} con action: {$action}";
-                echo "non esiste il controller: {$controller} con funzione: {$action}";
+            if(class_exists($controller)){
+                $dispatch = new $controller($model, $controllerName, $action);
+                if((int)method_exists($controller, $action)){
+                    call_user_func_array(array($dispatch, $action), $queryString);
+                    return BUILDER_OK;
+                }else{
+                    // ACTION NOT FOUND IS $action IN CONTROLLER $controller
+                    return BUILDER_ACTION_ERROR;
+                }
             }
+            return BUILDER_CONTROLLER_ERROR;
         }
+        /*
+        $model = $controllerName = "default";
+        $controller = "DefaultController";
+        $action = "index";
+        $queryString = array();
+        */
+        return BUILDER_URL_ERROR;
     }
-
+    
     /**
      * AUTOLOAD CLASS FUNCTIONS
      * spl_autoload_register (PHP 5 >= 5.1.2)
      * @param $className NAME OF THE CLASS TO REQUIRE
      */
+    function requireFileIfExists($path){
+        if(file_exists($path)){
+            require_once($path);
+        }
+    }
     function autoloadLibrary($className){
         $pathLibrary = PATH_LIBRARY . $className . '.class.php';
-        if(file_exists($pathLibrary)){
-            require_once($pathLibrary);
-        }
+        requireFileIfExists($pathLibrary);
     }
     function autoloadController($className){
         $pathController = PATH_CONTROLLERS . $className . '.php';
-        if(file_exists($pathController)){
-            require_once($pathController);
-        }
+        requireFileIfExists($pathController);
     }
     function autoloadModel($className){
         $pathModel = PATH_MODELS . $className . '.php';
-        if(file_exists($pathModel)){
-            require_once($pathModel);
-        }
+        requireFileIfExists($pathModel);
+    }
+    function autoloadNamespace($className){
+        $pathRoot = PATH_ROOT . strtolower($className) . '.class.php';
+        requireFileIfExists($pathRoot);
     }
     
-    spl_autoload_register('autoloadLibrary');
-    spl_autoload_register('autoloadController');
-    spl_autoload_register('autoloadModel');
-    
+    spl_autoload_register(__NAMESPACE__ . '\\autoloadLibrary');
+    spl_autoload_register(__NAMESPACE__ . '\\autoloadController');
+    spl_autoload_register(__NAMESPACE__ . '\\autoloadModel');
+    spl_autoload_register(__NAMESPACE__ . '\\autoloadNamespace');
+
     // FUNCTION CALLS
     setReporting();
+    preventHijacking();
     removeMagicQuotes();
     unsetRegisterGlobals();
-    callBuilder($url);
+    $callRes = callBuilder($url);
+    
+    function var_dump2($var){
+        echo "<pre>";
+        var_dump($var);
+        echo "</pre>";
+        echo "<br />";
+    }
