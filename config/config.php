@@ -5,8 +5,8 @@
 		
 		// DATABASE CONSTANTS
 		define('DB_HOST', 'localhost');
-		define('DB_USER', 'angelotm');
-		define('DB_PASSWORD', 'olegnatm');
+		define('DB_USER', 'root');
+		define('DB_PASSWORD', '');
 		define('DB_NAME', 'prove');
 		// PATH CONSTANTS
 		define('PATH_ROOT', ROOT . DS);

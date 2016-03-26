@@ -28,8 +28,8 @@
 		function __construct(){
             // CREDENTIALS VARS
 			$this->dbHost = "localhost";
-			$this->dbUser = "angelotm";
-			$this->dbPwd = "olegnatm";
+			$this->dbUser = "root";
+			$this->dbPwd = "";
 			$this->dbName = "prove";
             
             // CONNECTION VARS

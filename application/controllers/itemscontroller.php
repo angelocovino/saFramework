@@ -1,5 +1,7 @@
 <?php
 
+use app\model;
+
 class ItemsController extends Controller {
 
 	function view($id = null,$name = null) {
@@ -13,7 +15,7 @@ class ItemsController extends Controller {
 	}
 	
 	function viewall() {
-
+        $p = new app\model\cane();
 		$this->setTemplate('title','All Items - My Todo List App');
 		$this->setTemplate('todo',$this->_model->getItemsArray('Item'));
 	}
