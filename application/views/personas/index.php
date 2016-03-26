@@ -1,5 +1,6 @@
 <?php
     use plugin\form\Form;
+    use plugin\cryptography\Cryptography;
 ?>
 <span style="display:block; border:1px solid black;">
     <h2>persona's index</h2>
@@ -14,7 +15,15 @@
         <input type="submit" value="Logout" />
     </form>
 </span>
+
 <?php
+    $sole = "Angelo";
+    $sole = Cryptography::encode($sole,"saba");
+    echo $sole . "<br>";
+    $sole = Cryptography::decode($sole,"saba");
+    echo $sole . "<br>";
+    
+
     Form::open(['method' => 'post', 'url' => '']);
     Form::label('ciao', 'Label per Ciao');
     Form::text('ciao','scrivi ciao');

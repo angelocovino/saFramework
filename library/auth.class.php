@@ -1,4 +1,5 @@
 <?php
+
     class Auth{
         // DB VARIABLES
         private $dbLink = false;
