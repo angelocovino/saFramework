@@ -3,6 +3,12 @@ CREATE TABLE `items` (
   `item_name` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
 );
- 
+
+CREATE TABLE `personas` (
+  `id` int(5) NOT NULL auto_increment,
+  `nome` varchar(20) NOT NULL,
+  PRIMARY KEY  (`id`)
+);
+
 INSERT INTO `items` VALUES(1, 'Get Milk');
 INSERT INTO `items` VALUES(2, 'Buy Application');
