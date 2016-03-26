@@ -1,4 +1,6 @@
 <?php
+    namespace plugin\db;
+
 	abstract class mysql{
         // DATABASE VARS
             // CREDENTIALS VARS

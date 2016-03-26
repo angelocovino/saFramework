@@ -1,4 +1,6 @@
 <?php
+    use plugin\db\DB;
+
     class Model extends DB{
         protected $modelName;
 

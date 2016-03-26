@@ -1,5 +1,6 @@
 <?php
     namespace plugin\session;
+    use plugin\db\DB;
     
     class SessionObject{
         // SESSION OBJECT UNDEFINED CONSTANTS
@@ -65,7 +66,7 @@
         
         function __construct(){
             // LINKING DATABASE RESOURCE
-            $this->dbLink = \DB::open(DBMODEL_SESSION);
+            $this->dbLink = DB::open(DBMODEL_SESSION);
         }
         function __destruct(){
             // CLOSE WRITING ON SESSION
