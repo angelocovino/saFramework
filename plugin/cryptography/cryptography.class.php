@@ -1,28 +1,34 @@
 <?php
     namespace plugin\cryptography;
-
-    class Cryptography{
+    use plugin\cryptography\CryptographyOpenSSL;
+    
+    abstract class Cryptography{
         // CRYPTOGRPHY VARIABLES
-        private $fullKey = false;
-        private $firstKey = false;
-        private $secondKey = false;
+        protected $fullKey = false;
         
         function __construct($seed){
             $this->fullKey = hash('sha512', $seed);
-            $this->firstKey = substr($this->fullKey, FIRST_KEY_START, 64);
-            $this->secondKey = substr($this->fullKey, SECOND_KEY_START, 16);
         }
         
+        abstract public function encodeBuilder($value);
+        abstract public function decodeBuilder($value);
+        
+        // ENCODE AND DECODE FUNCTIONS
        /**
         * Codifica il valore in ingresso utilizzando il seme, che di default e uguale alla key del progetto
         * @param $valore chiave da codificare
         * @param $seme = false seme
         * @return valore codificato
         */
-        public static function encode($valore, $seme = SECURITY_KEY){
-            $cryptography = new Cryptography($seme);
-            $output = openssl_encrypt($valore, ENCODE_METHOD, $cryptography->firstKey, 0, $cryptography->secondKey);
-            return (base64_encode($output));
+        public static function encode($value, $method = false, $seed = SECURITY_KEY){
+            $cryptography = false;
+            switch($method){
+                default:
+                case 'openssl':
+                    $cryptography = new CryptographyOpenSSL($seed);
+                    break;
+            }
+            return ($cryptography->encodeBuilder($value));
         }
         
        /**
@@ -31,9 +37,14 @@
         * @param $seme = false
         * @return valore decodificato
         */
-        public static function decode($valore, $seme = SECURITY_KEY){
-            $cryptography = new Cryptography($seme);
-            return (openssl_decrypt(base64_decode($valore), ENCODE_METHOD, $cryptography->firstKey, 0, $cryptography->secondKey));
+        public static function decode($value, $method = false, $seed = SECURITY_KEY){
+            $cryptography = false;
+            switch($method){
+                default:
+                case 'openssl':
+                    $cryptography = new CryptographyOpenSSL($seed);
+                    break;
+            }
+            return ($cryptography->decodeBuilder($value));
         }
-        
     }

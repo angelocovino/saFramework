@@ -18,9 +18,9 @@
 
 <?php
     $sole = "Angelo";
-    $sole = Cryptography::encode($sole,"saba");
+    $sole = Cryptography::encode($sole);
     echo $sole . "<br>";
-    $sole = Cryptography::decode($sole,"saba");
+    $sole = Cryptography::decode($sole);
     echo $sole . "<br>";
     
 
