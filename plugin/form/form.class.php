@@ -4,7 +4,7 @@
     use plugin\form\FormInput;
     use plugin\form\FormLabel;
     
-    class Form{
+    abstract class Form{
         // LABEL FUNCTIONS
         public static function label($for, $value){
             echo (FormLabel::create($for, $value));

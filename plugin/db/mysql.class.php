@@ -1,5 +1,6 @@
 <?php
     namespace plugin\db;
+    use \PDO;
     
 	abstract class mysql{
         // DATABASE VARS

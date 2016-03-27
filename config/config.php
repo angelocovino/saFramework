@@ -14,7 +14,7 @@
 		// DATABASE CONSTANTS
 		define('DB_HOST', 'localhost');
 		define('DB_USER', 'root');
-		define('DB_PASSWORD', '');
+		define('DB_PASSWORD', 'olegnatm');
 		define('DB_NAME', 'prove');
         
 		// PATH CONSTANTS
