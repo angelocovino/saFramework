@@ -1,4 +1,6 @@
 <?php
+    namespace plugin\auth;
+    use plugin\db\DB;
 
     class Auth{
         // DB VARIABLES
