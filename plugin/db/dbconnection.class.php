@@ -2,8 +2,10 @@
     namespace plugin\db;
     use \PDO;
     
-	abstract class mysql{
+	abstract class DBConnection{
         // DATABASE VARS
+        //Tipo database utilizzato
+        protected $dbType;
             // CREDENTIALS VARS
             private $dbHost;
             private $dbUser;
@@ -51,7 +53,7 @@
 		private function connect(){
 			if(!($this->isConnected())){
                 try{
-                    $this->dbConn = new PDO("mysql:host={$this->dbHost};dbname={$this->dbName}", $this->dbUser, $this->dbPwd);
+                    $this->dbConn = new PDO($this->dbType.":host={$this->dbHost};dbname={$this->dbName}", $this->dbUser, $this->dbPwd);
                     $this->dbConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     $this->dbConn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 					$this->dbIsConnActive = true;

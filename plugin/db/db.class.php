@@ -1,9 +1,9 @@
 <?php
     namespace plugin\db;
-    use plugin\db\mysql;
+    use plugin\db\DBConnection;
     use plugin\db\JoinClause;
     
-	class DB extends mysql{
+	class DB extends DBConnection{
         // TABLE VARS
 		private $table = false;
         private $tableStructure = false;
@@ -36,7 +36,14 @@
         
         // NEW DB OPENING FUNCTION
         public static function open($tableName){
-            return ((new DB())->setTable($tableName));
+            switch(DBTYPE){
+                default: 
+                    $dbType=(new MySqlDB())->setTable($tableName);
+                    break;
+                //Case per altri tipo db
+                    
+            }
+            return ($dbType);
         }
         
         // GENERAL FUNCTIONS

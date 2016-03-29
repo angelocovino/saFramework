@@ -11,11 +11,14 @@
 		define('DBMODEL_SESSION', 'session');
 		define('DBMODEL_USER', 'user');
         
+        //DATABASE TYPE 
+        define('DBTYPE','mysql');
+
 		// DATABASE CONSTANTS
 		define('DB_HOST', 'localhost');
 		define('DB_USER', 'root');
-		define('DB_PASSWORD', 'olegnatm');
-		define('DB_NAME', 'prove');
+		define('DB_PASSWORD', '');
+		define('DB_NAME', 'travelonthewheels');
         
 		// PATH CONSTANTS
 		define('PATH_ROOT', ROOT . DS);

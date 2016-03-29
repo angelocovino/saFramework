@@ -2,6 +2,7 @@
     use plugin\form\Form;
     use plugin\cryptography\Cryptography;
     use plugin\auth\Auth;
+    use plugin\db\DB;
 ?>
 <span style="display:block; border:1px solid black;">
     <h2>persona's index</h2>
@@ -35,9 +36,11 @@
     */
     Form::submit();
     Form::close();
-
-
-    //var_dump2($_SERVER);
+    
+    $prova=DB::open("utenti")->get();
+    
+    
+    var_dump2($prova);
 
 
     Auth::attempt();
