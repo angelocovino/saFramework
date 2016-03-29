@@ -40,4 +40,4 @@
     //var_dump2($_SERVER);
 
 
-    $a = new Auth();
+    Auth::attempt();
