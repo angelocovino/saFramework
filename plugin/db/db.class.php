@@ -1,227 +1,34 @@
 <?php
     namespace plugin\db;
-
-	abstract class mysql{
-        // DATABASE VARS
-            // CREDENTIALS VARS
-            private $dbHost;
-            private $dbUser;
-            private $dbPwd;
-            private $dbName;
-            // CONNECTION VARS
-            private $dbConn;
-            private $dbIsConnActive;
-        
-        /*
-		// VARIABILI STATICHE DI SUPPORTO
-		protected static $mysqlNumericType = array(
-			"tinyint",
-			"smallint",
-			"mediumint",
-			"int",
-			"bigint",
-			"float",
-			"double",
-			"decimal"
-			);
-        */
-        
-		// CONSTRUCT AND DESTRUCT FUNCTIONS
-		function __construct(){
-            // CREDENTIALS VARS
-			$this->dbHost = DB_HOST;
-			$this->dbUser = DB_USER;
-			$this->dbPwd = DB_PASSWORD;
-			$this->dbName = DB_NAME;
-
-            // CONNECTION VARS
-			$this->dbConn = false;
-			$this->dbIsConnActive = false;
-		}
-		function __destruct(){
-            // DISCONNECTION
-			$this->disconnect();
-        }
-		
-		// CONNECTION AND DISCONNECTION FUNCTIONS
-		private function isConnected(){
-            return ($this->dbIsConnActive);
-        }
-		private function connect(){
-			if(!($this->isConnected())){
-                try{
-                    $this->dbConn = new PDO("mysql:host={$this->dbHost};dbname={$this->dbName}", $this->dbUser, $this->dbPwd);
-                    $this->dbConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    $this->dbConn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-					$this->dbIsConnActive = true;
-                }catch(PDOException $e){
-                    echo "Error:  " . $e->getMessage();
-                }
-			}
-		}
-		private function disconnect(){
-			if($this->isConnected()){
-                $this->dbConn = null;
-				$this->dbIsConnActive = false;
-			}
-		}
-        
-        // PDO FUNCTIONS
-        protected function executeRes($query, $params, $isBoolRes = true, $transaction = true){
-            $this->connect();
-            $res = false;
-            try{
-                if($transaction){
-                    $this->dbConn->beginTransaction();
-                }
-                $stmt = $this->prepareStmt($query);
-                //echo $query . "<br />";
-                //print_r($params);
-                $stmt = $this->bindParams($stmt, $params);
-                $res = $stmt->execute();
-                if(!$isBoolRes){
-                    $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                }
-                if($transaction){
-                    $this->dbConn->commit();
-                }
-            }catch(PDOException $e){
-                if($transaction){
-                    $this->dbConn->rollback();
-                }
-                echo "Error:  " . $e->getMessage();
-            }
-			$this->disconnect();
-            return $res;
-        }
-        protected function exec($query){
-            $this->connect();
-            $affectedRows = 0;
-            try{
-                $affectedRows = $this->dbConn->exec($query);
-            }catch(PDOException $e){
-                echo "Error:  " . $e->getMessage();
-            }
-			$this->disconnect();
-            return ($affectedRows);
-        }
-        protected function query($query, $pdoFetchType = PDO::FETCH_ASSOC){
-            $this->connect();
-            $res = false;
-            try{
-                $res = $this->dbConn->query($query, $pdoFetchType);
-            }catch(PDOException $e){
-                echo "Error:  " . $e->getMessage();
-            }
-			$this->disconnect();
-            return ($res);
-        }
-            // STATEMENT FUNCTIONS
-            protected function prepareStmt($prepare){
-                try{
-                    $stmt = $this->dbConn->prepare($prepare);
-                }catch(PDOException $e){
-                    echo "Error:  " . $e->getMessage();
-                }
-                return ($stmt);
-            }
-            protected function bindParams($stmt, $params){
-                try{
-                    if(is_array($params)){
-                        for($i=0;$i<count($params);$i++){
-                            $stmt->bindParam(($i+1), $params[$i]);
-                        }
-                    }else{
-                        $stmt->bindParam(1, $params);
-                    }
-                }catch(PDOException $e){
-                    echo "Error:  " . $e->getMessage();
-                }
-                return ($stmt);
-            }
-	}
-    
-    class joinClause{
-        // JOIN CONSTANTS
-        const INNERJOIN = "JOIN";
-        const LEFTOUTERJOIN = "LEFT JOIN";
-        const RIGHTOUTERJOIN = "RIGHT JOIN";
-        
-        // JOIN VARS
-        private $query;
-        
-        // CONSTRUCT AND DESTRUCT FUNCTIONS
-        function __construct($table, $type = self::INNERJOIN){
-            $this->query = " {$type} {$table}";
-        }
-        
-        // JOIN FUNCTIONS
-        private function onBuild($x, $op, $y){
-            $this->query .= " {$x}{$op}{$y}";
-        }
-        public function on($x, $op, $y){
-            $this->query .= " ON";
-            $this->onBuild($x, $op, $y);
-            return ($this);
-        }
-        public function orOn($x, $op, $y){
-            $this->query .= " OR";
-            $this->onBuild($x, $op, $y);
-            return ($this);
-        }
-        public function andOn($x, $op, $y){
-            $this->query .= " AND";
-            $this->onBuild($x, $op, $y);
-            return ($this);
-        }
-        
-        // GET FUNCTION
-        public function getQuery(){
-            return ($this->query);
-        }
-    }
+    use plugin\db\mysql;
+    use plugin\db\JoinClause;
     
 	class DB extends mysql{
         // TABLE VARS
-		private $table;
-        private $tableStructure;
-        private $tableJoinsQuery;
+		private $table = false;
+        private $tableStructure = false;
+        private $tableJoinsQuery = '';
         
         // SELECT VARS
-        private $selectQuery;
+        private $selectQuery = false;
             // ORDER BY VARS
-            private $orderByQuery;
-            private $orderByCount;
+            private $orderByQuery = '';
+            private $orderByCount = 0;
             // GROUP BY / HAVING VARS
-            private $groupByQuery;
-            private $groupByCount;
-            private $havingQuery;
-            private $havingParams;
-            private $havingParamsCount;
+            private $groupByQuery = '';
+            private $groupByCount = 0;
+            private $havingQuery = false;
+            private $havingParams = array();
+            private $havingParamsCount = 0;
         
         // WHERE VARS
-        private $whereQuery;
-        private $whereParams;
-        private $whereParamsCount;
+        private $whereQuery = false;
+        private $whereParams = array();
+        private $whereParamsCount = 0;
         
 		// CONSTRUCT AND DESTRUCT FUNCTIONS
         function __construct(){
 			parent::__construct();
-            $this->tableStructure = false;
-            $this->tableJoinsQuery = "";
-            
-            $this->selectQuery = false;
-            $this->orderByQuery = "";
-            $this->orderByCount = 0;
-            $this->groupByQuery = "";
-            $this->groupByCount = 0;
-            $this->havingQuery = false;
-            $this->havingParams = array();
-            $this->havingParamsCount = 0;
-            
-            $this->whereQuery = false;
-            $this->whereParams = array();
-            $this->whereParamsCount = 0;
         }
 		function __destruct(){
             parent::__destruct();

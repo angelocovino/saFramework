@@ -103,21 +103,15 @@
                 $dispatch = new $controller($model, $controllerName, $action);
                 if((int)method_exists($controller, $action)){
                     call_user_func_array(array($dispatch, $action), $queryString);
-                    return BUILDER_OK;
+                    return (BUILDER_OK);
                 }else{
                     // ACTION NOT FOUND IS $action IN CONTROLLER $controller
-                    return BUILDER_ACTION_ERROR;
+                    return (BUILDER_ACTION_ERROR);
                 }
             }
-            return BUILDER_CONTROLLER_ERROR;
+            return (BUILDER_CONTROLLER_ERROR);
         }
-        /*
-        $model = $controllerName = "default";
-        $controller = "DefaultController";
-        $action = "index";
-        $queryString = array();
-        */
-        return BUILDER_URL_ERROR;
+        return (BUILDER_URL_ERROR);
     }
     
     /**
@@ -151,7 +145,7 @@
     spl_autoload_register(__NAMESPACE__ . '\\autoloadController');
     spl_autoload_register(__NAMESPACE__ . '\\autoloadModel');
     spl_autoload_register(__NAMESPACE__ . '\\autoloadNamespace');
-
+    
     // FUNCTION CALLS
     setReporting();
     preventHijacking();

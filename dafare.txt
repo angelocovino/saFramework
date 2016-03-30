@@ -1,1 +1,9 @@
-scomporre post in un oggetto
+In ordine di importanza:
+- gestione errori ed errors log
+x scomporre post in un oggetto
+- completare auth
+- completare sessioni
+- plugin con caricamento basato su tag
+- chache
+- precompilatore file view
+- Complessita spazio tempo

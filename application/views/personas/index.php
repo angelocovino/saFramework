@@ -1,6 +1,7 @@
 <?php
     use plugin\form\Form;
     use plugin\cryptography\Cryptography;
+    use plugin\auth\Auth;
 ?>
 <span style="display:block; border:1px solid black;">
     <h2>persona's index</h2>
@@ -18,13 +19,13 @@
 
 <?php
     $sole = "Angelo";
-    $sole = Cryptography::encode($sole,"saba");
+    $sole = Cryptography::encode($sole);
     echo $sole . "<br>";
-    $sole = Cryptography::decode($sole,"saba");
+    $sole = Cryptography::decode($sole);
     echo $sole . "<br>";
     
 
-    Form::open(['method' => 'post', 'url' => '']);
+    Form::open(['method' => 'get', 'url' => '']);
     Form::label('ciao', 'Label per Ciao');
     Form::text('ciao','scrivi ciao');
     /*
@@ -34,3 +35,9 @@
     */
     Form::submit();
     Form::close();
+
+
+    //var_dump2($_SERVER);
+
+
+    $a = new Auth();

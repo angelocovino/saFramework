@@ -14,7 +14,7 @@
 		// DATABASE CONSTANTS
 		define('DB_HOST', 'localhost');
 		define('DB_USER', 'root');
-		define('DB_PASSWORD', '');
+		define('DB_PASSWORD', 'olegnatm');
 		define('DB_NAME', 'prove');
         
 		// PATH CONSTANTS
@@ -30,9 +30,6 @@
         define('BUILDER_OK', 101);
         define('BUILDER_CONTROLLER_ERROR', 102);
         define('BUILDER_ACTION_ERROR', 103);
-
+        
         // CRYPTOGRAPHY DEFINE
-        define('ENCODE_METHOD',"AES-256-CBC");
-        define('FIRST_KEY_START', 0);
-        define('SECOND_KEY_START', 64);
-        define('SECURITY_KEY','ASDF-SAD');
+        define('SECURITY_KEY', 'ASDF-SAD');
