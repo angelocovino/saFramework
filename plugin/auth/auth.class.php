@@ -24,7 +24,6 @@
         public function setModelName($modelName){$this->modelName = $modelName;}
         public function getModelName(){return ($this->modelName);}
         
-        
         private function getRequest(){
             switch($_SERVER['REQUEST_METHOD']){
                 case 'GET':
@@ -49,6 +48,18 @@
             var_dump($this->getParameters());
         }
         
+        private function checkAuth(){
+            if($this->getParameters() !== false){
+                $array_keys = array_keys($this->getParameters());
+                $array_values = array_values($this->getParameters());
+                unset($array_keys[2]);
+                $db = $this->dbLink
+                    ->select(implode(', ', $array_keys))
+                    ->get()
+                    ;
+                var_dump2($db);
+            }
+        }
         public static function attempt($params = false){
             $auth = new Auth();
             if($params !== false && is_array($params)){
@@ -56,6 +67,7 @@
             }else{
                 $auth->getRequest();
             }
+            $auth->checkAuth();
             return (false);
         }
     }

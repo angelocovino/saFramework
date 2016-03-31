@@ -9,6 +9,7 @@ class Template {
     
     // TEMPLATE PATH VARIABLES
     protected $pathViewLocal;
+    protected $pathViewStorage;
     
 	function __construct($controller, $action){
         // CONSTRUCT PROCEDURE
@@ -18,6 +19,7 @@ class Template {
         // INITIALIZATION
         $this->variables = array();
         $this->pathViewLocal = PATH_VIEW . $this->controllerName . DS;
+        $this->pathViewStorage = ROOT . DS . 'storage' . DS . 'views' . DS;
 	}
     
     // STYLES SET
@@ -54,7 +56,9 @@ class Template {
             include(PATH_VIEW . 'header.php');
         }
         // ACTION INCLUDE
-        if(file_exists($this->pathViewLocal . $this->actionName . '.php')){
+        if(file_exists($this->pathViewStorage . $this->actionName . '.php')){
+            include($this->pathViewStorage . $this->actionName . '.php');
+        }else if(file_exists($this->pathViewLocal . $this->actionName . '.php')){
             include($this->pathViewLocal . $this->actionName . '.php');
         }
         // FOOTER INCLUDE
