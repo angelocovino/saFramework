@@ -5,6 +5,7 @@
     use plugin\db\DB;
     use plugin\table\TableHtml;
     use plugin\katana\Katana;
+    use plugin\db\ddlbuilder\DDLBuilder;
 ?>
 <style>
 thead {color:green;}
@@ -31,7 +32,17 @@ table, th, td {
 
 <?php
 
-$utenti=DB::open('utenti')->get();
+var_dump2(DDLBuilder::createDatabase("SimoneVolgare", true));
+//var_dump2(DDLBuilder::dropDatabase("SimoneVolgare"));
+//var_dump2(DDLBuilder::dropDatabase("SimoneVolgare"));
+
+
+//$utenti=DB::open('user')->get();
+//var_dump2($utenti);
+
+
+
+/*
 
 
 // arguments: id, class
@@ -61,5 +72,5 @@ foreach($utenti as $u){
 
     
 echo $tbl->displayTable();
-
+*/
     

@@ -37,14 +37,7 @@
         
         // NEW DB OPENING FUNCTION
         public static function open($tableName){
-            switch(DBTYPE){
-                default: 
-                    $dbType=(new MySqlDB())->setTable($tableName);
-                    break;
-                //Case per altri tipo db
-                    
-            }
-            return ($dbType);
+            return (DBConnection::chooseDatabase()->setTable($tableName));
         }
         
         // GENERAL FUNCTIONS

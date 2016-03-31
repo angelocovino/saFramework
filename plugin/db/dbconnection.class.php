@@ -1,6 +1,7 @@
 <?php
     namespace plugin\db;
     use \PDO;
+    use \PDOException;
     
 	abstract class DBConnection{
         // DATABASE VARS
@@ -46,14 +47,26 @@
 			$this->disconnect();
         }
 		
+        // DATABASE CHOOSING
+        protected static function chooseDatabase(){
+            switch(DBTYPE){
+                default:
+                case 'mysql':
+                    $dbType=(new MySqlDB());
+                    break;
+            }
+            return ($dbType);
+        }
+        
 		// CONNECTION AND DISCONNECTION FUNCTIONS
 		private function isConnected(){
             return ($this->dbIsConnActive);
         }
-		private function connect(){
+		private function connect($isEmpty = false){
 			if(!($this->isConnected())){
                 try{
-                    $this->dbConn = new PDO("{$this->dbType}:host={$this->dbHost};dbname={$this->dbName}", $this->dbUser, $this->dbPwd);
+                    $connectionStr = "{$this->dbType}:host={$this->dbHost}" . ((!$isEmpty)?";dbname={$this->dbName}":"");
+                    $this->dbConn = new PDO($connectionStr, $this->dbUser, $this->dbPwd);
                     $this->dbConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     $this->dbConn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 					$this->dbIsConnActive = true;
@@ -69,7 +82,7 @@
 			}
 		}
         
-        // PDO FUNCTIONS
+        // EXECUTE FUNCTIONS
         protected function executeRes($query, $params, $isBoolRes = true, $transaction = true){
             $this->connect();
             $res = false;
@@ -97,13 +110,14 @@
 			$this->disconnect();
             return $res;
         }
-        protected function exec($query){
-            $this->connect();
+        protected function exec($query, $isEmptyConnection = false){
+            $this->connect($isEmptyConnection);
             $affectedRows = 0;
             try{
                 $affectedRows = $this->dbConn->exec($query);
             }catch(PDOException $e){
                 echo "Error:  " . $e->getMessage();
+                throw new PDOException('Message', $e->getCode());
             }
 			$this->disconnect();
             return ($affectedRows);
