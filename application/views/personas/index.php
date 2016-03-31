@@ -4,6 +4,7 @@
     use plugin\auth\Auth;
     use plugin\db\DB;
     use plugin\table\TableHtml;
+    use plugin\katana\Katana;
 ?>
 <style>
 thead {color:green;}
@@ -29,29 +30,6 @@ table, th, td {
 </span>
 
 <?php
-    $sole = "Angelo";
-    $sole = Cryptography::encode($sole);
-    echo $sole . "<br>";
-    $sole = Cryptography::decode($sole);
-    echo $sole . "<br>";
-    
-
-    Form::open(['method' => 'get', 'url' => '']);
-    Form::label('ciao', 'Label per Ciao');
-    Form::text('ciao','scrivi ciao');
-    /*
-    Form::password('ciao2','scrivi ciao');
-    Form::number('ciao3',17);
-    Form::email('ciao4','scrivi ciao');
-    */
-    Form::submit();
-    Form::close();
-
-
-    //var_dump2($_SERVER);
-
-
-    Auth::attempt();
 
 $utenti=DB::open('utenti')->get();
 
@@ -83,3 +61,5 @@ foreach($utenti as $u){
 
     
 echo $tbl->displayTable();
+
+    

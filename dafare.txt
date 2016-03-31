@@ -1,5 +1,0 @@
-In ordine di importanza:
-- gestione errori ed errors log
-x scomporre post in un oggetto
-- completare auth
-- completare sessioni
