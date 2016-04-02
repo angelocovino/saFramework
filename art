@@ -1,0 +1,26 @@
+#!/usr/bin/env php
+<?php
+/**
+ * User: Simone
+ * Date: 02/04/2016
+ * Time: 18.45
+ */
+// ABSOLUTE PATH VARS
+
+use plugin\db\dds\table\DBTable;
+
+define('DS', DIRECTORY_SEPARATOR);
+define('ROOT', dirname(__FILE__));
+
+// URL GETTER
+$url = false;
+
+// BOOTSTRAP LOADER
+require_once(ROOT . DS . 'library' . DS . 'bootstrap.php');
+
+require ("database/tabella2.php");
+
+$tab = create();
+
+var_dump($tab);
+//$tab = plugin\db\dds\table\DBTable::class;

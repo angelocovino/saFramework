@@ -87,4 +87,9 @@
             }
             return false;
         }
+        
+        //ALTER TABLE
+        public static function alterTable($tableName){
+            
+        }
     }
