@@ -6,7 +6,8 @@
     use plugin\table\TableHtml;
     use plugin\katana\Katana;
     use plugin\db\dds\DDS;
-    use plugin\db\dds\TableDDS;
+    use plugin\db\dds\table\DBTable;
+    use plugin\db\dds\table\DBColumn;
 ?>
 <style>
 thead {color:green;}
@@ -33,48 +34,19 @@ table, th, td {
 
 <?php
 
-$table = new TableDDS();
-$table->add("ciao","asd", false, "Defau");
-var_dump2($table);
+$tbl = DBTable::create("tabella")
+    ->addColumn("colonna1","varchar(20)")->setNotNull()->setIsPK()->setDefault("defaultValue")
+    ->addColumn("colonna2","int(2)")->setNotNull()->setIsPK()->setDefault("0");
 
-var_dump2(DDS::createDatabase("simonevolgare", false));
-//var_dump2(DDS::createTable("simonevolgare", true));
+var_dump2($tbl->build());
+//var_dump2(DDS::createDatabase("simonevolgare"));
+//var_dump2(DDS::dropTable("tabella"));
+
+//DDS::createTable($tbl);
+var_dump2(DDS::createTable($tbl));
+
+//var_dump2(DDS::createTable($tbl));
 //var_dump2(DDS::dropDatabase("simonevolgare"));
 
 //$utenti=DB::open('user')->get();
 //var_dump2($utenti);
-
-
-
-/*
-
-
-// arguments: id, class
-// can include associative array of optional additional attributes
-$tbl = new TableHtml('', 'miatable');
-$tbl->addCaption('Mia nuova Tabella','myCap');
-$tbl->addSezione('thead','myThead');
-
-$tbl->addRow();
-$tbl->addCell('user','','header');
-$tbl->addCell('nome','','header');
-$tbl->addCell('cognome','','header');
-
-$tbl->addSezione('tfoot','mioTfoot');
-$tbl->addRow();
-$tbl->addCell('Sono la riga di foot', 'foot', 'data',['colspan'=>3,'align'=>'center'] );
-
-$tbl->addSezione('tbody','mioTbody');
-foreach($utenti as $u){
-    $tbl->addRow();
-    $tbl->addCell($u['user']);
-    $tbl->addCell($u['nome']);
-    $tbl->addCell($u['cognome']);
-}
-
-
-
-    
-echo $tbl->displayTable();
-*/
-    

@@ -12,7 +12,15 @@
         }
         return false;
     }
-
+    
+    public function invokeWithParam($func, $params){
+        if(method_exists($this, $func)){
+            if(!is_array($params)){$params = array($params);}
+            return (call_user_func_array(array($this, $func), $params));
+        }
+        return (false);
+    }
+    
     /*
     if(phpIsVersion('5.1.2')){
         spl_autoload_register(function($className){

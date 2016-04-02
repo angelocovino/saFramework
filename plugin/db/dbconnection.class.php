@@ -107,7 +107,7 @@
                 if($transaction){
                     $this->dbConn->rollback();
                 }
-                echo "Error:  " . $e->getMessage();
+                throw $e;
             }
 			$this->disconnect();
             return $res;
@@ -118,8 +118,7 @@
             try{
                 $affectedRows = $this->dbConn->exec($query);
             }catch(PDOException $e){
-                echo "Error:  " . $e->getMessage();
-                throw new PDOException('Message', $e->getCode());
+                throw $e;
             }
 			$this->disconnect();
             return ($affectedRows);
