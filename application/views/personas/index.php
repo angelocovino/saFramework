@@ -5,7 +5,8 @@
     use plugin\db\DB;
     use plugin\table\TableHtml;
     use plugin\katana\Katana;
-    use plugin\db\ddlbuilder\DDLBuilder;
+    use plugin\db\dds\DDS;
+    use plugin\db\dds\TableDDS;
 ?>
 <style>
 thead {color:green;}
@@ -32,10 +33,13 @@ table, th, td {
 
 <?php
 
-var_dump2(DDLBuilder::createDatabase("SimoneVolgare", true));
-//var_dump2(DDLBuilder::dropDatabase("SimoneVolgare"));
-//var_dump2(DDLBuilder::dropDatabase("SimoneVolgare"));
+$table = new TableDDS();
+$table->add("ciao","asd", false, "Defau");
+var_dump2($table);
 
+var_dump2(DDS::createDatabase("simonevolgare", false));
+//var_dump2(DDS::createTable("simonevolgare", true));
+//var_dump2(DDS::dropDatabase("simonevolgare"));
 
 //$utenti=DB::open('user')->get();
 //var_dump2($utenti);
