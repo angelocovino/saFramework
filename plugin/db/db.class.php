@@ -2,6 +2,7 @@
     namespace plugin\db;
     use plugin\db\DBConnection;
     use plugin\db\JoinClause;
+    use plugin\db\MysqlDB;
     
 	class DB extends DBConnection{
         // TABLE VARS
@@ -36,14 +37,7 @@
         
         // NEW DB OPENING FUNCTION
         public static function open($tableName){
-            switch(DBTYPE){
-                default: 
-                    $dbType=(new MySqlDB())->setTable($tableName);
-                    break;
-                //Case per altri tipo db
-                    
-            }
-            return ($dbType);
+            return (DBConnection::chooseDatabase()->setTable($tableName));
         }
         
         // GENERAL FUNCTIONS
@@ -325,7 +319,7 @@
             return ($this);
 		}
             // JOIN FUNCTIONS
-            private function joinBuild(joinClause $join, $x, $op, $y){
+            private function joinBuild(JoinClause $join, $x, $op, $y){
                 if(is_callable($x)){
                     $x($join);
                 }else{
@@ -335,17 +329,17 @@
                 return ($join);
             }
             public function join($table, $x, $op = false, $y = false){
-                $join = new joinClause($table, joinClause::INNERJOIN);
+                $join = new JoinClause($table, JoinClause::INNERJOIN);
                 $join = $this->joinBuild($join, $x, $op, $y);
                 return ($this);
             }
             public function leftJoin($table, $x, $op = false, $y = false){
-                $join = new joinClause($table, joinClause::LEFTOUTERJOIN);
+                $join = new JoinClause($table, JoinClause::LEFTOUTERJOIN);
                 $join = $this->joinBuild($join, $x, $op, $y);
                 return ($this);
             }
             public function rightJoin($table, $x, $op = false, $y = false){
-                $join = new joinClause($table, joinClause::RIGHTOUTERJOIN);
+                $join = new JoinClause($table, JoinClause::RIGHTOUTERJOIN);
                 $join = $this->joinBuild($join, $x, $op, $y);
                 return ($this);
             }

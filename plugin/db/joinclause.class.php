@@ -1,7 +1,7 @@
 <?php
     namespace plugin\db;
     
-    class joinClause{
+    class JoinClause{
         // JOIN CONSTANTS
         const INNERJOIN = "JOIN";
         const LEFTOUTERJOIN = "LEFT JOIN";
