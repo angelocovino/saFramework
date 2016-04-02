@@ -83,8 +83,8 @@
 		}
         
         // EXECUTE FUNCTIONS
-        protected function executeRes($query, $params, $isBoolRes = true, $transaction = true){
-            $this->connect();
+        protected function executeRes($query, $params = false, $isBoolRes = true, $transaction = true, $isEmptyConnection = false){
+            $this->connect($isEmptyConnection);
             $res = false;
             try{
                 if($transaction){
@@ -93,7 +93,9 @@
                 $stmt = $this->prepareStmt($query);
                 //echo $query . "<br />";
                 //print_r($params);
-                $stmt = $this->bindParams($stmt, $params);
+                if($params !== false){
+                    $stmt = $this->bindParams($stmt, $params);
+                }
                 $res = $stmt->execute();
                 if(!$isBoolRes){
                     $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
