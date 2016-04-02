@@ -27,7 +27,7 @@
             }
         }
         
-        // INTERFACES WITH TABLE CLASS
+        // INTERFACES FOR DBTABLE CLASS
         public function addColumn($name, $type){
             return ($this->parentt->addColumn($name, $type));
         }

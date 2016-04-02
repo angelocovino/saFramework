@@ -21,7 +21,7 @@
         // COLUMN FUNCTIONS
         public function addColumn($name, $type){
             $this->setColumn(new DBColumn($name, $type, $this));
-            return ($this->getColumnLast());
+            return ($this);
         }
         
         // BUILD FUNCTIONS
@@ -45,6 +45,11 @@
             $this->query .= ")";
             return ($this->query);
         }
+        
+        // INTERFACES FOR DBCOLUMN CLASS
+        public function setNotNull(){$this->getColumnLast()->setNotNull(); return ($this);}
+        public function setIsPK(){$this->getColumnLast()->setIsPK(); return ($this);}
+        public function setDefault($default){$this->getColumnLast()->setDefault($default); return ($this);}
         
         // GET FUNCTIONS
         public function getName(){return ($this->name);}

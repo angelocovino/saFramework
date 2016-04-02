@@ -36,14 +36,14 @@ table, th, td {
 
 $tbl = DBTable::create("tabella")
     ->addColumn("colonna1","varchar(20)")->setNotNull()->setIsPK()->setDefault("defaultValue")
-    ->addColumn("colonna2","int(2)")->setNotNull()->setIsPK()->setDefault("0")->get();
+    ->addColumn("colonna2","int(2)")->setNotNull()->setIsPK()->setDefault("0");
 
 var_dump2($tbl->build());
 //var_dump2(DDS::createDatabase("simonevolgare"));
 //var_dump2(DDS::dropTable("tabella"));
 
 //DDS::createTable($tbl);
-//var_dump2(DDS::createTable($tbl));
+var_dump2(DDS::createTable($tbl));
 
 //var_dump2(DDS::createTable($tbl));
 //var_dump2(DDS::dropDatabase("simonevolgare"));
