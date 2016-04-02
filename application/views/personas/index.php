@@ -6,8 +6,8 @@
     use plugin\table\TableHtml;
     use plugin\katana\Katana;
     use plugin\db\dds\DDS;
-    use plugin\db\dds\TableDDS;
-    use plugin\db\dds\TableColumnDDS;
+    use plugin\db\dds\table\Table;
+    use plugin\db\dds\table\TableColumn;
 ?>
 <style>
 thead {color:green;}
@@ -34,10 +34,11 @@ table, th, td {
 
 <?php
 
-$tbl = (new TableDDS("nomeTabella"));
-$tbl
+$tbl = (new Table("nomeTabella"));
+echo $tbl
     ->addColumn("nomeColonna","tipo")->setNotNull()->setIsPK()->setDefault("defaultValue")
-    ->addColumn("nomeColonna1","tipo1")->setNotNull()->setIsPK()->setDefault("defaultValue1");
+    ->addColumn("nomeColonna1","tipo1")->setNotNull()->setIsPK()->setDefault("defaultValue1")
+    ->build();
 var_dump2($tbl);
 
 //var_dump2(DDS::createDatabase("simonevolgare", false));

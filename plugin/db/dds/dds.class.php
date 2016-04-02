@@ -57,7 +57,6 @@
         private static function checkTableExists($dbName, $tableName){
             return (DDS::executeResults("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?", array($dbName, $tableName), false));
         }
-/*
         public static function createTable($dbName, $tableName){
                 if(DDS::execute("CREATE TABLE ${dbName}")){
                     return (DDS::checkDatabaseExists($dbName));
@@ -69,7 +68,6 @@
             }
             return false;
         }
-*/
         public static function dropTable($dbName, $tableName){
             if(DDS::checkTableExists($dbName, $tableName)){
                 if(DDS::executeResults("DROP TABLE {$tableName}", false, true)){
