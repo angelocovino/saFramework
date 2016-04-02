@@ -1,78 +1,57 @@
 <?php
     namespace plugin\db\dds;
     use plugin\db\dds\DDS;
+    use \Exception;
     
     class TableDDS{
         private $name = false;
-        private $columns = false;
+        private $columns = array();
         
-        public function add($name, $type, $isNull = true, $default = false){
-            $params = compact('name', 'type', 'isnull', 'default');
-            $this->columns[] = new TableColumnDDS($params);
-            return ($this);
+        function __construct($tableName){
+            $this->name = $tableName;
+        }
+        public static function create($tableName){
+            return (new TableDDS($tableName));
+        }
+        public function addColumn($name, $type){
+            $this->columns[] = new TableColumnDDS($name, $type, $this);
+            return (end($this->columns));
         }
     }
-    
+
     class TableColumnDDS{
         private $name = false;
         private $type = false;
         private $isNull = true;
         private $isPK = false;
         private $dflt = false;
+        private $parentt = false;
         //private $extra;
         
-        public function invokeWithParam($func, $params){
-            if(method_exists($this, $func)){
-                if(!is_array($params)){$params = array($params);}
-                return (call_user_func_array(array($this, $func), $params));
-            }
-            return (false);
+        public function addColumn($name, $type){
+            return ($this->parentt->addColumn($name, $type));
         }
         
-        function __construct($params){
-            if(is_array($params)){
-                foreach($params as $key => $value){
-                    echo $key;
-                    if(substr($key, 0, 2) == "is"){
-                        $key = substr($key, 0, 2) . ucfirst(substr($key, 2, strlen($key)));
-                    }
-                    $this->invokeWithParam('set' . ucfirst($key), $value);
-                    /*
-                    switch($key){
-                        case 'name':
-                            $this->setName($value);
-                            break;
-                        case 'type':
-                            $this->setType($value);
-                            break;
-                        case 'is null':
-                        case 'isnull':
-                        case 'null':
-                            $this->setIsNull($value);
-                            break;
-                        case 'primary key':
-                        case 'primarykey':
-                        case 'pk':
-                            $this->setIsPK($value);
-                            break;
-                        case 'default':
-                            $this->setDefault($value);
-                            break;
-                    }
-                    */
-                }
+        function __construct($name, $type, $parentt){
+            if($parentt instanceof TableDDS){
+                $this->parentt = $parentt;
+                $this
+                    ->setName($name)
+                    ->setType($type);
+            }else{
+                throw new Exception("Non e' possibile instanziare una Colonna di Tabella se non tramite una Tabella");
             }
         }
         
-        public function getName(){return ($this->name);}
-        public function getType(){return ($this->type);}
-        public function getIsNull(){return ($this->isNull);}
-        public function getIsPK(){return ($this->isPK);}
-        public function getDefault(){return ($this->dflt);}
+        private function getName(){return ($this->name);}
+        private function getType(){return ($this->type);}
+        private function getIsNull(){return ($this->isNull);}
+        private function getIsPK(){return ($this->isPK);}
+        private function getDefault(){return ($this->dflt);}
         
-        public function setName($name){$this->name = $name; return ($this);}
-        public function setType($type){$this->type = $type; return ($this);}
-        public function setIsNull($isNull){$this->isNull = $isNull; return ($this);}
-        public function setIsPK($isPK){$this->isPK = $isPK; return ($this);}
+        private function setName($name){$this->name = $name; return ($this);}
+        private function setType($type){$this->type = $type; return ($this);}
+        public function setNotNull(){$this->isNull = false; return ($this);}
+        public function setIsPK(){$this->isPK = true; return ($this);}
         public function setDefault($default){$this->dflt = $default; return ($this);}
     }
