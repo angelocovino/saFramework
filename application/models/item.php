@@ -1,5 +1,7 @@
 <?php
-
-class Item extends Model{
-
-}
+    namespace application\models;
+    use library\Model;
+    
+    class Item extends Model{
+        
+    }

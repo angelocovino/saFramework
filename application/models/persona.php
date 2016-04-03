@@ -1,5 +1,7 @@
 <?php
-
-class Persona extends Model{
-
-}
+    namespace application\models;
+    use library\Model;
+    
+    class Persona extends Model{
+        
+    }
