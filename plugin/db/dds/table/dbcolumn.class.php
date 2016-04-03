@@ -11,6 +11,8 @@
         private $isPK = false;
         private $dflt = false;
         private $parentt = false;
+        private $unique = false;
+
         // SUPPORT VARIABLES
         private $query = false;
         
@@ -55,6 +57,7 @@
         public function getType(){return ($this->type);}
         public function getIsNull(){return ($this->isNull);}
         public function getIsPK(){return ($this->isPK);}
+        public function getIsUnique(){return ($this->unique);}
         public function getDefault(){return ($this->dflt);}
         
         // SET FUNCTIONS
@@ -62,5 +65,6 @@
         private function setType($type){$this->type = $type; return ($this);}
         public function setNotNull(){$this->isNull = false; return ($this);}
         public function setIsPK(){$this->isPK = true; $this->parentt->incrementNPKs(); return ($this);}
+        public function setIsUnique(){$this->unique = true; return ($this);}
         public function setDefault($default){$this->dflt = $default; return ($this);}
     }

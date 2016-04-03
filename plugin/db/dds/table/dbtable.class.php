@@ -9,6 +9,7 @@
         private $query = false;
         // SUPPORT VARIABLES
         private $nPKs = 0;
+        private $arrayUnique = array();
         
         // CONSTRUCT AND DESTRUCT FUNCTIONS
         function __construct($tableName){
@@ -28,6 +29,7 @@
         public function build(){
             $pks = "";
             $j = 0;
+            $constraint= array();
             $this->query = "CREATE TABLE {$this->name} (";
             foreach($this->columns as $i => $column){
                 if($i > 0){$this->query .= ", ";}
@@ -38,10 +40,15 @@
                         $pks .= ", ";
                     }
                 }
+                if($column->getIsUnique()){
+                    $constraint[] = "CONSTRAINT UNIQUE_" . $column->getName() . " UNIQUE(" . $column->getName() . ")";
+                }
             }
             if($this->getNPKs()>0){
                 $this->query .= ", PRIMARY KEY(" . $pks . ")";
             }
+            $this->query .= ", " . implode(", ",$constraint);
+            $this->query .= ", " . implode(", ",$this->arrayUnique);
             $this->query .= ")";
             return ($this->query);
         }
@@ -70,6 +77,15 @@
                 $this->columns[$index] = $column;
             }
             return ($this);
+        }
+        public function setUnique(){
+            $numColumn = func_num_args();
+            if($numColumn==0){
+                $this->getColumnLast()->setIsUnique();
+            }else{
+                $this->arrayUnique[] = "CONSTRAINT UNIQUE_" . implode("_",func_get_args()) . " UNIQUE(" . implode(", ",func_get_args()) . ")";
+            }
+            return($this);
         }
             // INCREMENT FUNCTIONS
             public function incrementNPKs(){$this->nPKs++; return ($this);}

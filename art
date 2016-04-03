@@ -22,5 +22,7 @@ require ("database/tabella2.php");
 
 $tab = create();
 
-var_dump($tab);
+$dds = plugin\db\dds\DDS::createTable($tab);
+
+var_dump($tab->build());
 //$tab = plugin\db\dds\table\DBTable::class;
