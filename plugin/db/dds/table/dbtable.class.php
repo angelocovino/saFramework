@@ -47,8 +47,8 @@
             if($this->getNPKs()>0){
                 $this->query .= ", PRIMARY KEY(" . $pks . ")";
             }
-            $this->query .= ", " . implode(", ",$constraint);
-            $this->query .= ", " . implode(", ",$this->arrayUnique);
+            if(count($constraint) > 0)$this->query .= ", " . implode(", ",$constraint);
+            if(count($this->arrayUnique) > 0)$this->query .= ", " . implode(", ",$this->arrayUnique);
             $this->query .= ")";
             return ($this->query);
         }

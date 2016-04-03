@@ -5,7 +5,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/art" afterPath="$PROJECT_DIR$/art" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/database/tabella2.php" afterPath="$PROJECT_DIR$/database/tabella2.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin/db/dds/table/dbcolumn.class.php" afterPath="$PROJECT_DIR$/plugin/db/dds/table/dbcolumn.class.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin/db/dds/table/dbtable.class.php" afterPath="$PROJECT_DIR$/plugin/db/dds/table/dbtable.class.php" />
     </list>
     <ignored path="FW.iws" />
@@ -31,8 +30,8 @@
       <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="44">
-              <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="10" selection-end-column="63" />
+            <state relative-caret-position="154">
+              <caret line="7" column="4" selection-start-line="7" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -41,8 +40,8 @@
       <file leaf-file-name="art" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/art">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="385">
-              <caret line="27" column="32" selection-start-line="27" selection-start-column="32" selection-end-line="27" selection-end-column="32" />
+            <state relative-caret-position="319">
+              <caret line="18" column="47" selection-start-line="18" selection-start-column="47" selection-end-line="18" selection-end-column="47" />
               <folding />
             </state>
           </provider>
@@ -51,8 +50,8 @@
       <file leaf-file-name="dds.class.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/plugin/db/dds/dds.class.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="83">
-              <caret line="59" column="17" selection-start-line="59" selection-start-column="17" selection-end-line="59" selection-end-column="17" />
+            <state relative-caret-position="413">
+              <caret line="73" column="40" selection-start-line="73" selection-start-column="40" selection-end-line="73" selection-end-column="40" />
               <folding>
                 <element signature="e#39#66#0#PHP" expanded="true" />
                 <element signature="e#280#657#0#PHP" expanded="false" />
@@ -73,11 +72,9 @@
       <file leaf-file-name="tabella2.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/database/tabella2.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="385">
-              <caret line="19" column="1" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
-              <folding>
-                <element signature="e#6#64#0#PHP" expanded="true" />
-              </folding>
+            <state relative-caret-position="220">
+              <caret line="10" column="47" selection-start-line="10" selection-start-column="47" selection-end-line="10" selection-end-column="47" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -85,12 +82,12 @@
       <file leaf-file-name="dbtable.class.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/plugin/db/dds/table/dbtable.class.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="305">
-              <caret line="85" column="117" selection-start-line="85" selection-start-column="117" selection-end-line="85" selection-end-column="117" />
+            <state relative-caret-position="297">
+              <caret line="49" column="33" selection-start-line="49" selection-start-column="33" selection-end-line="49" selection-end-column="33" />
               <folding>
-                <element signature="e#2374#2524#0#PHP" expanded="false" />
-                <element signature="e#2710#2970#0#PHP" expanded="false" />
-                <marker date="1459698027417" expanded="true" signature="940:968" placeholder="CREATE TABLE... $" />
+                <element signature="e#2433#2583#0#PHP" expanded="false" />
+                <element signature="e#2769#3029#0#PHP" expanded="false" />
+                <marker date="1459699358689" expanded="true" signature="940:968" placeholder="CREATE TABLE... $" />
               </folding>
             </state>
           </provider>
@@ -198,6 +195,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="FW" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FW" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FW" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -416,16 +427,16 @@
       <workItem from="1459611716523" duration="471000" />
       <workItem from="1459612412104" duration="28000" />
       <workItem from="1459613230609" duration="10630000" />
-      <workItem from="1459676499086" duration="9393000" />
+      <workItem from="1459676499086" duration="10150000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="20522000" />
+    <option name="totallyTimeSpent" value="21279000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18656716" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -433,7 +444,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37594798" sideWeight="0.5079957" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37594798" sideWeight="0.5079957" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -485,9 +496,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="44">
           <caret line="6" column="32" selection-start-line="6" selection-start-column="32" selection-end-line="6" selection-end-column="32" />
-          <folding>
-            <element signature="e#6#64#0#PHP" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -496,9 +505,9 @@
         <state relative-caret-position="88">
           <caret line="4" column="17" selection-start-line="4" selection-start-column="10" selection-end-line="4" selection-end-column="17" />
           <folding>
-            <element signature="e#2374#2524#0#PHP" expanded="false" />
-            <element signature="e#2710#2970#0#PHP" expanded="false" />
-            <marker date="1459698027417" expanded="true" signature="940:968" placeholder="CREATE TABLE... $" />
+            <element signature="e#2433#2583#0#PHP" expanded="false" />
+            <element signature="e#2769#3029#0#PHP" expanded="false" />
+            <marker date="1459699358689" expanded="true" signature="940:968" placeholder="CREATE TABLE... $" />
           </folding>
         </state>
       </provider>
@@ -669,14 +678,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="10" selection-end-column="63" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plugin/db/db.class.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="814">
@@ -684,10 +685,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/database/tabella2.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="10" column="47" selection-start-line="10" selection-start-column="47" selection-end-line="10" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="7" column="4" selection-start-line="7" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/plugin/db/dds/dds.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="83">
-          <caret line="59" column="17" selection-start-line="59" selection-start-column="17" selection-end-line="59" selection-end-column="17" />
+        <state relative-caret-position="413">
+          <caret line="73" column="40" selection-start-line="73" selection-start-column="40" selection-end-line="73" selection-end-column="40" />
           <folding>
             <element signature="e#39#66#0#PHP" expanded="true" />
             <element signature="e#280#657#0#PHP" expanded="false" />
@@ -714,32 +731,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/database/tabella2.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="19" column="1" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
-          <folding>
-            <element signature="e#6#64#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plugin/db/dds/table/dbtable.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="85" column="117" selection-start-line="85" selection-start-column="117" selection-end-line="85" selection-end-column="117" />
+        <state relative-caret-position="297">
+          <caret line="49" column="33" selection-start-line="49" selection-start-column="33" selection-end-line="49" selection-end-column="33" />
           <folding>
-            <element signature="e#2374#2524#0#PHP" expanded="false" />
-            <element signature="e#2710#2970#0#PHP" expanded="false" />
-            <marker date="1459698027417" expanded="true" signature="940:968" placeholder="CREATE TABLE... $" />
+            <element signature="e#2433#2583#0#PHP" expanded="false" />
+            <element signature="e#2769#3029#0#PHP" expanded="false" />
+            <marker date="1459699358689" expanded="true" signature="940:968" placeholder="CREATE TABLE... $" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/art">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="27" column="32" selection-start-line="27" selection-start-column="32" selection-end-line="27" selection-end-column="32" />
+        <state relative-caret-position="319">
+          <caret line="18" column="47" selection-start-line="18" selection-start-column="47" selection-end-line="18" selection-end-column="47" />
           <folding />
         </state>
       </provider>
