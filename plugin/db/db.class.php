@@ -4,7 +4,7 @@
     use plugin\db\JoinClause;
     use plugin\db\MysqlDB;
     
-	class DB extends DBConnection{
+	abstract class DB extends DBConnection{
         // TABLE VARS
 		private $table = false;
         private $tableStructure = false;

@@ -93,15 +93,12 @@
                 $queryString = array();
             }
             // MAKE UPPER CASE FIRST LETTER OF CONTROLLER NAME
-            $controller = ucwords($controllerName);
-            // TRIM THE LAST S FROM CONTROLLER NAME IN ORDER TO GET THE MODEL NAME
-            $model = rtrim($controller, 's');
-            // CONTROLLER NAME CONCATENATION
-            $controller .= 'Controller';
-            
+            $controller = ucwords($controllerName) . 'Controller';
+            $controller = 'application\\controllers\\' . $controller;
             if(class_exists($controller)){
-                $dispatch = new $controller($model, $controllerName, $action);
+                $dispatch = new $controller();
                 if((int)method_exists($controller, $action)){
+                    call_user_func_array(array($dispatch, 'initialize'), array($controllerName, $action));
                     call_user_func_array(array($dispatch, $action), $queryString);
                     return (BUILDER_OK);
                 }else{
@@ -122,12 +119,16 @@
     function requireFileIfExists($path){
         if(file_exists($path)){
             require_once($path);
+            return true;
         }
+        return false;
     }
+/*
     function autoloadLibrary($className){
         $pathLibrary = PATH_LIBRARY . $className . '.class.php';
         requireFileIfExists($pathLibrary);
     }
+*/
     function autoloadController($className){
         $pathController = PATH_CONTROLLERS . $className . '.php';
         requireFileIfExists($pathController);
@@ -138,24 +139,8 @@
     }
     function autoloadNamespace($className){
         $pathRoot = PATH_ROOT . strtolower($className) . '.class.php';
-        requireFileIfExists($pathRoot);
-    }
-    
-    spl_autoload_register(__NAMESPACE__ . '\\autoloadLibrary');
-    spl_autoload_register(__NAMESPACE__ . '\\autoloadController');
-    spl_autoload_register(__NAMESPACE__ . '\\autoloadModel');
-    spl_autoload_register(__NAMESPACE__ . '\\autoloadNamespace');
-    
-    // FUNCTION CALLS
-    setReporting();
-    preventHijacking();
-    removeMagicQuotes();
-    unsetRegisterGlobals();
-    $callRes = callBuilder($url);
-    
-    function var_dump2($var){
-        echo "<pre>";
-        var_dump($var);
-        echo "</pre>";
-        echo "<br />";
+        if(!requireFileIfExists($pathRoot)){
+            $pathRoot = PATH_ROOT . strtolower($className) . '.php';
+            requireFileIfExists($pathRoot);
+        }
     }

@@ -18,14 +18,6 @@
 			// DATABASE CCREDENTIALS
 			require_once('config.personal.php');
         
-		// PATH CONSTANTS
-		define('PATH_ROOT', ROOT . DS);
-		define('PATH_LIBRARY', PATH_ROOT . 'library' . DS);
-		define('PATH_APPLICATION', PATH_ROOT . 'application' . DS);
-            define('PATH_CONTROLLERS', PATH_APPLICATION . 'controllers' . DS);
-            define('PATH_MODELS', PATH_APPLICATION . 'models' . DS);
-            define('PATH_VIEW', PATH_APPLICATION . 'views' . DS);
-        
         // CALL BUILDER CONSTANTS
         define('BUILDER_URL_ERROR', 100);
         define('BUILDER_OK', 101);

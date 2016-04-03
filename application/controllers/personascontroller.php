@@ -1,5 +1,15 @@
 <?php
+    namespace application\controllers;
+    use library\Controller;
+    use application\models\Persona;
+    
     class PersonasController extends Controller{
+        private $persona = false;
+        
+        function __construct(){
+            $this->persona = new Persona();
+        }
+        
         function index(){
             $this->setTemplate('title', 'pagina di persona');
         }
@@ -10,6 +20,7 @@
                                ->getItemsArray('Item')
                               );
         }
+        
         function provola(){
             
         }
