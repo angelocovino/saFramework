@@ -78,23 +78,22 @@
      */
     function callBuilder($url){
         if($url !== false){
-            $controllerName = $urlArray = $url;
+            $controllerName = $url;
             $actionCheck = 1;
             if(strpos($url, "/") !== false){
-                $urlArray = explode("/", $url);
-                $controllerName = array_shift($urlArray);
+                $url = explode("/", $url);
+                $controllerName = array_shift($url);
                 $actionCheck = 0;
             }
-            if(is_array($urlArray) && count($urlArray>1) && !empty($urlArray[$actionCheck])){
-                $action = array_shift($urlArray);
-                $queryString = $urlArray;
+            if(is_array($url) && count($url>1) && !empty($url[$actionCheck])){
+                $action = array_shift($url);
+                $queryString = $url;
             }else{
                 $action = "index";
                 $queryString = array();
             }
-            // MAKE UPPER CASE FIRST LETTER OF CONTROLLER NAME
-            $controller = ucwords($controllerName) . 'Controller';
-            $controller = 'application\\controllers\\' . $controller;
+            // ADD CONTROLLER PATH, MAKE UPPER CASE FIRST LETTER OF CONTROLLER NAME, COMPLETE CONTROLLER NAME
+            $controller = NAMESPACE_CONTROLLERS . ucwords($controllerName) . 'Controller';
             if(class_exists($controller)){
                 $dispatch = new $controller();
                 if((int)method_exists($controller, $action)){
@@ -128,7 +127,6 @@
         $pathLibrary = PATH_LIBRARY . $className . '.class.php';
         requireFileIfExists($pathLibrary);
     }
-*/
     function autoloadController($className){
         $pathController = PATH_CONTROLLERS . $className . '.php';
         requireFileIfExists($pathController);
@@ -137,6 +135,7 @@
         $pathModel = PATH_MODELS . $className . '.php';
         requireFileIfExists($pathModel);
     }
+*/
     function autoloadNamespace($className){
         $pathRoot = PATH_ROOT . strtolower($className) . '.class.php';
         if(!requireFileIfExists($pathRoot)){

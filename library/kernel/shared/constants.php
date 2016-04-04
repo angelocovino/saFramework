@@ -1,0 +1,6 @@
+<?php
+    // CALL BUILDER CONSTANTS
+    define('BUILDER_URL_ERROR', 100);
+    define('BUILDER_OK', 101);
+    define('BUILDER_CONTROLLER_ERROR', 102);
+    define('BUILDER_ACTION_ERROR', 103);
