@@ -18,5 +18,5 @@
 			// DATABASE CCREDENTIALS
 			require_once('config.personal.php');
         
-        // CRYPTOGRAPHY DEFINE
+        // CRYPTOGRAPHY CONSTANTS
         define('SECURITY_KEY', 'ASDF-SAD');

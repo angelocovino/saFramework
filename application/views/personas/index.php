@@ -9,15 +9,6 @@
     use plugin\db\dds\table\DBTable;
     use plugin\db\dds\table\DBColumn;
 ?>
-<style>
-thead {color:green;}
-tbody {color:blue;}
-tfoot {color:red;}
-
-table, th, td {
-    border: 1px solid black;
-}
-</style>
 <span style="display:block; border:1px solid black;">
     <h2>persona's index</h2>
     <form method="post" action="">
@@ -31,19 +22,27 @@ table, th, td {
         <input type="submit" value="Logout" />
     </form>
 </span>
-
 <?php
+    //trigger_error("asd", E_ERROR);
+    
+    //get_defined_constants();
+//throw new Exception("Daniele e' scem", 100);
 
-$tbl = DBTable::create("tabella")
+
+/*
+$tbl = DBTable::create("powcm")
     ->addColumn("colonna1","varchar(20)")->setNotNull()->setIsPK()->setDefault("defaultValue")
     ->addColumn("colonna2","int(2)")->setNotNull()->setIsPK()->setDefault("0");
+*/
 
+/*
 var_dump2($tbl->build());
+*/
 //var_dump2(DDS::createDatabase("simonevolgare"));
 //var_dump2(DDS::dropTable("tabella"));
 
 //DDS::createTable($tbl);
-var_dump2(DDS::createTable($tbl));
+//var_dump2(DDS::createTable($tbl));
 
 //var_dump2(DDS::createTable($tbl));
 //var_dump2(DDS::dropDatabase("simonevolgare"));

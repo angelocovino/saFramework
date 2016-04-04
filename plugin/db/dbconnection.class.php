@@ -8,10 +8,11 @@
             // DATABASE TYPE VARS
             protected $dbType;
             // CREDENTIALS VARS
-            private $dbHost;
-            private $dbUser;
-            private $dbPwd;
-            private $dbName;
+            private $dbHost = false;
+            private $dbPort = false;
+            private $dbUser = false;
+            private $dbPwd = false;
+            private $dbName = false;
             // CONNECTION VARS
             private $dbConn;
             private $dbIsConnActive;
@@ -34,6 +35,7 @@
 		function __construct(){
             // CREDENTIALS VARS
 			$this->dbHost = DB_HOST;
+			$this->dbPort = DB_PORT;
 			$this->dbUser = DB_USER;
 			$this->dbPwd = DB_PASSWORD;
 			$this->dbName = DB_NAME;
@@ -65,7 +67,9 @@
 		private function connect($isEmpty = false){
 			if(!($this->isConnected())){
                 try{
-                    $connectionStr = "{$this->dbType}:host={$this->dbHost}" . ((!$isEmpty)?";dbname={$this->dbName}":"");
+                    $connectionStr = "{$this->dbType}:host={$this->dbHost}";
+                    $connectionStr .= (($this->dbPort !== false && !empty($this->dbPort))?";port={$this->dbPort}":"");
+                    $connectionStr .= ((!$isEmpty)?";dbname={$this->dbName}":"");
                     $this->dbConn = new PDO($connectionStr, $this->dbUser, $this->dbPwd);
                     $this->dbConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     $this->dbConn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);

@@ -3,17 +3,22 @@
      * DEVELOPMENT ENVIRONMENT AND ERROR REPORTING
      */
     function setReporting(){
-        if(DEVELOPMENT_ENVIRONMENT == true){
+        if(DEVELOPMENT_ENVIRONMENT === true){
             //error_reporting(E_ALL);
-            ini_set('error_reporting', E_ALL);
+            ini_set('error_reporting', E_ALL | E_STRICT | E_RECOVERABLE_ERROR);
             ini_set('display_errors', 'On');
         }else{
             //error_reporting(0);
             ini_set('error_reporting', 0);
             ini_set('display_errors', 'Off');
         }
+        // SET LOGS DIRECTORY
         ini_set('log_errors', 'On');
-        ini_set('error_log', ROOT . DS . 'tmp' . DS . 'logs' . DS . 'error.log');
+        ini_set('error_log', PATH_STORAGE_LOGS . 'error.log');
+        // SET EXCEPTION HANDLER
+        set_exception_handler(NAMESPACE_KERNEL_DEBUG . 'Debug::uncaughtException');
+        register_shutdown_function(NAMESPACE_KERNEL_DEBUG . 'Debug::uncaughtError');
+        //set_error_handler(NAMESPACE_KERNEL_DEBUG . 'Debug::uncaughtError');
     }
     
     /**
@@ -122,20 +127,6 @@
         }
         return false;
     }
-/*
-    function autoloadLibrary($className){
-        $pathLibrary = PATH_LIBRARY . $className . '.class.php';
-        requireFileIfExists($pathLibrary);
-    }
-    function autoloadController($className){
-        $pathController = PATH_CONTROLLERS . $className . '.php';
-        requireFileIfExists($pathController);
-    }
-    function autoloadModel($className){
-        $pathModel = PATH_MODELS . $className . '.php';
-        requireFileIfExists($pathModel);
-    }
-*/
     function autoloadNamespace($className){
         $pathRoot = PATH_ROOT . strtolower($className) . '.class.php';
         if(!requireFileIfExists($pathRoot)){
