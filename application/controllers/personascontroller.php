@@ -12,7 +12,7 @@
         }
         
         function index(){
-            $view = View::build('items:viewall1.php')
+            $view = View::build('items:viewall.php')
                 ->setVariables('title', 'titolo')
                 ->setVariables('pippo', 'SONO PERSONAS')
                 ->setVariables('pluto', 'dsa');

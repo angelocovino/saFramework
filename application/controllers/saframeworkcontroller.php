@@ -18,7 +18,7 @@
         }
         // THIS FUNCTION WILL BE THE ONLY ONE WORKING IN THIS CONTROLLER
         function saframework(){
-            $view = View::build('items:viewall1.php')
+            $view = View::build('items:viewall.php')
                 ->setVariables('title', 'o mej framework into the world for PHP')
                 ->setVariables('pippo', 'SONO SAFRAMEWORK')
                 ->setVariables('pluto', 'PHYTON CIO MAGNAMM, COMM E COLOMBIAN!');
