@@ -1,5 +1,6 @@
 <?php
     namespace library\kernel\core;
+    use \Exception;
     
     class Dispatcher{
         // SINGLETON VARIABLE
@@ -53,7 +54,8 @@
                 return (true);
             }
             $url = explode('/', $url);
-            $originalControllerName = array_shift() $url[0];
+            var_dump2($url);
+            $originalControllerName = $url[0];
             $url[0] = NAMESPACE_CONTROLLERS . ucfirst($url[0] .= 'Controller');
             // DEFAULT CONTROLLER EXISTS
             if(class_exists($url[0])){
