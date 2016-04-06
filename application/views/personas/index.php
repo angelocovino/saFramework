@@ -25,6 +25,10 @@
 <?php
     //trigger_error("asd", E_ERROR);
     
+    
+    //echo $a;
+    //casa();
+
     //get_defined_constants();
 //throw new Exception("Daniele e' scem", 100);
 

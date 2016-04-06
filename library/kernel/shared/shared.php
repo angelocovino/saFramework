@@ -1,27 +1,5 @@
 <?php
     /**
-     * DEVELOPMENT ENVIRONMENT AND ERROR REPORTING
-     */
-    function setReporting(){
-        if(DEVELOPMENT_ENVIRONMENT === true){
-            //error_reporting(E_ALL);
-            ini_set('error_reporting', E_ALL | E_STRICT | E_RECOVERABLE_ERROR);
-            ini_set('display_errors', 'On');
-        }else{
-            //error_reporting(0);
-            ini_set('error_reporting', 0);
-            ini_set('display_errors', 'Off');
-        }
-        // SET LOGS DIRECTORY
-        ini_set('log_errors', 'On');
-        ini_set('error_log', PATH_STORAGE_LOGS . 'error.log');
-        // SET EXCEPTION HANDLER
-        set_exception_handler(NAMESPACE_KERNEL_DEBUG . 'Debug::uncaughtException');
-        register_shutdown_function(NAMESPACE_KERNEL_DEBUG . 'Debug::uncaughtError');
-        //set_error_handler(NAMESPACE_KERNEL_DEBUG . 'Debug::uncaughtError');
-    }
-    
-    /**
      * PREVENT SESSIONS FROM HIJACKING
      */
     function preventHijacking(){
@@ -74,63 +52,5 @@
                     }
                 }
             }
-        }
-    }
-    
-    /**
-     * BUILD THE CALL USING URL PARAMETERS
-     * @param $url PATH TAKEN BY GET
-     */
-    function callBuilder($url){
-        if($url !== false){
-            $controllerName = $url;
-            $actionCheck = 1;
-            if(strpos($url, "/") !== false){
-                $url = explode("/", $url);
-                $controllerName = array_shift($url);
-                $actionCheck = 0;
-            }
-            if(is_array($url) && count($url>1) && !empty($url[$actionCheck])){
-                $action = array_shift($url);
-                $queryString = $url;
-            }else{
-                $action = "index";
-                $queryString = array();
-            }
-            // ADD CONTROLLER PATH, MAKE UPPER CASE FIRST LETTER OF CONTROLLER NAME, COMPLETE CONTROLLER NAME
-            $controller = NAMESPACE_CONTROLLERS . ucwords($controllerName) . 'Controller';
-            if(class_exists($controller)){
-                $dispatch = new $controller();
-                if((int)method_exists($controller, $action)){
-                    call_user_func_array(array($dispatch, 'initialize'), array($controllerName, $action));
-                    call_user_func_array(array($dispatch, $action), $queryString);
-                    return (BUILDER_OK);
-                }else{
-                    // ACTION NOT FOUND IS $action IN CONTROLLER $controller
-                    return (BUILDER_ACTION_ERROR);
-                }
-            }
-            return (BUILDER_CONTROLLER_ERROR);
-        }
-        return (BUILDER_URL_ERROR);
-    }
-    
-    /**
-     * AUTOLOAD CLASS FUNCTIONS
-     * spl_autoload_register (PHP 5 >= 5.1.2)
-     * @param $className NAME OF THE CLASS TO REQUIRE
-     */
-    function requireFileIfExists($path){
-        if(file_exists($path)){
-            require_once($path);
-            return true;
-        }
-        return false;
-    }
-    function autoloadNamespace($className){
-        $pathRoot = PATH_ROOT . strtolower($className) . '.class.php';
-        if(!requireFileIfExists($pathRoot)){
-            $pathRoot = PATH_ROOT . strtolower($className) . '.php';
-            requireFileIfExists($pathRoot);
         }
     }

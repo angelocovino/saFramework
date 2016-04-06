@@ -1,6 +1,7 @@
 <?php
     namespace application\controllers;
-    use library\Controller;
+    use library\kernel\Controller;
+    use library\kernel\View;
     use application\models\Persona;
     
     class PersonasController extends Controller{
@@ -11,7 +12,11 @@
         }
         
         function index(){
-            $this->setTemplate('title', 'pagina di persona');
+            $view = View::build('items:viewall1.php')
+                ->setVariables('title', 'titolo')
+                ->setVariables('pippo', 'SONO PERSONAS')
+                ->setVariables('pluto', 'dsa');
+            return ($view);
         }
         
         function viewall(){

@@ -1,17 +1,31 @@
 <?php
     namespace library;
     
+    /*
+        // SESSION FUNCTIONS
+        private function sessionManagement(){
+                //$session->setDBSession($session->generateUniqueSessionID());
+                //$session->getDBSession(17);
+                //if(!$session->checkSessionSet()){
+                //    $session->setSession(SESSION_DEFAULT_NAME, $this->controllerName);
+                //}
+                //echo $session->getSession(SESSION_DEFAULT_NAME);
+            // CREATE AN ISTANCE OF SESSION
+            Session::open();
+        }
+    */
+    
     class Template{
         // TEMPLATE MVC LINKS
-        protected $controllerName;
-        protected $actionName;
+        protected $controllerName   = false;
+        protected $actionName       = false;
         
         // TEMPLATE VARIABLES
-        protected $variables;
+        protected $variables        = false;
         
         // TEMPLATE PATH VARIABLES
-        protected $pathViewLocal;
-        protected $pathViewStorage;
+        protected $pathViewLocal    = false;
+        protected $pathViewStorage  = false;
         
         function __construct($controller, $action){
             // CONSTRUCT PROCEDURE
@@ -52,11 +66,13 @@
                         array_push($this->variables['styles'], PATH_VIEW . "style.css");
                     }
                 }
+            echo "asd";
             if(file_exists($this->pathViewLocal . 'header.php')){
                 include($this->pathViewLocal . 'header.php');
             }else{
                 include(PATH_VIEW . 'header.php');
             }
+            echo "asd";
             // ACTION INCLUDE
             if(file_exists($this->pathViewStorage . $this->actionName . '.php')){
                 include($this->pathViewStorage . $this->actionName . '.php');

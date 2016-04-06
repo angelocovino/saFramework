@@ -1,10 +1,10 @@
 <?php
-    namespace library;
+    namespace library\kernel;
     use plugin\db\DB;
 
     class Model{
-        protected $modelName = false;
-        private $connection = false;
+        protected $modelName    = false;
+        private $connection     = false;
 
         // CONSTRUCT AND DESTRUCT FUNCTIONS
         function __construct(){
@@ -13,7 +13,6 @@
             // MAKE A NEW CONNECTION
             $this->connection = DB::open($this->modelName);
         }
-        function __destruct(){}
         
         // TO USE DATABASE METHODS
         // MODEL IS NOT A DATABASE EXTENSION ANYMORE, BECAUSE OF THE DATABASE CHOOSE IMPLEMENT

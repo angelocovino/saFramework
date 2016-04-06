@@ -4,7 +4,9 @@
     define('PATH_CONFIG', PATH_ROOT . 'config' . DS);
     define('PATH_LIBRARY', PATH_ROOT . 'library' . DS);
         define('PATH_KERNEL', PATH_LIBRARY . 'kernel' . DS);
+            define('PATH_KERNEL_AUTOLOADER', PATH_KERNEL . 'autoloader' . DS);
             define('PATH_KERNEL_BOOTSTRAP', PATH_KERNEL . 'bootstrap' . DS);
+            define('PATH_KERNEL_CORE', PATH_KERNEL . 'core' . DS);
             define('PATH_KERNEL_CONFIG', PATH_KERNEL . 'config' . DS);
             define('PATH_KERNEL_DEBUG', PATH_KERNEL . 'debug' . DS);
             define('PATH_KERNEL_SHARED', PATH_KERNEL . 'shared' . DS);

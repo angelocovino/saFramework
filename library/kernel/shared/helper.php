@@ -7,6 +7,14 @@
         echo "<br />";
     }
     
+    function requireFileIfExists($path){
+        if(file_exists($path)){
+            require_once($path);
+            return true;
+        }
+        return false;
+    }
+    
     function getClassFromNamespace($class){
         $tempArr = explode("\\", $class);
         return (end($tempArr));

@@ -2,14 +2,17 @@
     // PATHS LOADER
     require_once(ROOT . DS . 'library' . DS . 'kernel' . DS . 'config' . DS . 'path.php');
     
-    // NAMESPACE LOADER
-    require_once(PATH_KERNEL_CONFIG . 'namespace.php');
+    // SHARED LOADER
+    require_once(PATH_KERNEL_SHARED . 'loader.php');
     
-    // HELPERS LOADER
-    require_once(PATH_KERNEL_TEMP . 'helper.php');
+    // AUTOLOAD LOADER
+    require_once(PATH_KERNEL_AUTOLOADER . 'loader.php');
     
     // CONFIGURATIONS LOADER
-    require_once(PATH_CONFIG . 'config.php');
+    require_once(PATH_KERNEL_CONFIG . 'loader.php');
     
-    // KERNEL LOADER
-    require_once(PATH_KERNEL_SHARED . 'sharedloader.php');
+    // DEBUG LOADER
+    require_once(PATH_KERNEL_DEBUG . 'loader.php');
+    
+    // CORE LOADER
+    require_once(PATH_KERNEL_CORE . 'loader.php');

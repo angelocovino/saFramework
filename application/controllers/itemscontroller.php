@@ -1,6 +1,7 @@
 <?php
     namespace application\controllers;
-    use library\Controller;
+    use library\kernel\Controller;
+    use library\kernel\View;
     use application\models\Item;
     
     class ItemsController extends Controller{
@@ -17,13 +18,23 @@
                                ->getItemArray('Item')
                               );
         }
-        
+        /*
         function viewall(){
             $this->setTemplate('title', 'All Items - My Todo List App');
             $this->setTemplate('todo', $this->item
                                ->getItemsArray('Item')
                               );
             $this->setStyle('style.css');
+        }
+        */
+        
+        function viewall(){
+            $view = View::build('items:viewall1.php')
+                ->setVariables('title', 'titolo')
+                ->setVariables('pippo', 'SONO ITEMS')
+                ->setVariables('pluto', 'dsa')
+                ->setVariables('todo', $this->item->getItemsArray('Item'));
+            return ($view);
         }
         
         function add(){
@@ -40,9 +51,5 @@
                                ->where('id','=',$id)
                                ->delete()
                               );	
-        }
-        
-        function index(){
-            $this->setTemplate('title', 'Success - My Todo List App');
         }
     }
