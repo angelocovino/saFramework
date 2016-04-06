@@ -12,7 +12,7 @@
         private $defaultActionName      = false;
         private $actionName             = false;
         // QUERY STRING
-        private $queryString            = false;
+        private $queryString            = array();
         
         // CONSTRUCT AND DESTRUCT FUNCTIONS
         function __construct($url = false){
@@ -35,12 +35,11 @@
             // INSTANTIATE DISPATCH
             $dispatcher = new Dispatcher($url);
             $dispatch = $dispatcher->getSingleton();
-            $queryString = array();
             if($dispatch !== false){
                 // INITIALIZE CONTROLLER
                 call_user_func_array(array($dispatch, 'initialize'), array($dispatcher->getController(), $dispatcher->getAction()));
                 // CALL CONTROLLER ACTION AND RENDER THE VIEW RESULT IF THERE IS ONE
-                $actionRes = call_user_func_array(array($dispatch, $dispatcher->getAction()), $queryString);
+                $actionRes = call_user_func_array(array($dispatch, $dispatcher->getAction()), $dispatcher->getQueryString());
                 if(!is_null($actionRes) && is_object($actionRes)){
                     $actionRes->render();
                 }
@@ -54,19 +53,21 @@
                 return (true);
             }
             $url = explode('/', $url);
-            var_dump2($url);
-            $originalControllerName = $url[0];
-            $url[0] = NAMESPACE_CONTROLLERS . ucfirst($url[0] .= 'Controller');
+            $controllerName = array_shift($url);
+            $controllerNameComplete = NAMESPACE_CONTROLLERS . ucfirst($controllerName . 'Controller');
             // DEFAULT CONTROLLER EXISTS
-            if(class_exists($url[0])){
+            if(class_exists($controllerNameComplete)){
                 // CONTROLLER EXISTS
-                $this->controllerName = $url[0];
+                $this->controllerName = $controllerNameComplete;
                 switch(count($url)){
-                    case 1:
+                    case 0:
                         $this->actionName = $this->defaultActionName;
                         break;
-                    case 2:
-                        $this->actionName = $url[1];
+                    case 1:
+                        $this->actionName = array_shift($url);
+                        break;
+                    default:
+                        $queryString = $url;
                         break;
                 }
                 if(method_exists($this->controllerName, $this->actionName)){
@@ -75,7 +76,8 @@
             }else{
                 // CONTROLLER DOESN'T EXIST
                 $this->controllerName = $this->defaultControllerName;
-                $this->actionName = $originalControllerName;
+                $this->actionName = $controllerName;
+                $queryString = $url;
                 if(method_exists($this->controllerName, $this->actionName)){
                     return (true);
                 }
@@ -90,4 +92,5 @@
         public function getSingleton(){return ($this->singleton);}
         public function getAction(){return ($this->actionName);}
         public function getController(){return ($this->controllerName);}
+        public function getQueryString(){return ($this->queryString);}
     }
