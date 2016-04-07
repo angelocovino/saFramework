@@ -3,7 +3,7 @@
     require_once(ROOT . DS . 'library' . DS . 'kernel' . DS . 'config' . DS . 'path.php');
     
     // SHARED LOADER
-    require_once(PATH_KERNEL_SHARED . 'loader.php');
+    require_once(PATH_SHARED . 'loader.php');
     
     // AUTOLOAD LOADER
     require_once(PATH_KERNEL_AUTOLOADER . 'loader.php');

@@ -1,5 +1,4 @@
 <?php
-    use plugin\form\Form;
     use plugin\cryptography\Cryptography;
     use plugin\auth\Auth;
     use plugin\db\DB;
@@ -8,21 +7,31 @@
     use plugin\db\dds\DDS;
     use plugin\db\dds\table\DBTable;
     use plugin\db\dds\table\DBColumn;
+    //use plugin\cookie\Cookie;
 ?>
 <span style="display:block; border:1px solid black;">
     <h2>persona's index</h2>
-    <form method="post" action="">
-        <input type="text" name="username" value="angelotm" placeholder="username" />
-        <input type="text" name="password" value="napoli" placeholder="password" />
-        <input type="hidden" name="action" value="login" />
-        <input type="submit" value="Login" />
-    </form>
-    <form method="post" action="">
-        <input type="hidden" name="action" value="logout" />
-        <input type="submit" value="Logout" />
-    </form>
+<?php
+    $form::open(['method' => 'post', 'url' => 'login']);
+    $form::text('username', false, 'angelotm');
+    $form::password('password', false, 'napoli');
+    $form::submit('Login');
+    $form::close();
+    
+    $form::open(['method' => 'post']);
+    $form::submit('Logout');
+    $form::close();
+?>
 </span>
 <?php
+    //use library\tag\Angelo;
+    //$angelo = new Angelo();
+/*
+    $headers = apache_request_headers();
+    var_dump2($headers);
+*/
+    var_dump2($cookie::get('prova'));
+    //var_dump2(Cookie::get('prova'));
     //trigger_error("asd", E_ERROR);
     
     

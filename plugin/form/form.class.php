@@ -3,6 +3,7 @@
     use plugin\form\FormBuilder;
     use plugin\form\FormInput;
     use plugin\form\FormLabel;
+    use plugin\file\File;
     
     abstract class Form{
         // LABEL FUNCTIONS
@@ -10,28 +11,29 @@
             echo (FormLabel::create($for, $value));
         }
         // INPUT FUNCTIONS
-        public static function input($params = false){
-            echo (FormInput::create($params));
+        public static function input($params){
+            echo "\t" . (FormInput::create($params)) . "\n";
         }
-        private static function inputBuilder($type, $name, $placeholder = false){
-            $params['type']=$type;
-            $params['name']=$name;
-            //if($value !== false){$params['value']=$value;}
-            if($placeholder !== false){$params['placeholder']=$placeholder;}
-            Form::input($params);
+        private static function inputBuilder($type, $name, $placeholder, $value, $disabled){
+            Form::input(compact('type', 'name', 'placeholder', 'value', 'disabled'));
         }
             // SPECIFIED INPUT FUNCTIONS
-            public static function text($name, $placeholder = false){
-                Form::inputBuilder('text', $name, $placeholder);
+            public static function hidden($name, $value){
+                $params['type']='hidden';
+                $params['value']=$value;
+                Form::input($params);
             }
-            public static function number($name, $placeholder = false){
-                Form::inputBuilder('number', $name, $placeholder);
+            public static function text($name, $placeholder = false, $value = false, $disabled = false){
+                Form::inputBuilder('text', $name, $placeholder, $value, $disabled);
             }
-            public static function password($name, $placeholder = false){
-                Form::inputBuilder('password', $name, $placeholder);
+            public static function number($name, $placeholder = false, $value = false, $disabled = false){
+                Form::inputBuilder('number', $name, $placeholder, $value, $disabled);
             }
-            public static function email($name, $placeholder = false){
-                Form::inputBuilder('email', $name, $placeholder);
+            public static function password($name, $placeholder = false, $value = false, $disabled = false){
+                Form::inputBuilder('password', $name, $placeholder, $value, $disabled);
+            }
+            public static function email($name, $placeholder = false, $value = false, $disabled = false){
+                Form::inputBuilder('email', $name, $placeholder, $value, $disabled);
             }
             public static function submit($value = 'Submit'){
                 $params['type']='submit';
@@ -40,7 +42,7 @@
             }
         
         // OPEN FORM FUNCTIONS
-        public static function open($params){
+        public static function open($params = false){
             $form = new FormBuilder();
             if(is_array($params)){
                 // FORM METHOD FETCH
@@ -52,10 +54,12 @@
                 }
                 // FORM URL
                 if(
-                    array_key_exists('url', $params) && 
-                    preg_match('/^[a-zA-Z0-9]+\.[a-zA-Z]{3,4}$/', $params['url'])
+                    array_key_exists('url', $params)
+                    //&& 
+                    //preg_match('/^[a-zA-Z0-9]+\.[a-zA-Z]{3,4}$/', $params['url'])
                 ){
                     $form->setAction($params['url']);
+                    //$form->setAction(File::pathParse($params['url'], false)->getFullName());
                 }
                 // FORM ACTION
             }
@@ -63,5 +67,5 @@
         }
         
         // CLOSE FORM FUNCTIONS
-        public static function close(){echo "</form>";}
+        public static function close(){echo "</form>\n";}
     }

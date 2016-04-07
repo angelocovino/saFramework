@@ -21,8 +21,7 @@
         private function getFileName(){return ($this->fileObj->getFullName());}
         
         private function setFile($fileName){
-            $fileObj = File::pathParse($fileName);
-            $this->fileObj = $fileObj;
+            $this->fileObj = File::pathParse($fileName);
         }
         public function setVariables($key, $value){$this->variables[$key] = $value; return ($this);}
         

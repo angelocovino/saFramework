@@ -40,6 +40,22 @@
             return (DBConnection::chooseDatabase()->setTable($tableName));
         }
         
+        // NOT NECESSARY FUNCTIONS
+		public function getTableStructure($table){
+			$query = "SHOW COLUMNS FROM {$table}";
+            $res = $this->executeRes($query, false, false);
+			if($res !== false){
+                /*
+				foreach($res as $res){
+					$this->tableStructure[$i] = $this->fetchAssocStored();
+					$this->tableStructureColumns[$i] = $this->tableStructure[$i]['Field'];
+				}*/
+                return ($res);
+			}
+            return (false);
+		}
+        
+        
         // GENERAL FUNCTIONS
         private function resetQuery($res = false){
             if($res){
@@ -309,6 +325,7 @@
             $this->table = $table;
             return ($this);
         }
+        /*
         private function getTableStructure($table){
             try{
                 $stmt = $this->query("SHOW COLUMNS FROM {$table}");
@@ -318,6 +335,7 @@
             }
             return ($this);
 		}
+        */
             // JOIN FUNCTIONS
             private function joinBuild(JoinClause $join, $x, $op, $y){
                 if(is_callable($x)){
@@ -350,17 +368,6 @@
         $stmt->execute( array(':username' => $_REQUEST['username']) );
         
         
-		protected function getTableStructure($table){
-			$query = "SHOW COLUMNS FROM {$table}";
-			$this->executeQuery($query);
-			$rows = $this->getNumRowsStored();
-			if($rows!=false){
-				for($i=0;$i<$rows;$i++){
-					$this->tableStructure[$i] = $this->fetchAssocStored();
-					$this->tableStructureColumns[$i] = $this->tableStructure[$i]['Field'];
-				}
-			}
-		}
 		protected function isColumnNumeric($columnName){
 			//echo "colonna ".$columnName."<br />";
 			$index = array_search($columnName, $this->tableStructureColumns);

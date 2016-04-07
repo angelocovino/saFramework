@@ -9,8 +9,8 @@
             define('PATH_KERNEL_CORE', PATH_KERNEL . 'core' . DS);
             define('PATH_KERNEL_CONFIG', PATH_KERNEL . 'config' . DS);
             define('PATH_KERNEL_DEBUG', PATH_KERNEL . 'debug' . DS);
-            define('PATH_KERNEL_SHARED', PATH_KERNEL . 'shared' . DS);
             define('PATH_KERNEL_TEMP', PATH_KERNEL . 'temp' . DS);
+        define('PATH_SHARED', PATH_LIBRARY . 'shared' . DS);
     define('PATH_APPLICATION', PATH_ROOT . 'application' . DS);
         define('PATH_CONTROLLERS', PATH_APPLICATION . 'controllers' . DS);
         define('PATH_MODELS', PATH_APPLICATION . 'models' . DS);

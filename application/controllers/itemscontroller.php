@@ -12,11 +12,12 @@
         }
         
         function view($id = null, $name = null){
-            $this->setTemplate('title', $name . ' - My Todo List App');
-            $this->setTemplate('todo', $this->item
-                               ->where('id', '=', $id)
-                               ->getItemArray('Item')
-                              );
+            $view = View::build('items:view.php')
+                ->setVariables('title', $name)
+                ->setVariables('pippo', 'SONO ITEMS')
+                ->setVariables('pluto', 'dsa')
+                ->setVariables('todo', $this->item->where('id', '=', $id)->getItemArray('Item'));
+            return ($view);
         }
         /*
         function viewall(){

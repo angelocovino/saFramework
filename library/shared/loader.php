@@ -1,9 +1,9 @@
 <?php
     // LOAD SHARED FUNCTIONS
-    require_once(PATH_KERNEL_SHARED . 'shared.php');
+    require_once(PATH_SHARED . 'shared.php');
     
     // LOAD SHARED FUNCTIONS
-    require_once(PATH_KERNEL_SHARED . 'helper.php');
+    require_once(PATH_SHARED . 'helper.php');
     
     // PREVENT HIJACKING
     preventHijacking();

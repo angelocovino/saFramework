@@ -12,9 +12,13 @@
             // HERE YOU WILL INSTANTIATE YOUR MODELS LIKE:
             // $this->item = new Item();
         }
-        
-        function casa(){
+        function index(){
             
+        }
+        function login(){
+            $view = View::build('login.php')
+                ->setVariables('title', 'o mej framework into the world for PHP');
+            return ($view);
         }
         // THIS FUNCTION WILL BE THE ONLY ONE WORKING IN THIS CONTROLLER
         function saframework(){

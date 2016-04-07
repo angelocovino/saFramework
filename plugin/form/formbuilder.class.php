@@ -14,7 +14,7 @@
             }else if($this->getAction()!==false){
                 $str .= " action='" . $this->getAction() . "'";
             }
-            $str .=">";
+            $str .=">\n";
             return ($str);
         }
         

@@ -19,3 +19,8 @@
         $tempArr = explode("\\", $class);
         return (end($tempArr));
     }
+    
+    function getPlugin($pluginName = false){
+        $cookie = 'plugin\cookie\Cookie';
+        return ($cookie);
+    }
