@@ -4,7 +4,7 @@
     use library\kernel\View;
     use application\models\Item;
     
-    class ItemsController extends Controller{
+    class Items extends Controller{
         private $item = false;
         
         function __construct(){
@@ -12,13 +12,16 @@
             $this->setTags('view', ['angelo']);
         }
         
-    function view($id = null, $plugins, $name = null){
+        function view($plugins, $id, $name = null){
+        //function view($id = null, $plugins, $name = null){
             // ###############################################
+            /*
             $cookie = $plugins['cookie'];
             if($cookie::get('prova') === false){
                 $cookie::set('prova','valoreprova', time()+5);
             }
             var_dump2($cookie::get('prova'));
+            */
             // ###############################################
             $view = View::build('items:view.php')
                 ->setVariables('title', $name)
@@ -27,15 +30,6 @@
                 ->setVariables('todo', $this->item->where('id', '=', $id)->getItemArray('Item'));
             return ($view);
         }
-        /*
-        function viewall(){
-            $this->setTemplate('title', 'All Items - My Todo List App');
-            $this->setTemplate('todo', $this->item
-                               ->getItemsArray('Item')
-                              );
-            $this->setStyle('style.css');
-        }
-        */
         
         function viewall(){
             $view = View::build('items:viewall1.php')
@@ -48,17 +42,16 @@
         
         function add(){
             $todo = $_POST['todo'];
-            $this->setTemplate('title', 'Success - My Todo List App');
-            $this->setTemplate('todo', $this->item
-                               ->insert(['item_name' => $todo])
-                              );	
+            $view = View::build('items:add.php')
+                ->setVariables('title', 'titolo')
+                ->setVariables('todo', $this->item->insert(['item_name' => $todo]));
+            return ($view);
         }
         
         function delete($id = null){
-            $this->setTemplate('title', 'Success - My Todo List App');
-            $this->setTemplate('todo', $this->item
-                               ->where('id','=',$id)
-                               ->delete()
-                              );	
+            $view = View::build('items:delete.php')
+                ->setVariables('title', 'titolo')
+                ->setVariables('todo', $this->item->where('id','=',$id)->delete());
+            return ($view);
         }
     }

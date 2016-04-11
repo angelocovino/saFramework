@@ -6,6 +6,10 @@
         private $actionName     = false;
         private $tags           = false;
         
+        // CONSTRUCT AND DESTRUCT FUNCTIONS
+        private function __construct(){}
+        private function __destruct(){}
+        
         // INITIALIZE SUBCONTROLLER
         public function initialize($controller, $action){
             $this->controllerName = $controller;

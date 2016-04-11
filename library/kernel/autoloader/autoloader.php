@@ -8,6 +8,9 @@
         $pathRoot = str_replace("\\", '/', PATH_ROOT . strtolower($className) . '.class.php');
         if(!requireFileIfExists($pathRoot)){
             $pathRoot = str_replace("\\", '/', PATH_ROOT . strtolower($className) . '.php');
-            requireFileIfExists($pathRoot);
+            if(!requireFileIfExists($pathRoot)){
+                $pathRoot = str_replace("\\", '/', PATH_ROOT . strtolower($className) . '.controller.php');
+                requireFileIfExists($pathRoot);
+            }
         }
     }

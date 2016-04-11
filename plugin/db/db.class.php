@@ -126,7 +126,9 @@
         public function getItemArray($itemName, $column = false){
             $res = $this->getItemsArray($itemName, $column);
             $newRes = array();
-            $newRes[$itemName] = $res[0][$itemName];
+            if(count($res)>0){
+                $newRes[$itemName] = $res[0][$itemName];
+            }
             return ($newRes);
         }
         /* */

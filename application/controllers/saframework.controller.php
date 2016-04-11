@@ -4,7 +4,7 @@
     use library\kernel\View;
     use application\models\Item;
     
-    class SaframeworkController extends Controller{
+    class Saframework extends Controller{
         // HERE YOU WILL DECLARE YOUR MODELS LIKE:
         // private $item;
         

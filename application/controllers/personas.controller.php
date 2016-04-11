@@ -4,7 +4,7 @@
     use library\kernel\View;
     use application\models\Persona;
     
-    class PersonasController extends Controller{
+    class Personas extends Controller{
         private $persona = false;
         
         function __construct(){
@@ -12,10 +12,8 @@
             $this->setTags('index', array('ANGELO','WORLD'));
         }
         
-        function index($plugins, $a = false, $b = false){
+        function index($plugins){
             $cookie = $plugins['cookie'];
-            //$cookie = PLUGIN_COOKIE;
-            //$cookie = 'plugin\cookie\Cookie';
             if($cookie::get('prova') === false){
                 $cookie::set('prova','valoreprova', time()+5);
             }

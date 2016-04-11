@@ -14,17 +14,19 @@
             $this->variables = array(); 
         }
         
+        // BUILD FUNCTIONS
         public static function build($fileName){
             return (new View($fileName));
         }
         
+        // GET FUNCTIONS
         private function getFileName(){return ($this->fileObj->getFullName());}
         
-        private function setFile($fileName){
-            $this->fileObj = File::pathParse($fileName);
-        }
+        // SET FUNCTIONS
+        private function setFile($fileName){$this->fileObj = File::pathParse($fileName);}
         public function setVariables($key, $value){$this->variables[$key] = $value; return ($this);}
         
+        // RENDER FUNCTIONS
         public function render(){
             extract($this->variables);
             include(PATH_VIEW . 'header.php');

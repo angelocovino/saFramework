@@ -25,13 +25,22 @@
             foreach($parameters as $index => $param) {
                 // SETTING UP PARAMETER NAME
                 $this->name[$index] = $param->getName();
-                if($param->isOptional()){
+                //if($param->isOptional()){
+                if($param->isDefaultValueAvailable()){
                     $this->countOptionalParams++;
                     $this->isOptional[$index] = true;
-                    $this->defaultValue[$index] = $param->getDefaultValue();
+                $this->defaultValue[$index] = $param->getDefaultValue();
+                    //$this->defaultValue[$index] = $param->getDefaultValue();
                 }else{
                     $this->isOptional[$index] = false;
                 }
+                
+                /*
+                try{
+                    $this->defaultValue[$index] = $param->getDefaultValue();
+                }catch(\ReflectionException $e){
+                    //var_dump2($e);
+                }*/
             }
             $this->countNecessaryParams = $this->countParams - $this->countOptionalParams;
         }
@@ -41,11 +50,12 @@
             return (new MethodParams($class, $method));
         }
         
-        //public function nameExists($name){return (in_array($name, $this->name));}
-        public function getNameIndex($name){return (array_search($name, $this->name));}
+        // GET FUNCTIONS
+        public function getNameIndex($name){return ((is_array($this->name)) ? array_search($name, $this->name) : false );}
         public function getIndexName($index){return ($this->name[$index]);}
         public function isOptional($index){return ($this->isOptional[$index]);}
-        public function getDefault($index){return ($this->defaultValue[$index]);}
+        public function getDefaultValues(){return ($this->defaultValue);}
+        public function getDefaultValue($index){return ($this->defaultValue[$index]);}
         public function getCount(){return ($this->countParams);}
         public function getCountNecessary(){return ($this->countNecessaryParams);}
         public function getCountOptional(){return ($this->countOptionalParams);}
