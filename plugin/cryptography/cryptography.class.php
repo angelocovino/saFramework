@@ -1,14 +1,16 @@
 <?php
     namespace plugin\cryptography;
-    use plugin\cryptography\CryptographyOpenSSL;
+    use plugin\cryptography\OpenSSL;
     
     abstract class Cryptography{
         // CRYPTOGRPHY VARIABLES
         protected $fullKey = false;
         
         // CONSTRUCT AND DESTRUCT FUNCTIONS
-        function __construct($seed){
-            $this->fullKey = hash('sha512', $seed);
+        function __construct($seed = false){
+            if($seed !== false){
+                $this->fullKey = hash('sha512', $seed);
+            }
         }
         
         // ENCODE AND DECODE FUNCTION NEEDED BY SUBCLASSES
@@ -27,7 +29,10 @@
             switch($method){
                 default:
                 case 'openssl':
-                    $cryptography = new CryptographyOpenSSL($seed);
+                    $cryptography = new OpenSSL($seed);
+                    break;
+                case 'base64':
+                    $cryptography = new Base64();
                     break;
             }
             return ($cryptography);

@@ -1,105 +1,131 @@
 <?php
     namespace library\kernel\core;
+    use library\kernel\core\Dispatch;
+    use library\kernel\config\Config;
+    use library\kernel\core\MethodParams;
+    use library\kernel\View;
     use \Exception;
     
-    class Dispatcher{
-        // SINGLETON VARIABLE
-        private $singleton              = false;
-        // CONTROLLER VARIABLES
-        private $controllerDefault      = false;
-        private $controllerName         = false;
-        private $controller             = false;
-        // ACTION VARIABLES
-        private $actionDefault          = false;
-        private $action             = false;
-        // QUERY STRING
-        public $queryString            = array();
+    abstract class Dispatcher{
+        // DISPATCHER VARIABLES
+        private static $dispatch        = false;
+        private static $dispatchAction  = false;
+        // VIEW VARIABLES
+        private static $view            = false;
         
-        // CONSTRUCT AND DESTRUCT FUNCTIONS
-        function __construct($url = false){
-            $this->controllerDefault = NAMESPACE_CONTROLLERS . ucwords(FRAMEWORK_NAME) . 'Controller';
-            $this->actionDefault = 'index';
-            if(!class_exists($this->controllerDefault)){
-                throw new Exception('Main class not found', ERROR_FW_CONTROLLER_NOT_FOUND);
-            }else if(!method_exists($this->controllerDefault, strtolower(FRAMEWORK_NAME))){
-                throw new Exception('Non esiste una pagina home', 666);
-            }
-            if($this->findCorrectParams($url)){
-                $this->setSingleton(new $this->controller());
-            }else{
-                throw new Exception('erroraccio', 666);
-            }
-        }
-        // DISPATCH BUILDER AND ITS SUBFUNCTIONS
-        public static function dispatchBuilder($url){
-            // INSTANTIATE DISPATCH
-            $dispatcher = new Dispatcher($url);
-            $dispatch = $dispatcher->getSingleton();
-            // IF CONTROLLER INSTANTIATION IS GONE WELL
-            if($dispatch !== false){
-                // INITIALIZE CONTROLLER
-                call_user_func_array(array($dispatch, 'initialize'), array($dispatcher->getController(), $dispatcher->getAction()));
-                // CALL CONTROLLER ACTION AND RENDER THE VIEW RESULT IF THERE IS ONE
-                $actionView = call_user_func_array(array($dispatch, $dispatcher->getAction()), $dispatcher->getQueryString());
-                // IF VIEW IS NOT NULL (CAN BE NULL WHEN THERE IS NO RETURN VALUE) AND RETURN VALUE IS AN OBJECT
-                if(!is_null($actionView) && is_object($actionView)){
-                    // SET VARIABLES controllerName AND actionName TO USE THEM INTO VIEWS
-                    //if(){
-                        $actionView->setVariables('form', 'plugin\form\Form');
-                        $actionView->setVariables('cookie', 'plugin\cookie\Cookie');
-                    //}
-                    $actionView->setVariables('controllerName', $dispatcher->getControllerName());
-                    $actionView->setVariables('actionName', $dispatcher->getAction());
-                    // RENDER THE PAGE
-                    $actionView->render();
-                }
+        // SET DISPATCH FUNCTIONS
+        public static function setDispatch(Dispatch $dispatch){
+            if(!self::checkDispatch()){
+                self::$dispatch = $dispatch;
                 return (true);
-            }
-        }
-        private function findCorrectParams($url){
-            if($url === false){
-                $this->controller = $this->controllerDefault;
-                $this->action = strtolower(FRAMEWORK_NAME);
-                return (true);
-            }
-            $url = explode('/', $url);
-            $this->controllerName = array_shift($url);
-            $controllerCompletePath = NAMESPACE_CONTROLLERS . ucfirst($this->controllerName . 'Controller');
-            // DEFAULT CONTROLLER EXISTS
-            if(class_exists($controllerCompletePath)){
-                // CONTROLLER EXISTS
-                $this->controller = $controllerCompletePath;
-                $this->action = $this->actionDefault;
-                if(count($url)>0){
-                    $this->action = array_shift($url);
-                    if(count($url)>0){
-                        $this->queryString = $url;
-                    }
-                }
-                
-                if(method_exists($this->controller, $this->action)){
-                    return (true);
-                }
-            }else{
-                // CONTROLLER DOESN'T EXIST
-                $this->controller = $this->controllerDefault;
-                $this->action = $this->controllerName;
-                array_shift($url);
-                $this->queryString = $url;
-                if(method_exists($this->controller, $this->action)){
-                    return (true);
-                }
             }
             return (false);
         }
         
-        // SET FUNCTIONS
-        private function setSingleton($singleton){$this->singleton = $singleton;}
+        // CHECK DISPATCH FUNCTIONS
+        private static function checkDispatch(){
+            if((self::$dispatch !== false) && (self::$dispatch instanceof Dispatch)){
+                return (true);
+            }
+            return (false);
+        }
         
-        // GET FUNCTIONS
-        public function getSingleton(){return ($this->singleton);}
-        public function getAction(){return ($this->action);}
-        public function getController(){return ($this->controller);}
-        public function getControllerName(){return ($this->controllerName);}
-        public function getQueryString(){return ($this->queryString);}
+        // CHECK DISPATCH TAGS FUNCTIONS
+        private static function checkDispatchTags(){
+            $dispatch = self::$dispatch;
+            // RETRIEVE CHOOSEN ACTION TAGS
+            $tags = $dispatch->getSingleton()->getTags($dispatch->getAction());
+            // IF ACTION HAS TAGS
+            if($tags !== false){
+                // PARSE INI TAGS LIST
+                $settedTags = Config::parseINIFile(PATH_CONFIG . 'tag.ini', true)->getConfigs();
+                // PARSE INI PLUGINS LIST
+                $plugins = Config::parseINIFile(PATH_KERNEL_CONFIG . 'plugins.ini', true)->getConfigs('PLUGINS');
+                // CYCLE TAGS TO RETRIEVE ACTIVE PLUGIN LIST
+                $activePlugins = array();
+                foreach($tags as $tag){
+                    foreach($settedTags[strtoupper($tag)] as $k => $v){
+                        $activePlugins[strtolower($k)] = $plugins[strtoupper($k)];
+                    }
+                }
+                // IF PLUGINS WERE FOUND
+                if(count($activePlugins)>0){
+                    return ($activePlugins);
+                }
+                // NO PLUGINS FOUND
+            }
+            // ACTION HAS NO TAGS
+            return (false);
+        }
+        
+        // SET DISPATCH ACTION PLUGINS
+        private static function setDispatchPlugins($plugins){
+            $dispatch = self::$dispatch;
+            // IF PLUGINS NEED TO BE INCLUDED
+            if($plugins !== false){
+                // GET ACTION PARAMETERS
+                $cmp = MethodParams::build($dispatch->getSingleton(), $dispatch->getAction());
+                // RETRIEVE PLUGINS PARAMETER POSITION
+                $pluginParamPos = $cmp->getNameIndex(PLUGINS_CONTROLLER_PARAM_NAME);
+                // CHECK PLUGINS PARAMETER POSITION
+                if($pluginParamPos !== false){
+                //var_dump2($pluginParamPos, $dispatch->getQueryString());
+                var_dump2(count($dispatch->getQueryString()), ($cmp->getCountNecessary()-1));
+                    // IF ACTION HAS NO PARAMETERS DO NOT PROCEED
+                    if(count($dispatch->getQueryString()) < ($cmp->getCountNecessary()-1)){
+                        throw new Exception('Action can not be called, parameters required', 666);
+                        /*
+                    }else if(count($dispatch->getQueryString()) < $pluginParamPos){
+                        throw new Exception('Can not pass action plugins without preceding parameters', 666);
+                        */
+                    }
+                    // ACTION HAS SUFFICIENT PARAMETERS
+                    // ADD PLUGIN AT THE CORRECT POSITION IN ACTION PARAMETERS LIST
+                    $dispatch->addQueryStringByPos($plugins, $pluginParamPos);
+                }
+                var_dump2($dispatch->getQueryString());
+            }
+        }
+        
+        // DISPATCHER START
+        public static function start(){
+            if(!self::checkDispatch()){
+                throw new Exception('Dispatch not found', 666);
+            }
+            $dispatch = self::$dispatch;
+            // INITIALIZE CONTROLLER
+            call_user_func_array(
+                // INVOKE initialize METHOD IN CHOOSEN CONTROLLER
+                array($dispatch->getSingleton(), 'initialize'),
+                // PASSING AS ARGUMENT ITS NAME AND CHOOSEN ACTION
+                array($dispatch->getController(), $dispatch->getAction())
+            );
+//$dispatch->getSingleton()->{'initialize'}($dispatch->getController(), $dispatch->getAction());
+            
+            // CHECK TAGS
+            $activePlugins = self::checkDispatchTags();
+            
+            // SET PLUGINS
+            self::setDispatchPlugins($activePlugins);
+            
+            // RETRIEVE VIEW FROM CHOOSEN METHOD IN CHOOSEN CONTROLLER
+            self::$view = call_user_func_array(
+                // INVOKE CHOOSEN METHOD IN CHOOSEN CONTROLLER
+                array($dispatch->getSingleton(), $dispatch->getAction()),
+                // PASSING AS ARGUMENT ITS QUERY STRING (WHICH IS ALREADY AN ARRAY)
+                $dispatch->getQueryString()
+            );
+            
+            // IF VIEW IS NOT NULL (CAN BE NULL WHEN THERE IS NO RETURN VALUE) AND IT'S A View INSTANCE
+            if(!is_null(self::$view) && (self::$view instanceof View)){
+                if($activePlugins !== false){
+                    self::$view->setVariables('plugins', $activePlugins);
+                }
+                // SET VARIABLES controllerName AND actionName TO USE THEM INTO VIEWS
+                self::$view->setVariables('controllerName', $dispatch->getControllerName());
+                self::$view->setVariables('actionName', $dispatch->getAction());
+                // RENDER THE PAGE
+                self::$view->render();
+            }
+        }
     }

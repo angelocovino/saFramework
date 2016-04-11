@@ -1,10 +1,12 @@
 <?php
     // FUNCTION var_dump ENCLOSED IN A <pre> TAG
-    function var_dump2($var){
-        echo "<pre>";
-        var_dump($var);
-        echo "</pre>";
-        echo "<br />";
+    function var_dump2(){
+        foreach(func_get_args() as $var){
+            echo "<pre>";
+            var_dump($var);
+            echo "</pre>";
+            echo "<br />";
+        }
     }
     
     function requireFileIfExists($path){
@@ -18,9 +20,4 @@
     function getClassFromNamespace($class){
         $tempArr = explode("\\", $class);
         return (end($tempArr));
-    }
-    
-    function getPlugin($pluginName = false){
-        $cookie = 'plugin\cookie\Cookie';
-        return ($cookie);
     }

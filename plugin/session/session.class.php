@@ -64,19 +64,19 @@
         
         
         // GET SESSION FROM DATABASE
-        private function getDBSession($arr){
+        private function getDB($arr){
             if(count($arr)==1){
                 return (SessionObject::makeFromArray($arr[0]));
             }
             return (false);
         }
-        private function getDBSessionByID($id){
+        private function getDBByID($id){
             $session = $this->dbLink
                             ->where('id', '=', $id)
                             ->get();
             return ($this->getDBSession($session));
         }
-        private function getDBSessionByUserID($id){
+        private function getDBByUserID($id){
             $session = $this->dbLink
                             ->where('idUser', '=', $id)
                             ->get();
@@ -86,7 +86,7 @@
         
         
         // SET SESSION INTO DATABASE
-        private function setDBSession(SessionObject $obj, $isUserID = true){
+        private function setDB(SessionObject $obj, $isUserID = true){
             // CHECK FOR SAME ID
             $session = $this->getDBSessionByID($obj->getID());
             if($session !== false){
@@ -120,12 +120,12 @@
                     ->update($obj->arrayImplode());
             }
         }
-        private function setDBSessionByID(SessionObject $obj){
+        private function setDBByID(SessionObject $obj){
             return ($this->dbLink
                     ->where('id', '=', $obj->getID())
                     ->insert($obj->arrayImplode()));
         }
-        private function setDBSessionByUserID(SessionObject $obj){
+        private function setDBByUserID(SessionObject $obj){
             return ($this->dbLink
                     ->where('idUser', '=', $obj->getUserID())
                     ->insert($obj->arrayImplode()));
@@ -164,15 +164,15 @@
         */
         
         // GET/SET SESSION
-        public static function setSession($value, $key = Session::DEFAULT_FWSESS_OBJ){
+        public static function set($value, $key = Session::DEFAULT_FWSESS_OBJ){
             $_SESSION[$key] = $value;
         }
-        public function getSession($key = Session::DEFAULT_FWSESS_OBJ){
+        public function get($key = Session::DEFAULT_FWSESS_OBJ){
             return ($this->isSessionSetted($key)?$_SESSION[$key]:false);
         }
         
         // GET/SET SESSION OBJECT
-        public function setSessionObject($obj, $key = Session::DEFAULT_FWSESS_OBJ){
+        public function setObject($obj, $key = Session::DEFAULT_FWSESS_OBJ){
             if(is_array($obj)){
                 $obj = SessionObject::makeFromArray($obj);
             }else if(!is_a($obj, 'SessionObject')){
@@ -181,12 +181,12 @@
             $this->setSession($obj, $key);
             return true;
         }
-        public function getSessionObject($key = Session::DEFAULT_FWSESS_OBJ){
+        public function getObject($key = Session::DEFAULT_FWSESS_OBJ){
             return ($this->getSession($key));
         }
         
         // CHECK FUNCTIONS
-        public function isSessionSetted($key = Session::DEFAULT_FWSESS_OBJ){
+        public function isSetted($key = Session::DEFAULT_FWSESS_OBJ){
             return (array_key_exists($key, $_SESSION));
         }
         /*public function setNewSession($brute = false){

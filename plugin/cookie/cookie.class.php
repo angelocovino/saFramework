@@ -8,7 +8,7 @@
         // SET COOKIE FUNCTIONS
         public static function set($name, $value = '', $expire = Cookie::COOKIE_EXPIRE_TIME, $path = '/', $domain = '', $secure = false, $httpOnly = false){
             $res = setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
-            if($res === true){
+            if($res === true && COOKIE_AVAILABLE_AT_SET_TIME === true){
                 $_COOKIE[$name] = $value;
             }
             return ($res);

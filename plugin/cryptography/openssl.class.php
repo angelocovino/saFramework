@@ -1,7 +1,7 @@
 <?php
     namespace plugin\cryptography;
     
-    class CryptographyOpenSSL extends Cryptography{
+    class OpenSSL extends Cryptography{
         // VARIABLES
         private $firstKey = false;
         private $secondKey = false;
@@ -14,16 +14,15 @@
         // CONSTRUCT FUNCTIONS
         function __construct($seed){
             parent::__construct($seed);
-            $this->firstKey = substr($this->fullKey, CryptographyOpenSSL::FIRST_KEY_START, 64);
-            $this->secondKey = substr($this->fullKey, CryptographyOpenSSL::SECOND_KEY_START, 16);
+            $this->firstKey = substr($this->fullKey, OpenSSL::FIRST_KEY_START, 64);
+            $this->secondKey = substr($this->fullKey, OpenSSL::SECOND_KEY_START, 16);
         }
         
         // ENCODE AND DECODE FUNCTIONS
         public function encodeBuilder($value){
-            $output = openssl_encrypt($value, CryptographyOpenSSL::ENCODE_METHOD, $this->firstKey, 0, $this->secondKey);
-            return (base64_encode($output));
+            return (openssl_encrypt($value, OpenSSL::ENCODE_METHOD, $this->firstKey, 0, $this->secondKey));
         }
         public function decodeBuilder($value){
-            return (openssl_decrypt(base64_decode($value), CryptographyOpenSSL::ENCODE_METHOD, $this->firstKey, 0, $this->secondKey));
+            return (openssl_decrypt($value, OpenSSL::ENCODE_METHOD, $this->firstKey, 0, $this->secondKey));
         }
     }

@@ -9,9 +9,17 @@
         
         function __construct(){
             $this->item = new Item();
+            $this->setTags('view', ['angelo']);
         }
         
-        function view($id = null, $name = null){
+    function view($id = null, $plugins, $name = null){
+            // ###############################################
+            $cookie = $plugins['cookie'];
+            if($cookie::get('prova') === false){
+                $cookie::set('prova','valoreprova', time()+5);
+            }
+            var_dump2($cookie::get('prova'));
+            // ###############################################
             $view = View::build('items:view.php')
                 ->setVariables('title', $name)
                 ->setVariables('pippo', 'SONO ITEMS')

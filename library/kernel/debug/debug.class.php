@@ -4,8 +4,16 @@
     abstract class Debug{
         // CATCH UNCAUGHT EXCEPTIONS USING set_exception_handler
         public static function uncaughtException($exception){
-            //echo $exception->getMessage();
-            var_dump2($exception);
+            ?>
+            <html>
+                <body>
+                    <h2>ERROR</h2>
+                    <b>[MESSAGE]</b> <?php echo $exception->getMessage(); ?><br />
+                    <b>[CODE]</b> <?php echo $exception->getCode(); ?><br />
+                </body>
+            </html>
+            <?php
+            //var_dump2($exception);
         }
         public static function uncaughtError(){
             $error = error_get_last();

@@ -8,10 +8,16 @@
     use plugin\db\dds\table\DBTable;
     use plugin\db\dds\table\DBColumn;
     //use plugin\cookie\Cookie;
+    use plugin\token\Token;
+    use plugin\csrf\CSRF;
+    use library\request\Request;
+    use library\kernel\config\Config;
 ?>
 <span style="display:block; border:1px solid black;">
     <h2>persona's index</h2>
 <?php
+    $form = $plugins['form'];
+    $cookie = $plugins['cookie'];
     $form::open(['method' => 'post', 'url' => 'login']);
     $form::text('username', false, 'angelotm');
     $form::password('password', false, 'napoli');
@@ -24,6 +30,15 @@
 ?>
 </span>
 <?php
+    //Config::parseINIFile(PATH_CONFIG . 'tag.ini', true);
+    
+    //var_dump2(Request::getMethod());
+    
+    //var_dump2($_SERVER);
+
+    //var_dump2(CSRF::generate());
+    //var_dump2(Token::generate(22));
+
     //use library\tag\Angelo;
     //$angelo = new Angelo();
 /*

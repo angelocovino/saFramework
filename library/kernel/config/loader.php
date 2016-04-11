@@ -6,4 +6,6 @@
     require_once(PATH_KERNEL_CONFIG . 'namespace.php');
     
     // SET ERRORS REPORTING
-    Config::parseINIFile(PATH_CONFIG . 'config.ini', true)->defineConfig()->defineCheck(PATH_KERNEL_CONFIG . 'default.ini');
+    Config::parseINIFile(PATH_CONFIG . 'config.ini', true)
+        ->defineConfig()
+        ->defineCheck(PATH_KERNEL_CONFIG . 'default.ini');

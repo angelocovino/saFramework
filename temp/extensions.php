@@ -22,6 +22,13 @@
     }
     
     /*
+        $str = 'class asd{public $dsa;function __construct($dsa){$this->dsa=$dsa;}}';
+        eval($str);
+        $aa = new asd("ciao");
+        echo $aa->dsa;
+    */
+    
+    /*
     if(phpIsVersion('5.1.2')){
         spl_autoload_register(function($className){
             $pathLibrary = PATH_LIBRARY . $className . '.class.php';
