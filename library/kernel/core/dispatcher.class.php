@@ -155,6 +155,7 @@
             // INITIALIZE METHOD PARAMS
             self::$methodParams = MethodParams::build($dispatch->getSingleton(), $dispatch->getAction());
             // RETRIEVE PLUGINS PARAMETER POSITION
+            
             self::$methodPluginParamPos = self::$methodParams->getNameIndex(PLUGINS_CONTROLLER_PARAM_NAME);
             
             // CHECK DISPATCH ACTION PARAMETERS POSITION AND QUANTITY

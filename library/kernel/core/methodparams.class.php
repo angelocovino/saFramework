@@ -22,9 +22,36 @@
                 $this->isOptional = array();
                 $this->defaultValue = array();
             }
+            
+            /*
+            function getClassName(\ReflectionParameter $param) {
+                preg_match('/\[\s\<\w+>\s([\w]+)/s', $param->__toString(), $matches);
+                return isset($matches[1]) ? $matches[1] : null;
+            }
+            */
+            
             foreach($parameters as $index => $param) {
                 // SETTING UP PARAMETER NAME
                 $this->name[$index] = $param->getName();
+                
+
+            //$reflectionFunc = new \ReflectionFunction('var_dump2');
+            //$reflectionParams = $reflectionFunc->getParameters();
+            //var_dump2($param->getClass()->name);
+            //$reflectionType1 = $parameters->getType();
+
+            //echo $reflectionType1;
+            //var_dump($reflectionType2);
+                
+                //var_dump2($param->getType());
+                
+                
+                /*
+                echo $param->__toString() . "<br />";
+                echo $param->getClass()->name . "<br />";
+                echo getClassName($param) . "<br /><br />";
+                */
+                
                 //if($param->isOptional()){
                 if($param->isDefaultValueAvailable()){
                     $this->countOptionalParams++;

@@ -48,7 +48,7 @@
                 // FORM METHOD FETCH
                 if(
                     array_key_exists('method', $params) && 
-                    in_array($params['method'], FormBuilder::FORM_METHODS)
+                    in_array($params['method'], FormBuilder::$FORM_METHODS)
                 ){
                     $form->setMethod($params['method']);
                 }

@@ -3,7 +3,7 @@
     
     abstract class Cookie{
         // CONSTANTS
-        const COOKIE_EXPIRE_TIME = 60*60*24;
+        const COOKIE_EXPIRE_TIME = 86400; //60*60*24
         
         // SET COOKIE FUNCTIONS
         public static function set($name, $value = '', $expire = Cookie::COOKIE_EXPIRE_TIME, $path = '/', $domain = '', $secure = false, $httpOnly = false){

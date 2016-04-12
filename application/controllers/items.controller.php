@@ -12,7 +12,7 @@
             $this->setTags('view', ['angelo']);
         }
         
-        function view($plugins, $id, $name = null){
+        function view($plugins, $id, View $vista = null, $name = null){
         //function view($id = null, $plugins, $name = null){
             // ###############################################
             /*

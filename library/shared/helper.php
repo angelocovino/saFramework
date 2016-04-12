@@ -1,4 +1,8 @@
 <?php
+    define('BR', '<br />');
+    define('NL', PHP_EOL);
+    define('EOL', NL);
+    
     // FUNCTION var_dump ENCLOSED IN A <pre> TAG
     function var_dump2(){
         foreach(func_get_args() as $var){

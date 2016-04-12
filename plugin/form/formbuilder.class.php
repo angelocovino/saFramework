@@ -2,7 +2,7 @@
     namespace plugin\form;
     
     class FormBuilder{
-        const FORM_METHODS = ['post', 'get'];
+        public static $FORM_METHODS = ['post', 'get'];
         private $method = 'post';
         private $url = false;
         private $action = false;

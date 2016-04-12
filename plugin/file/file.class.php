@@ -28,8 +28,8 @@
             $file = File::create();
             $regexp = sprintf(File::REGEXP_FILEFULLPATH, File::REGEXP_INVALID_CHARS, File::REGEXP_INVALID_CHARS);
             if(preg_match($regexp, $fileFullPath, $matches) != 0){
-                $file->path = str_replace(':', '/', $matches[1]);
-                $file->name = str_replace("\\", '/', $matches[2]);
+                $file->path = str_replace(':', DS, $matches[1]);
+                $file->name = str_replace("\\", DS, $matches[2]);
                 $file->extension = $matches[3];
             }else{
                 throw new Exception('Invalid file path/name', 666);
