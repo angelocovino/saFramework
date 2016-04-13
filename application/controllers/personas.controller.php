@@ -12,11 +12,13 @@
             $this->setTags('index', array('ANGELO','WORLD'));
         }
         
-        function index($plugins){
+        function index(){ //$plugins = null
+            /*
             $cookie = $plugins['cookie'];
             if($cookie::get('prova') === false){
                 $cookie::set('prova','valoreprova', time()+5);
             }
+            */
             $view = View::build('personas:index.php')
                 ->setVariables('title', 'titolo')
                 ->setVariables('pippo', 'SONO PERSONAS')

@@ -2,6 +2,7 @@
     namespace application\controllers;
     use library\kernel\Controller;
     use library\kernel\View;
+    use library\plugin\Plugin;
     use application\models\Item;
     
     class Items extends Controller{
@@ -14,7 +15,7 @@
         }
         
         //function view($plugins, $id, View $vista = null, $name = null){
-        function view($id = null, $plugins, $name = null){
+        function view($id = null, $name = null){
             // ###############################################
             /*
             $cookie = $plugins['cookie'];
@@ -32,7 +33,8 @@
             return ($view);
         }
         
-        function viewall($a = null, View $visuale = null, Item $modello = null, View $vis = null){
+        function viewall($a, Plugin $visuale = null){
+            var_dump2($visuale);
             $view = View::build('items:viewall1.php')
                 ->setVariables('title', 'titolo')
                 ->setVariables('pippo', 'SONO ITEMS')

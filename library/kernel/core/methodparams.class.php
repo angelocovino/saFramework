@@ -104,15 +104,18 @@
         
         // GET FUNCTIONS
         public function getNameIndex($name){
-            return (($this->getCheck($this->name, $name)) ? array_search($name, $this->name) : false );
+            return (($this->getCheck($this->name)) ? array_search($name, $this->name) : false );
         }
         public function getIndexName($index){
             return ($this->name[$index]);
         }
         public function isOptional($index){
-            return ($this->isOptional[$index]);
+            if($this->getCheck($this->isOptional, $index)){
+                return ($this->isOptional[$index]);
+            }
+            throw new Exception('Trying to get ' . $index . ' default value, it is not a value', 666);
         }
-        //public function getDefaultValues(){return ($this->defaultValue);}
+        public function getDefaultValues(){return ($this->defaultValue);}
         public function getDefaultValue($index){
             if($this->getCheck($this->defaultValue, $index)){
                 return ($this->defaultValue[$index]);
@@ -126,7 +129,7 @@
             return (($this->getCheck($this->className, $index)) ? $this->className[$index] : false );
         }
         public function getClassNameIndex($name){
-            return (($this->getCheck($this->className, $name)) ? array_search($name, $this->className) : false );
+            return (($this->getCheck($this->className)) ? array_search($name, $this->className) : false );
         }
         public function getClassNameCount($name){
             return (($this->getCheck($this->classNameCount, $name)) ? $this->classNameCount[$name] : 0 );
@@ -134,10 +137,10 @@
         public function getCount(){return ($this->countParams);}
         public function getCountNecessary(){return ($this->countNecessaryParams);}
         public function getCountOptional(){return ($this->countOptionalParams);}
-        private function getCheck($array, $index){
-            if(is_array($array) && isset($array[$index])){
-                return (true);
+        private function getCheck($array, $index = false){
+            if(!is_array($array) || (($index !== false) && !isset($array[$index]))){
+                return (false);
             }
-            return (false);
+            return (true);
         }
     }

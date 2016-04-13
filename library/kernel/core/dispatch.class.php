@@ -15,6 +15,7 @@
         private $action                 = false;
         // QUERY STRING
         private $queryString            = array();
+        private $queryStringCount       = 0;
         
         // CONSTRUCT AND DESTRUCT FUNCTIONS
         private function __construct(){
@@ -104,7 +105,11 @@
         private function setAction($action){$this->action = $action;}
         private function setController($controller){$this->controller = $controller;}
         private function setControllerName($controllerName){$this->controllerName = $controllerName;}
-        private function setQueryString($queryString){$this->queryString = $queryString;}
+        private function setQueryString($queryString){
+            $this->queryString = $queryString;
+            $this->setQueryStringCount($this->getQueryStringCount()+1);
+        }
+        private function setQueryStringCount($queryStringCount){$this->queryStringCount = $queryStringCount;}
         
         // GET FUNCTIONS
         public function getSingleton(){return ($this->singleton);}
@@ -115,10 +120,21 @@
         public function getControllerName(){return ($this->controllerName);}
         public function getControllerDefault(){return ($this->controllerDefault);}
         public function getQueryString(){return ($this->queryString);}
+        public function getQueryStringCount(){return ($this->queryStringCount);}
         
         // OTHER PRIVATE VARIABLE FUNCTIONS
-        public function addQueryStringByPos($value, $index, $defaultValues){
+        public function addQueryStringByPos($value, $index, $defaultValues = null){
+            if($this->getQueryStringCount() < $index){
+                $this->queryStringFillUsingDefaults($defaultValues, $this->getQueryStringCount(), $index);
+            }
             array_splice($this->queryString, $index, 0, array($value));
+        }
+        private function queryStringFillUsingDefaults($defaultValues, $from, $to){
+            for($i=$from;$i<$to;$i++){
+                if(isset($defaultValues[$i])){
+                    $this->queryString[$i] = $defaultValues[$i];
+                }
+            }
         }
         public function appendQueryString($queryString){$this->queryString[] = $queryString;}
     }
