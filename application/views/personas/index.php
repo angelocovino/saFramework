@@ -5,6 +5,12 @@
     use plugin\db\DB;
     use plugin\table\TableHtml;
     use plugin\katana\Katana;
+use plugin\attribute\AttributeHtml;
+use plugin\attribute\table\AttributeTableElement;
+use plugin\attribute\table\AttributeTableTag;
+use plugin\attribute\table\AttributeTableTd;
+use plugin\table\Table;
+use plugin\table\TableTr;
 ?>
 <style>
 thead {color:green;}
@@ -36,16 +42,58 @@ $utenti=DB::open('utenti')->get();
 
 // arguments: id, class
 // can include associative array of optional additional attributes
-$tbl = new TableHtml('', 'miatable');
+/*$tbl = new TableHtml('', 'miatable');
 $tbl->addCaption('Mia nuova Tabella','myCap');
-$tbl->addSezione('thead','myThead');
+$tbl->addSezione('thead','myThead')->addRow()->addCell('user','','header')->addCell('nome','','header')->addCell('cognome','','header');
+$tbl->addSezione('tfoot','mioTfoot')->addRow()->addCell('Sono la riga di foot', 'foot', 'data',['colspan'=>3,'align'=>'center'] );
+$tbl->addSezione('tbody','mioTbody');*/
 
-$tbl->addRow();
-$tbl->addCell('user','','header');
-$tbl->addCell('nome','','header');
-$tbl->addCell('cognome','','header');
 
-$tbl->addSezione('tfoot','mioTfoot');
+/*TableHtml::createTableFromArray($utenti)->displayTable();
+
+$attr=new AttributeTableTd(['id'=>'1','class'=>'miaclasse','style'=>'color:blue;text-align:center','align'=>'center','valign'=>'top','bgcolor'=>'#FF0000','width'=>'5px','height'=>'100%']);
+echo $attr->display();*/
+
+///QUELLO CHE VOGLIO FARE
+$table= new Table(array('id' => 'pollo'));
+$table->createTr()->createTd('mio cont')->buildHtmlTable();
+
+
+
+
+/*class Table{
+    public static function create(){
+        
+        return($this);
+    }
+    public function createTR(){
+        return (new TableTR());
+    }
+}
+class TableTR{
+    private $myTable;
+    public function __construct(Table $myTable){
+        $this->myTable = $myTable;
+    }
+    public function createTD($dv,$vdv,$dfs){
+        return (new TableTD($this,$dv,$vdv,$dfs));
+    }
+}
+class TableTD{
+    private $myTR;
+    public function __construct(TableTR $myTR){
+        $this->myTR = $myTR;
+    }
+    public function createTD($dv,$vdv,$dfs){
+        return $this->myTR->createTD($dv,$vdv,$dfs);
+    }
+    public function createTR(){
+        $this->myTR->myTable->createTR();
+    }
+}*/
+
+
+/*$tbl->addSezione('tfoot','mioTfoot');
 $tbl->addRow();
 $tbl->addCell('Sono la riga di foot', 'foot', 'data',['colspan'=>3,'align'=>'center'] );
 
@@ -57,9 +105,9 @@ foreach($utenti as $u){
     $tbl->addCell($u['cognome']);
 }
 
-
+*/
 
     
-echo $tbl->displayTable();
+//echo $tbl->displayTable();
 
     
