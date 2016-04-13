@@ -7,11 +7,4 @@
     $url = isset($_GET['url'])?$_GET['url']:false;
     
     // BOOTSTRAP LOADER
-    require_once(ROOT . DS . 'library' . DS . 'bootstrap.php');
-    
-    /*
-        $str = 'class asd{public $dsa;function __construct($dsa){$this->dsa=$dsa;}}';
-        eval($str);
-        $aa = new asd("ciao");
-        echo $aa->dsa;
-    */
+    require_once(ROOT . DS . 'library' . DS . 'kernel' . DS . 'bootstrap' . DS . 'bootstrap.php');

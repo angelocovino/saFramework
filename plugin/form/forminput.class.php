@@ -1,16 +1,20 @@
 <?php
     namespace plugin\form;
+    use \Exception;
     
     class FormInput{
+        // CONSTANTS
         const INPUT_TYPE = ['text', 'number', 'password', 'submit', 'email'];
         
+        // VARIABLES
         private $type = 'text';
         private $name = false;
         private $value = false;
         private $placeholder = false;
         private $disabled = false;
         
-        public function __construct($params = false){
+        // CONSTRUCT AND DESTRUCT FUNCTIONS
+        public function __construct($params){
             if(is_array($params)){
                 if(
                     array_key_exists('type', $params) && 
@@ -33,28 +37,17 @@
                 ){
                     $this->setDisabled($params['disabled']);
                 }
+            }else{
+                throw new Exception('FormInput needs a Parameters array', 666);
             }
         }
         
-        public static function create($params = false){
+        // CREATE NEW OBJECT BY STATIC METHOD
+        public static function create($params){
             return ((new FormInput($params))->build());
         }
         
-        private function setType($type){$this->type=$type; return ($this);}
-        private function getType(){return ($this->type);}
-        
-        private function setName($name){$this->name=$name; return ($this);}
-        private function getName(){return ($this->name);}
-        
-        private function setValue($value){$this->value=$value; return ($this);}
-        private function getValue(){return ($this->value);}
-        
-        private function setPlaceholder($plchldr){$this->placeholder=$plchldr; return ($this);}
-        private function getPlaceholder(){return ($this->placeholder);}
-        
-        private function setDisabled($dsbld){$this->disabled=$dsbld; return ($this);}
-        private function getDisabled(){return ($this->disabled);}
-        
+        // BUILD HTML FUNCTION
         public function build(){
             $str = "<input type='" . $this->getType() . "'";
             if($this->getName()!=false){
@@ -72,4 +65,18 @@
             $str .= " />";
             return ($str);
         }
+        
+        // SET FUNCTIONS
+        private function setType($type){$this->type=$type; return ($this);}
+        private function setName($name){$this->name=$name; return ($this);}
+        private function setValue($value){$this->value=$value; return ($this);}
+        private function setPlaceholder($plchldr){$this->placeholder=$plchldr; return ($this);}
+        private function setDisabled($dsbld){$this->disabled=$dsbld; return ($this);}
+        
+        // GET FUNCTIONS
+        private function getType(){return ($this->type);}
+        private function getName(){return ($this->name);}
+        private function getValue(){return ($this->value);}
+        private function getPlaceholder(){return ($this->placeholder);}
+        private function getDisabled(){return ($this->disabled);}
     }

@@ -1,16 +1,18 @@
 <?php
     namespace plugin\db;
     use \PDO;
+    use \PDOException;
     
 	abstract class DBConnection{
         // DATABASE VARS
             // DATABASE TYPE VARS
             protected $dbType;
             // CREDENTIALS VARS
-            private $dbHost;
-            private $dbUser;
-            private $dbPwd;
-            private $dbName;
+            private $dbHost = false;
+            private $dbPort = false;
+            private $dbUser = false;
+            private $dbPwd = false;
+            private $dbName = false;
             // CONNECTION VARS
             private $dbConn;
             private $dbIsConnActive;
@@ -33,6 +35,7 @@
 		function __construct(){
             // CREDENTIALS VARS
 			$this->dbHost = DB_HOST;
+			$this->dbPort = DB_PORT;
 			$this->dbUser = DB_USER;
 			$this->dbPwd = DB_PASSWORD;
 			$this->dbName = DB_NAME;
@@ -46,14 +49,28 @@
 			$this->disconnect();
         }
 		
+        // DATABASE CHOOSING
+        protected static function chooseDatabase(){
+            switch(DBTYPE){
+                default:
+                case 'mysql':
+                    $dbType=(new MySqlDB());
+                    break;
+            }
+            return ($dbType);
+        }
+        
 		// CONNECTION AND DISCONNECTION FUNCTIONS
 		private function isConnected(){
             return ($this->dbIsConnActive);
         }
-		private function connect(){
+		private function connect($isEmpty = false){
 			if(!($this->isConnected())){
                 try{
-                    $this->dbConn = new PDO("{$this->dbType}:host={$this->dbHost};dbname={$this->dbName}", $this->dbUser, $this->dbPwd);
+                    $connectionStr = "{$this->dbType}:host={$this->dbHost}";
+                    $connectionStr .= (($this->dbPort !== false && !empty($this->dbPort))?";port={$this->dbPort}":"");
+                    $connectionStr .= ((!$isEmpty)?";dbname={$this->dbName}":"");
+                    $this->dbConn = new PDO($connectionStr, $this->dbUser, $this->dbPwd);
                     $this->dbConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     $this->dbConn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 					$this->dbIsConnActive = true;
@@ -69,9 +86,9 @@
 			}
 		}
         
-        // PDO FUNCTIONS
-        protected function executeRes($query, $params, $isBoolRes = true, $transaction = true){
-            $this->connect();
+        // EXECUTE FUNCTIONS
+        protected function executeRes($query, $params = false, $isBoolRes = true, $transaction = true, $isEmptyConnection = false){
+            $this->connect($isEmptyConnection);
             $res = false;
             try{
                 if($transaction){
@@ -80,7 +97,9 @@
                 $stmt = $this->prepareStmt($query);
                 //echo $query . "<br />";
                 //print_r($params);
-                $stmt = $this->bindParams($stmt, $params);
+                if($params !== false){
+                    $stmt = $this->bindParams($stmt, $params);
+                }
                 $res = $stmt->execute();
                 if(!$isBoolRes){
                     $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -92,18 +111,18 @@
                 if($transaction){
                     $this->dbConn->rollback();
                 }
-                echo "Error:  " . $e->getMessage();
+                throw $e;
             }
 			$this->disconnect();
             return $res;
         }
-        protected function exec($query){
-            $this->connect();
+        protected function exec($query, $isEmptyConnection = false){
+            $this->connect($isEmptyConnection);
             $affectedRows = 0;
             try{
                 $affectedRows = $this->dbConn->exec($query);
             }catch(PDOException $e){
-                echo "Error:  " . $e->getMessage();
+                throw $e;
             }
 			$this->disconnect();
             return ($affectedRows);

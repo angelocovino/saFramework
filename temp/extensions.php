@@ -12,7 +12,22 @@
         }
         return false;
     }
-
+    
+    public function invokeWithParam($func, $params){
+        if(method_exists($this, $func)){
+            if(!is_array($params)){$params = array($params);}
+            return (call_user_func_array(array($this, $func), $params));
+        }
+        return (false);
+    }
+    
+    /*
+        $str = 'class asd{public $dsa;function __construct($dsa){$this->dsa=$dsa;}}';
+        eval($str);
+        $aa = new asd("ciao");
+        echo $aa->dsa;
+    */
+    
     /*
     if(phpIsVersion('5.1.2')){
         spl_autoload_register(function($className){

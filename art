@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+
+// ABSOLUTE PATH VARS
+define('DS', DIRECTORY_SEPARATOR);
+define('ROOT', dirname(__FILE__));
+
+// URL GETTER
+$url = false;
+
+// BOOTSTRAP LOADER
+require_once(ROOT . DS . 'library' . DS . 'kernel' . DS . 'bootstrap' . DS . 'bootstrap.php');
+
+//
+require_once('database/tabella2.php');
+
+$tab = create();
+
+$dds = plugin\db\dds\DDS::createTable($tab,true);
+
+var_dump($tab->build());
+//$tab = plugin\db\dds\table\DBTable::class;

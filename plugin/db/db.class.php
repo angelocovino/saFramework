@@ -4,7 +4,7 @@
     use plugin\db\JoinClause;
     use plugin\db\MysqlDB;
     
-	class DB extends DBConnection{
+	abstract class DB extends DBConnection{
         // TABLE VARS
 		private $table = false;
         private $tableStructure = false;
@@ -37,15 +37,24 @@
         
         // NEW DB OPENING FUNCTION
         public static function open($tableName){
-            switch(DBTYPE){
-                default: 
-                    $dbType=(new MySqlDB())->setTable($tableName);
-                    break;
-                //Case per altri tipo db
-                    
-            }
-            return ($dbType);
+            return (DBConnection::chooseDatabase()->setTable($tableName));
         }
+        
+        // NOT NECESSARY FUNCTIONS
+		public function getTableStructure($table){
+			$query = "SHOW COLUMNS FROM {$table}";
+            $res = $this->executeRes($query, false, false);
+			if($res !== false){
+                /*
+				foreach($res as $res){
+					$this->tableStructure[$i] = $this->fetchAssocStored();
+					$this->tableStructureColumns[$i] = $this->tableStructure[$i]['Field'];
+				}*/
+                return ($res);
+			}
+            return (false);
+		}
+        
         
         // GENERAL FUNCTIONS
         private function resetQuery($res = false){
@@ -117,7 +126,9 @@
         public function getItemArray($itemName, $column = false){
             $res = $this->getItemsArray($itemName, $column);
             $newRes = array();
-            $newRes[$itemName] = $res[0][$itemName];
+            if(count($res)>0){
+                $newRes[$itemName] = $res[0][$itemName];
+            }
             return ($newRes);
         }
         /* */
@@ -316,6 +327,7 @@
             $this->table = $table;
             return ($this);
         }
+        /*
         private function getTableStructure($table){
             try{
                 $stmt = $this->query("SHOW COLUMNS FROM {$table}");
@@ -325,6 +337,7 @@
             }
             return ($this);
 		}
+        */
             // JOIN FUNCTIONS
             private function joinBuild(JoinClause $join, $x, $op, $y){
                 if(is_callable($x)){
@@ -357,17 +370,6 @@
         $stmt->execute( array(':username' => $_REQUEST['username']) );
         
         
-		protected function getTableStructure($table){
-			$query = "SHOW COLUMNS FROM {$table}";
-			$this->executeQuery($query);
-			$rows = $this->getNumRowsStored();
-			if($rows!=false){
-				for($i=0;$i<$rows;$i++){
-					$this->tableStructure[$i] = $this->fetchAssocStored();
-					$this->tableStructureColumns[$i] = $this->tableStructure[$i]['Field'];
-				}
-			}
-		}
 		protected function isColumnNumeric($columnName){
 			//echo "colonna ".$columnName."<br />";
 			$index = array_search($columnName, $this->tableStructureColumns);
