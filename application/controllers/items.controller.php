@@ -10,10 +10,11 @@
         function __construct(){
             $this->item = new Item();
             $this->setTags('view', ['angelo']);
+            $this->setTags('viewall', ['angelo']);
         }
         
-        function view($plugins, $id, View $vista = null, $name = null){
-        //function view($id = null, $plugins, $name = null){
+        //function view($plugins, $id, View $vista = null, $name = null){
+        function view($id = null, $plugins, $name = null){
             // ###############################################
             /*
             $cookie = $plugins['cookie'];
@@ -31,7 +32,7 @@
             return ($view);
         }
         
-        function viewall(){
+        function viewall($a = null, View $visuale = null, Item $modello = null, View $vis = null){
             $view = View::build('items:viewall1.php')
                 ->setVariables('title', 'titolo')
                 ->setVariables('pippo', 'SONO ITEMS')
