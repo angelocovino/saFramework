@@ -14,12 +14,6 @@
         }
         
         function index(Plugin $plugin){
-            /*
-            $cookie = $plugins['cookie'];
-            if($cookie::get('prova') === false){
-                $cookie::set('prova','valoreprova', time()+5);
-            }
-            */
             $view = View::build('personas:index.php')
                 ->setVariables('title', 'titolo')
                 ->setVariables('pippo', 'SONO PERSONAS')

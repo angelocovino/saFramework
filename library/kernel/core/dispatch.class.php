@@ -20,7 +20,6 @@
         // CONSTRUCT AND DESTRUCT FUNCTIONS
         private function __construct(){
             // SETTING UP DEFAULT CONTROLLER/ACTION
-            //$this->controllerDefault = NAMESPACE_CONTROLLERS . ucwords(FRAMEWORK_NAME) . 'Controller';
             $this->controllerDefault = NAMESPACE_CONTROLLERS . ucwords(FRAMEWORK_NAME);
             $this->actionDefault = 'index';
         }
@@ -59,7 +58,6 @@
             $url = explode('/', $url);
             // SETTING UP CONTROLLER NAME AND IT'S REAL CLASS PATH
             $this->setControllerName(array_shift($url));
-            //$controllerClassPath = NAMESPACE_CONTROLLERS . ucfirst($this->controllerName . 'Controller');
             $controllerClassPath = NAMESPACE_CONTROLLERS . ucfirst($this->controllerName);
             // CHECK IF CONTROLLER EXISTS
             if(class_exists($controllerClassPath)){

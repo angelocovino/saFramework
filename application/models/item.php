@@ -3,7 +3,5 @@
     use library\kernel\Model;
     
     class Item extends Model{
-        public function casa(){
-            
-        }
+        
     }

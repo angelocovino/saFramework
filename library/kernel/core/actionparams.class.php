@@ -3,7 +3,7 @@
     use \ReflectionMethod;
     use \Exception;
     
-    class MethodParams{
+    class ActionParams{
         // VARIABLES
         private $name = false;
         private $isOptional = false;
@@ -11,6 +11,7 @@
         private $classFullName = false;
         private $className = false;
         private $classNameCount = false;
+        // SUPPORT VARIABLES
         private $classOccurencies = false;
         // COUNT VARIABLES
         private $countParams = 0;
@@ -59,7 +60,7 @@
         
         // BUILD CLASS FUNCTIONS
         public static function build($class, $method){
-            return (new MethodParams($class, $method));
+            return (new ActionParams($class, $method));
         }
         
         // OTHER FUNCTIONS
@@ -150,11 +151,6 @@
         public function getClassNameCount($name){
             return (($this->getCheck($this->classNameCount, $name)) ? $this->classNameCount[$name] : 0 );
         }
-        /*
-        public function getClassOccurencies($name){
-            return (($this->getCheck($this->classOccurencies, $name)) ? $this->classOccurencies[$name] : false );
-        }
-        */
         public function getCount(){return ($this->countParams);}
         public function getCountNecessary(){return ($this->countNecessaryParams);}
         public function getCountOptional(){return ($this->countOptionalParams);}

@@ -2,7 +2,7 @@
     namespace library\kernel;
     use plugin\db\DB;
 
-    class Model{
+    abstract class Model{
         protected $modelName    = false;
         private $connection     = false;
 

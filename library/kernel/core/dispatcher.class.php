@@ -1,7 +1,7 @@
 <?php
     namespace library\kernel\core;
     use library\kernel\core\Dispatch;
-    use library\kernel\core\MethodParams;
+    use library\kernel\core\ActionParams;
     use library\kernel\config\Config;
     use library\kernel\View;
     use \Exception;
@@ -10,7 +10,7 @@
         // DISPATCHER VARIABLES
         private static $dispatch                = false;
         // DISPATCHER METHOD VARIABLES
-        private static $methodParams            = false;
+        private static $actionParams            = false;
         // VIEW VARIABLES
         private static $defaultParams           = false;
         private static $defaultIndexes          = false;
@@ -69,12 +69,12 @@
         private static function checkAndSetDefaultParameters($class, $tags, $isPlugin = false){
             $dispatch = self::$dispatch;
             
-            if(self::$methodParams->getClassNameCount($class)>1){
+            if(self::$actionParams->getClassNameCount($class)>1){
                 throw new Exception('Only one instance of ' . $class . ' is allowed', 666);
             }
             // SETTING PARAM POS
-            $paramPos = self::$methodParams->getClassNameIndex($class);
-            $paramName = self::$methodParams->getIndexName($paramPos);
+            $paramPos = self::$actionParams->getClassNameIndex($class);
+            $paramName = self::$actionParams->getIndexName($paramPos);
             if($paramPos !== false){
                 // SETTING PARAM INSTANCE
                 $classInstance = 'library\\' . strtolower($class) . '\\' . $class;
@@ -95,21 +95,14 @@
                             $classInstance = new $classInstance($activePlugins);
                             self::$defaultParams[$paramName] = $classInstance;
                             self::$defaultIndexes[$paramPos] = $classInstance;
-                            
-                            //$dispatch->addQueryStringByPos($classInstance, $paramPos, self::$methodParams->getDefaultValues());
-                            //return 1;
                         }
                     }
                 }else{
                     $classInstance = new $classInstance();
                     self::$defaultParams[$paramName] = $classInstance;
                     self::$defaultIndexes[$paramPos] = $classInstance;
-                    
-                    //$dispatch->addQueryStringByPos(new $classInstance, $paramPos, self::$methodParams->getDefaultValues());
-                    //return 1;
                 }
             }
-            //return 0;
         }
         private static function checkParameters($tags){
             $dispatch = self::$dispatch;
@@ -117,7 +110,7 @@
             // SETTING UP DEFAULT PARAMETERS
             $defaultParams = array('Plugin', 'Response', 'Request');
             // CHECKING EACH DEFAULT PARAMETER
-            foreach(self::$methodParams->getClassNames() as $index => $class){
+            foreach(self::$actionParams->getClassNames() as $index => $class){
                 if(in_array($class, $defaultParams)){
                     if(strcmp($class, $defaultParams[0])==0){
                         self::checkAndSetDefaultParameters($class, $tags, true);
@@ -128,23 +121,23 @@
             }
             
             // REMOVE DEFAULT PARAMS IN ORDER TO CHECK REMAING PARAMETERS
-            self::$methodParams->removeParams($defaultParams);
+            self::$actionParams->removeParams($defaultParams);
             
             // CHECK DEFAULT ACTION HAS NO PARAMETERS INSIDE EXCEPT FOR DEFAULT PARAMETERS
             if($dispatch->getIsActionDefault()){
                 // CHECK IT USING NUMBER OF DEFAULT ACTION PARAMETERS
-                if(self::$methodParams->getCount()>0){
+                if(self::$actionParams->getCount()>0){
                     throw new Exception('Default Action can not be called, no parameters allowed except for ' . implode(', ', $defaultParams), 666);
                 }
             }
             
             // CHECK FOR NECESSARY PARAMS IN VERY FIRST POSITIONS
-            if(!self::$methodParams->checkNecessaryParamsInVeryFirstPositions()){
+            if(!self::$actionParams->checkNecessaryParamsInVeryFirstPositions()){
                 throw new Exception('Action can not be called, parameters required in very first positions', 666);
             }
             
             // CHECK NUMBER OF NECESSARY ARGUMENTS REQUIRED
-            if(self::$methodParams->getCountNecessary() > (count($dispatch->getQueryString()))){
+            if(self::$actionParams->getCountNecessary() > (count($dispatch->getQueryString()))){
                 // LESS NECESSARY ARGUMENTS THAN FUNCTION NEEDS
                 throw new Exception('Action can not be called, parameters required', 666);
             }
@@ -152,7 +145,7 @@
             // ADDING DEFAULT PARAMS TO QUERY STRING
             if(self::$defaultIndexes !== false){
                 foreach(self::$defaultIndexes as $index => $class){
-                    $dispatch->addQueryStringByPos($class, $index, self::$methodParams->getDefaultValues());
+                    $dispatch->addQueryStringByPos($class, $index, self::$actionParams->getDefaultValues());
                 }
             }
         }
@@ -176,8 +169,8 @@
             // CHECK TAGS
             $tags = self::getTags();
             
-            // INITIALIZE METHOD PARAMS
-            self::$methodParams = MethodParams::build($dispatch->getSingleton(), $dispatch->getAction());
+            // INITIALIZE ACTION PARAMS
+            self::$actionParams = ActionParams::build($dispatch->getSingleton(), $dispatch->getAction());
             
             // CHECK DISPATCH ACTION PARAMETERS POSITION AND QUANTITY
             self::checkParameters($tags);
@@ -192,11 +185,6 @@
             
             // IF VIEW IS NOT NULL (CAN BE NULL WHEN THERE IS NO RETURN VALUE) AND IT'S A View INSTANCE
             if(!is_null(self::$view) && (self::$view instanceof View)){
-                /*
-                if($activePlugins !== false){
-                    self::$view->setVariables('plugins', $activePlugins);
-                }
-                */
                 if(is_array(self::$defaultParams) && (count(self::$defaultParams)>0)){
                     foreach(self::$defaultParams as $name => $object){
                         self::$view->setVariables($name, $object);

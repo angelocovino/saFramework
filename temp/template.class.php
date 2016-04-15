@@ -66,13 +66,11 @@
                         array_push($this->variables['styles'], PATH_VIEW . "style.css");
                     }
                 }
-            echo "asd";
             if(file_exists($this->pathViewLocal . 'header.php')){
                 include($this->pathViewLocal . 'header.php');
             }else{
                 include(PATH_VIEW . 'header.php');
             }
-            echo "asd";
             // ACTION INCLUDE
             if(file_exists($this->pathViewStorage . $this->actionName . '.php')){
                 include($this->pathViewStorage . $this->actionName . '.php');
