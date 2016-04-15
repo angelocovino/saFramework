@@ -43,6 +43,10 @@ class TableTd extends TablePart{
         return $this->myTr->createTd($cont,$t='data',$attr);
     }
     
+    public function createTh($cont,$t='header',$attr=false){
+        return $this->myTr->createTh($cont,$t='header',$attr);
+    }
+    
     public function createTr($attr){
         $this->myTr->getMytable()->createTr($attr);
     }
@@ -63,6 +67,7 @@ class TableTd extends TablePart{
     }
     
     protected function buildHtmlTr(){}
+    protected function buildHtmlTableSection($sec,$tag){}
     
     public function buildHtmlTable(){
         echo $this->myTr->getMytable()->buildHtmlTable();

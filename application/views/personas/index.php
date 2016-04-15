@@ -62,7 +62,7 @@ $attr=new AttributeTableTd(['id'=>'1','class'=>'miaclasse','style'=>'color:blue;
 echo $attr->display();*/
 
 ///QUELLO CHE VOGLIO FARE
-$table= new Table(array('id' => 'pollo'));
+$table= new Table(array('id' => 'pollo','style'=>'border:1px solid black'));
 $table->createTr()->createTd('mio cont')->buildHtmlTable();
 
 

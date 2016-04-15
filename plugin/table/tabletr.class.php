@@ -34,6 +34,11 @@ class Tabletr extends TablePart{
         return end($this->td);
     }
     
+    public function createTh($cont,$t='header',$attr=false){
+        $this->td[]=new TableTd($this,$cont,$t,$attr);
+        return end($this->td);
+    }
+    
     private function getRowCells($celle)
     {
         $str='';
@@ -51,5 +56,6 @@ class Tabletr extends TablePart{
     
     protected function buildHtmlTable(){}
     protected function buildHtmlTd(){}
+    protected function buildHtmlTableSection($sec,$tag){}
     
 }

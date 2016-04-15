@@ -6,4 +6,5 @@ abstract class TablePart{
     abstract protected function buildHtmlTable();
     abstract protected function buildHtmlTr();
     abstract protected function buildHtmlTd();
+    abstract protected function buildHtmlTableSection($sec,$tag);
 }
