@@ -3,7 +3,7 @@
     use plugin\cookie\Cookie;
     use plugin\session\Session;
     
-    abstract class Request{
+    class Request{
         private static $isSet           = false;
         private static $requestMethod   = false;
         private static $parameters      = false;

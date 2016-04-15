@@ -6,9 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <!--
-    -->
     <style>
+        <?php
+        /*
+        body{
+            background-color:rgb(33,33,33);
+            color:white;
+        }
+        a, a:link, a:active, a:hover, a:visited{
+            color:white;
+        }
+        */
+        ?>
     <?php
         if(isset($styles)):
             foreach($styles as $style):

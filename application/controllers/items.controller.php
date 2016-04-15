@@ -2,6 +2,11 @@
     namespace application\controllers;
     use library\kernel\Controller;
     use library\kernel\View;
+    // DEFAULT PARAMETERS
+    use library\response\Response;
+    use library\request\Request;
+    use library\plugin\Plugin;
+    // MODELS
     use application\models\Item;
     
     class Items extends Controller{
@@ -10,19 +15,10 @@
         function __construct(){
             $this->item = new Item();
             $this->setTags('view', ['angelo']);
+            $this->setTags('viewall', ['angelo']);
         }
         
-        function view($plugins, $id, View $vista = null, $name = null){
-        //function view($id = null, $plugins, $name = null){
-            // ###############################################
-            /*
-            $cookie = $plugins['cookie'];
-            if($cookie::get('prova') === false){
-                $cookie::set('prova','valoreprova', time()+5);
-            }
-            var_dump2($cookie::get('prova'));
-            */
-            // ###############################################
+        function view($id = null, $name = null){
             $view = View::build('items:view.php')
                 ->setVariables('title', $name)
                 ->setVariables('pippo', 'SONO ITEMS')
@@ -31,7 +27,7 @@
             return ($view);
         }
         
-        function viewall(){
+        function viewall(Request $req, $a = null, Plugin $visuale, $b = null, Response $res){
             $view = View::build('items:viewall1.php')
                 ->setVariables('title', 'titolo')
                 ->setVariables('pippo', 'SONO ITEMS')

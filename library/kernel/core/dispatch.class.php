@@ -15,11 +15,11 @@
         private $action                 = false;
         // QUERY STRING
         private $queryString            = array();
+        private $queryStringCount       = 0;
         
         // CONSTRUCT AND DESTRUCT FUNCTIONS
         private function __construct(){
             // SETTING UP DEFAULT CONTROLLER/ACTION
-            //$this->controllerDefault = NAMESPACE_CONTROLLERS . ucwords(FRAMEWORK_NAME) . 'Controller';
             $this->controllerDefault = NAMESPACE_CONTROLLERS . ucwords(FRAMEWORK_NAME);
             $this->actionDefault = 'index';
         }
@@ -58,7 +58,6 @@
             $url = explode('/', $url);
             // SETTING UP CONTROLLER NAME AND IT'S REAL CLASS PATH
             $this->setControllerName(array_shift($url));
-            //$controllerClassPath = NAMESPACE_CONTROLLERS . ucfirst($this->controllerName . 'Controller');
             $controllerClassPath = NAMESPACE_CONTROLLERS . ucfirst($this->controllerName);
             // CHECK IF CONTROLLER EXISTS
             if(class_exists($controllerClassPath)){
@@ -104,7 +103,11 @@
         private function setAction($action){$this->action = $action;}
         private function setController($controller){$this->controller = $controller;}
         private function setControllerName($controllerName){$this->controllerName = $controllerName;}
-        private function setQueryString($queryString){$this->queryString = $queryString;}
+        private function setQueryString($queryString){
+            $this->queryString = $queryString;
+            $this->setQueryStringCount($this->getQueryStringCount()+1);
+        }
+        private function setQueryStringCount($queryStringCount){$this->queryStringCount = $queryStringCount;}
         
         // GET FUNCTIONS
         public function getSingleton(){return ($this->singleton);}
@@ -115,10 +118,21 @@
         public function getControllerName(){return ($this->controllerName);}
         public function getControllerDefault(){return ($this->controllerDefault);}
         public function getQueryString(){return ($this->queryString);}
+        public function getQueryStringCount(){return ($this->queryStringCount);}
         
         // OTHER PRIVATE VARIABLE FUNCTIONS
         public function addQueryStringByPos($value, $index, $defaultValues){
+            if($this->getQueryStringCount() < $index){
+                $this->queryStringFillUsingDefaults($this->getQueryStringCount(), $index, $defaultValues);
+            }
             array_splice($this->queryString, $index, 0, array($value));
+        }
+        private function queryStringFillUsingDefaults($from, $to, $defaultValues){
+            for($i=$from;$i<$to;$i++){
+                if(array_key_exists($i, $defaultValues) && !array_key_exists($i, $this->queryString)){
+                    $this->queryString[$i] = $defaultValues[$i];
+                }
+            }
         }
         public function appendQueryString($queryString){$this->queryString[] = $queryString;}
     }

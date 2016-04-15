@@ -4,7 +4,7 @@
 </form>
 <br/><br/>
 <?php
-    echo "pippo [" . $pippo . "]<br />pluto[" . $pluto . "]<br />";
+    echo "pippo [" . $pippo . "]<br />pluto [" . $pluto . "]<br />";
     $number = 0;
 ?>
 

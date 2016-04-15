@@ -1,8 +1,8 @@
 <?php
     namespace library\kernel\core;
     use library\kernel\core\Dispatch;
+    use library\kernel\core\ActionParams;
     use library\kernel\config\Config;
-    use library\kernel\core\MethodParams;
     use library\kernel\View;
     use \Exception;
     
@@ -10,9 +10,10 @@
         // DISPATCHER VARIABLES
         private static $dispatch                = false;
         // DISPATCHER METHOD VARIABLES
-        private static $methodParams            = false;
-        private static $methodPluginParamPos    = false;
+        private static $actionParams            = false;
         // VIEW VARIABLES
+        private static $defaultParams           = false;
+        private static $defaultIndexes          = false;
         private static $view                    = false;
         
         // SET DISPATCH FUNCTIONS
@@ -33,7 +34,7 @@
         }
         
         // CHECK DISPATCH TAGS FUNCTIONS
-        private static function checkTags(){
+        private static function getTags(){
             $dispatch = self::$dispatch;
             // RETRIEVE CHOOSEN ACTION TAGS
             return ($dispatch->getSingleton()->getTags($dispatch->getAction()));
@@ -64,71 +65,87 @@
             return (false);
         }
         
-        // SET DISPATCH ACTION PLUGINS
-        private static function setPlugins($plugins){
+        // CHECK DISPATCH ACTION PARAMETERS
+        private static function checkAndSetDefaultParameters($class, $tags, $isPlugin = false){
             $dispatch = self::$dispatch;
-            // IF PLUGINS NEED TO BE INCLUDED
-            if($plugins !== false){
-                // CHECK PLUGINS PARAMETER POSITION
-                if(self::$methodPluginParamPos !== false){
-                    // IF ACTION HAS NO PARAMETERS DO NOT PROCEED
-                    if(count($dispatch->getQueryString()) < (self::$methodParams->getCountNecessary()-1)){
-                        throw new Exception('Action can not be called, parameters required', 666);
+            
+            if(self::$actionParams->getClassNameCount($class)>1){
+                throw new Exception('Only one instance of ' . $class . ' is allowed', 666);
+            }
+            // SETTING PARAM POS
+            $paramPos = self::$actionParams->getClassNameIndex($class);
+            $paramName = self::$actionParams->getIndexName($paramPos);
+            if($paramPos !== false){
+                // SETTING PARAM INSTANCE
+                $classInstance = 'library\\' . strtolower($class) . '\\' . $class;
+                // 
+                if($isPlugin === true){
+                    // CHECKING IF PLUGIN IS AMONG ACTION PARAMETERS
+                    if($paramPos !== false){
+                        // CHECK THERE IS NO PLUGIN PARAMS IF NO TAGS ARE SPECIFIED
+                        if($tags === false){
+                            throw new Exception('Action can not be called, no parameters instance of ' . $class . ' allowed, it is allowed only after setting valid Tags, using \'setTag\' controller function', 666);
+                        }
+                        // GET PLUGINS
+                        $activePlugins = self::getPlugins($tags);
+                        // IF PLUGINS NEED TO BE INCLUDED AND PLUGIN PARAMETER IS PRESENT
+                        if($activePlugins !== false){
+                            // ACTION HAS SUFFICIENT PARAMETERS
+                            // ADD PLUGIN AT THE CORRECT POSITION IN ACTION PARAMETERS LIST
+                            $classInstance = new $classInstance($activePlugins);
+                            self::$defaultParams[$paramName] = $classInstance;
+                            self::$defaultIndexes[$paramPos] = $classInstance;
+                        }
                     }
-                    // ACTION HAS SUFFICIENT PARAMETERS
-                    // ADD PLUGIN AT THE CORRECT POSITION IN ACTION PARAMETERS LIST
-                    $dispatch->addQueryStringByPos($plugins, self::$methodPluginParamPos, self::$methodParams->getDefaultValues());
+                }else{
+                    $classInstance = new $classInstance();
+                    self::$defaultParams[$paramName] = $classInstance;
+                    self::$defaultIndexes[$paramPos] = $classInstance;
                 }
             }
         }
-        
-        // CHECK DISPATCH ACTION PARAMETERS
         private static function checkParameters($tags){
             $dispatch = self::$dispatch;
             
-            // CHECK NO PLUGINS_CONTROLLER_PARAM_NAME PARAMS IF NO TAGS ARE SPECIFIED
-            if(($tags === false) && (self::$methodPluginParamPos !== false)){
-                throw new Exception('Action can not be called, no parameters called ' . PLUGINS_CONTROLLER_PARAM_NAME . ' allowed, it is allowed only after setting valid Tags, using setTag controller function', 666);
+            // SETTING UP DEFAULT PARAMETERS
+            $defaultParams = array('Plugin', 'Response', 'Request');
+            // CHECKING EACH DEFAULT PARAMETER
+            foreach(self::$actionParams->getClassNames() as $index => $class){
+                if(in_array($class, $defaultParams)){
+                    if(strcmp($class, $defaultParams[0])==0){
+                        self::checkAndSetDefaultParameters($class, $tags, true);
+                    }else{
+                        self::checkAndSetDefaultParameters($class, $tags);
+                    }
+                }
             }
             
-            // CHECK DEFAULT ACTION HAS NO PARAMETERS INSIDE EXCEPT FOR PLUGIN PARAMETER (IF TAG ARE SETTED)
+            // REMOVE DEFAULT PARAMS IN ORDER TO CHECK REMAING PARAMETERS
+            self::$actionParams->removeParams($defaultParams);
+            
+            // CHECK DEFAULT ACTION HAS NO PARAMETERS INSIDE EXCEPT FOR DEFAULT PARAMETERS
             if($dispatch->getIsActionDefault()){
                 // CHECK IT USING NUMBER OF DEFAULT ACTION PARAMETERS
-                switch(self::$methodParams->getCount()){
-                    default:
-                        throw new Exception('Default Action can not be called, no parameters allowed except for Plugins', 666);
-                        break;
-                    case 1:
-                        if(!(($tags !== false) && (self::$methodPluginParamPos !== false))){
-                            throw new Exception('Default Action can not be called, no parameters allowed except for Plugins', 666);
-                        }
-                    case 0:
-                        break;
+                if(self::$actionParams->getCount()>0){
+                    throw new Exception('Default Action can not be called, no parameters allowed except for ' . implode(', ', $defaultParams), 666);
                 }
             }
             
-            // CHECK NECESSARY PARAMETERS NUMBER AND OPTIONAL PARAMETERS POSITION
-            // SETTING UP REAL NUMBER OF NECESSARY PARAMS
-            $necessaryParams = self::$methodParams->getCountNecessary() + ((self::$methodPluginParamPos !== false) ? (-1) : 0);
+            // CHECK FOR NECESSARY PARAMS IN VERY FIRST POSITIONS
+            if(!self::$actionParams->checkNecessaryParamsInVeryFirstPositions()){
+                throw new Exception('Action can not be called, parameters required in very first positions', 666);
+            }
+            
             // CHECK NUMBER OF NECESSARY ARGUMENTS REQUIRED
-            if($necessaryParams > count($dispatch->getQueryString())){
+            if(self::$actionParams->getCountNecessary() > (count($dispatch->getQueryString()))){
                 // LESS NECESSARY ARGUMENTS THAN FUNCTION NEEDS
                 throw new Exception('Action can not be called, parameters required', 666);
-            }else{
-                // CHECK FOR NECESSARY PARAMS IN VERY FIRST POSITIONS
-                $i = 0;
-                // SETTING UP HOW MANY POSITION CHECK FOR NECESSARY PARAMS
-                // IF PLUGIN VARIABLE IS A PARAMETER CHECK ITS POSITION
-                if((self::$methodPluginParamPos !== false) && (self::$methodPluginParamPos < $necessaryParams)){
-                    // PLUGIN VARIABLE IS IN AMONG VERY FIRST POSITIONS
-                    $necessaryParams = self::$methodParams->getCountNecessary();
-                }
-                // CHECK IF VERY FIRST PARAMETERS ARE OPTIONAL
-                while($i<$necessaryParams){
-                    if((self::$methodParams->isOptional($i)) && ($i != self::$methodPluginParamPos)){
-                        throw new Exception('Action can not be called, parameters required in very first positions', 666);
-                    }
-                    $i++;
+            }
+            
+            // ADDING DEFAULT PARAMS TO QUERY STRING
+            if(self::$defaultIndexes !== false){
+                foreach(self::$defaultIndexes as $index => $class){
+                    $dispatch->addQueryStringByPos($class, $index, self::$actionParams->getDefaultValues());
                 }
             }
         }
@@ -150,22 +167,13 @@
             );
             
             // CHECK TAGS
-            $tags = self::checkTags();
+            $tags = self::getTags();
             
-            // INITIALIZE METHOD PARAMS
-            self::$methodParams = MethodParams::build($dispatch->getSingleton(), $dispatch->getAction());
-            // RETRIEVE PLUGINS PARAMETER POSITION
-            
-            self::$methodPluginParamPos = self::$methodParams->getNameIndex(PLUGINS_CONTROLLER_PARAM_NAME);
+            // INITIALIZE ACTION PARAMS
+            self::$actionParams = ActionParams::build($dispatch->getSingleton(), $dispatch->getAction());
             
             // CHECK DISPATCH ACTION PARAMETERS POSITION AND QUANTITY
             self::checkParameters($tags);
-            
-            // GET PLUGINS
-            $activePlugins = self::getPlugins($tags);
-            
-            // SET PLUGINS
-            self::setPlugins($activePlugins);
             
             // RETRIEVE VIEW FROM CHOOSEN METHOD IN CHOOSEN CONTROLLER
             self::$view = call_user_func_array(
@@ -177,8 +185,10 @@
             
             // IF VIEW IS NOT NULL (CAN BE NULL WHEN THERE IS NO RETURN VALUE) AND IT'S A View INSTANCE
             if(!is_null(self::$view) && (self::$view instanceof View)){
-                if($activePlugins !== false){
-                    self::$view->setVariables('plugins', $activePlugins);
+                if(is_array(self::$defaultParams) && (count(self::$defaultParams)>0)){
+                    foreach(self::$defaultParams as $name => $object){
+                        self::$view->setVariables($name, $object);
+                    }
                 }
                 // SET VARIABLES controllerName AND actionName TO USE THEM INTO VIEWS
                 self::$view->setVariables('controllerName', $dispatch->getControllerName());
