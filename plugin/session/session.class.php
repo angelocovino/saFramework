@@ -179,5 +179,4 @@
 
         public function generateUniqueSessionID(){
             return (hash("sha256", uniqid(), false));
-        }
-*/
+        }*/

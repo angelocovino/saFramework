@@ -1,6 +1,7 @@
 <?php
     namespace library\kernel;
     use plugin\file\File;
+    use \Exception;
     
     class View{
         // VIEW-CONTEXT USABLE VARIABLES
@@ -48,7 +49,7 @@
             if(file_exists($this->getFilePath('body'))){
                 include($this->getFilePath('body'));
             }else{
-                // PAGE 404 OR THROW EXCEPTION??
+                throw new Exception('View not found on path ' . $this->getFilePath('body'), 666);
             }
             
             // FOOTER
