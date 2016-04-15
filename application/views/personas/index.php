@@ -24,9 +24,23 @@
 <span style="display:block; border:1px solid black;">
     <h2>persona's index</h2>
 <?php
+    var_dump2($request::getCookie('cookie'));
+    
+    /*  
+    $cookie = $plugin->get('cookie');
+    if($cookie::get('prova') === false){
+        $cookie::set('prova','valoreprova', time()+5);
+    }
+    var_dump2($cookie::get('prova'));
+    */
+    
     $form = $plugin->get('form');
     $form::open(['method' => 'post', 'url' => 'login']);
+    
+    
     $form::text('username', false, 'angelotm');
+    
+    
     $form::password('password', false, 'napoli');
     $form::submit('Login');
     $form::close();
@@ -66,12 +80,6 @@ $tbl->addCell('Sono la riga di foot', 'foot', 'data',['colspan'=>3,'align'=>'cen
     $headers = apache_request_headers();
     var_dump2($headers);
 */
-
-    $cookie = $plugin->get('cookie');
-    if($cookie::get('prova') === false){
-        $cookie::set('prova','valoreprova', time()+5);
-    }
-    var_dump2($cookie::get('prova'));
 
     //get_defined_constants();
 /*

@@ -175,7 +175,7 @@
         public function setObject($obj, $key = Session::DEFAULT_FWSESS_OBJ){
             if(is_array($obj)){
                 $obj = SessionObject::makeFromArray($obj);
-            }else if(!is_a($obj, 'SessionObject')){
+            }else if(!($obj instanceof SessionObject)){
                 return false;
             }
             $this->setSession($obj, $key);

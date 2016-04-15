@@ -48,7 +48,7 @@
         }
         public static function getCookie($name){
             Request::build();
-            Cookie::get($name);
+            return (Cookie::get($name));
         }
         /*public static function getSession($name){
             Request::build();
