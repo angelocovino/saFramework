@@ -312,12 +312,24 @@
         public function orWhere($x, $op, $y){
             if($this->whereParamsCount>0){
                 $this->whereBuild($x, $op, $y, "OR");
+            }else{
+                $this->where($x, $op, $y);
             }
             return ($this);
         }
         public function andWhere($x, $op, $y){
             if($this->whereParamsCount>0){
                 $this->whereBuild($x, $op, $y, "AND");
+            }else{
+                $this->where($x, $op, $y);
+            }
+            return ($this);
+        }
+        public function whereArray($arr, $str='AND'){
+            if(is_array($arr) && in_array($str, array('AND', 'OR'))){
+                foreach($arr as $key => $value){
+                    $this->{strtolower($str).'Where'}($key, '=', $value);
+                }
             }
             return ($this);
         }

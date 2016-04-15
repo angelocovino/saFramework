@@ -24,7 +24,7 @@
 <span style="display:block; border:1px solid black;">
     <h2>persona's index</h2>
 <?php
-    var_dump2($request::getCookie('cookie'));
+    //var_dump2($request::getCookie('cookie'), $request);
     
     /*  
     $cookie = $plugin->get('cookie');
@@ -66,9 +66,11 @@
 $attr=new AttributeTableTd(['id'=>'1','class'=>'miaclasse','style'=>'color:blue;text-align:center','align'=>'center','valign'=>'top','bgcolor'=>'#FF0000','width'=>'5px','height'=>'100%']);
 echo $attr->display();*/
 
+/*
 ///QUELLO CHE VOGLIO FARE
 $table= new Table(array('id' => 'pollo','style'=>'border:1px solid black'));
 $table->createTr()->createTd('mio cont')->buildHtmlTable();
+*/
 
 
 /*$tbl->addSezione('tfoot','mioTfoot');

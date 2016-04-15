@@ -4,11 +4,16 @@
     use plugin\session\Session;
     
     class Request{
+        // SUPPORT VARIABLES
         private static $isSet           = false;
+        // VARIABLES
         private static $requestMethod   = false;
         private static $parameters      = false;
         private static $session         = false;
         private static $cookie          = false;
+        
+        // CONSTRUCT AND DESTRUCT FUNCTIONS
+        public function __construct(){self::build();}
         
         // BUILD REQUEST FUNCTIONS
         private static function build(){
@@ -19,45 +24,32 @@
                     self::$session = $_SESSION;
                 }
                 self::$cookie = $_COOKIE;
+                self::$isSet = true;
             }
         }
-        private static function isSetted(){
-            if(self::$isSet !== false){
-                return (true);
-            }
-            return (false);
-        }
+        private static function isSetted(){return (self::$isSet !== false);}
         private static function getRequest(){
-            switch(Request::$requestMethod){
+            switch(self::$requestMethod){
                 case 'GET':
-                    if(isset($_GET['url'])){
+                    if(array_key_exists('url', $_GET)){
                         unset($_GET['url']);
                     }
-                    Request::$parameters = $_GET;
+                    self::$parameters = $_GET;
                     break;
                 case 'POST':
-                    Request::$parameters = $_POST;
+                    self::$parameters = $_POST;
                     break;
             }
         }
         
         // GET FUNCTIONS
-        public static function getMethod(){
-            Request::build();
-            return (Request::$requestMethod);
-        }
-        public static function getCookie($name){
-            Request::build();
-            return (Cookie::get($name));
-        }
-        /*public static function getSession($name){
-            Request::build();
-            Session::get($name);
-        }*/
-        public static function getInput($name){
-            Request::build();
-            if(isset(Request::$parameters[$name])){
-                return (Request::$parameters[$name]);
+        public static function getMethod(){self::build(); return (self::$requestMethod);}
+        public static function getCookie($name){self::build(); return (Cookie::get($name));}
+        //public static function getSession($name){self::build(); return (Session::get($name));}
+        public static function getParameters(){self::build(); return (self::$parameters);}
+        public static function getInput($name){self::build();
+            if(array_key_exists($name, self::$parameters)){
+                return (self::$parameters[$name]);
             }
             return (false);
         }

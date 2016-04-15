@@ -25,4 +25,12 @@
             }
             return false;
         }
+        /*
+        public function removeActions(){
+            //$this->actionName;
+            if(\runkit_function_remove('asd')){
+                echo "non chiamarmi annarella";
+            }
+        }
+        */
     }
