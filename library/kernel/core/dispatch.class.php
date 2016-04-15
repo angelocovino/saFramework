@@ -123,15 +123,15 @@
         public function getQueryStringCount(){return ($this->queryStringCount);}
         
         // OTHER PRIVATE VARIABLE FUNCTIONS
-        public function addQueryStringByPos($value, $index, $defaultValues = null){
+        public function addQueryStringByPos($value, $index, $defaultValues){
             if($this->getQueryStringCount() < $index){
-                $this->queryStringFillUsingDefaults($defaultValues, $this->getQueryStringCount(), $index);
+                $this->queryStringFillUsingDefaults($this->getQueryStringCount(), $index, $defaultValues);
             }
             array_splice($this->queryString, $index, 0, array($value));
         }
-        private function queryStringFillUsingDefaults($defaultValues, $from, $to){
+        private function queryStringFillUsingDefaults($from, $to, $defaultValues){
             for($i=$from;$i<$to;$i++){
-                if(isset($defaultValues[$i])){
+                if(array_key_exists($i, $defaultValues) && !array_key_exists($i, $this->queryString)){
                     $this->queryString[$i] = $defaultValues[$i];
                 }
             }

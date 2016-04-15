@@ -23,8 +23,8 @@ use plugin\table\TableTr;
 <span style="display:block; border:1px solid black;">
     <h2>persona's index</h2>
 <?php
-    $form = $plugins['form'];
-    $cookie = $plugins['cookie'];
+    $form = $plugin->get('form');
+    $cookie = $plugin->get('cookie');
     $form::open(['method' => 'post', 'url' => 'login']);
     $form::text('username', false, 'angelotm');
     $form::password('password', false, 'napoli');

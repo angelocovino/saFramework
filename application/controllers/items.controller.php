@@ -3,6 +3,8 @@
     use library\kernel\Controller;
     use library\kernel\View;
     use library\plugin\Plugin;
+    use library\response\Response;
+    use library\request\Request;
     use application\models\Item;
     
     class Items extends Controller{
@@ -33,8 +35,8 @@
             return ($view);
         }
         
-        function viewall($a, Plugin $visuale = null){
-            var_dump2($visuale);
+        function viewall(Request $req, $a = null, Plugin $visuale, $b = null, Response $res){
+            //$visuale->ciao();
             $view = View::build('items:viewall1.php')
                 ->setVariables('title', 'titolo')
                 ->setVariables('pippo', 'SONO ITEMS')

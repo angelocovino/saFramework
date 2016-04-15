@@ -33,7 +33,6 @@
             foreach($parameters as $index => $param) {
                 // SETTING UP PARAMETER NAME
                 $this->name[$index] = $param->getName();
-                //if($param->isOptional()){
                 if(!is_null($param->getClass())){
                     $this->classFullName[$index] = $param->getClass()->name;
                     $this->className[$index] = getClassFromNamespace($this->classFullName[$index]);
@@ -46,21 +45,14 @@
                     $this->classOccurencies[$this->className[$index]][$index] = $index;
                     $this->classNameCount[$this->className[$index]]++;
                 }
+                //if($param->isOptional()){
                 if($param->isDefaultValueAvailable()){
                     $this->countOptionalParams++;
                     $this->isOptional[$index] = true;
-                $this->defaultValue[$index] = $param->getDefaultValue();
-                    //$this->defaultValue[$index] = $param->getDefaultValue();
+                    $this->defaultValue[$index] = $param->getDefaultValue();
                 }else{
                     $this->isOptional[$index] = false;
                 }
-                
-                /*
-                try{
-                    $this->defaultValue[$index] = $param->getDefaultValue();
-                }catch(\ReflectionException $e){
-                    //var_dump2($e);
-                }*/
             }
             $this->countNecessaryParams = $this->countParams - $this->countOptionalParams;
         }
@@ -85,7 +77,7 @@
                             $this->countParams--;
                         }
                         $this->name = $this->arrayDiffKey($this->name, $this->classOccurencies[$param]);
-                        $this->isOptional = $this->arrayDiffKey($this->isOptional, $this->classOccurencies[$param]);
+                        $this->isOptional = ($this->arrayDiffKey($this->isOptional, $this->classOccurencies[$param]));
                         $this->defaultValue = $this->arrayDiffKey($this->defaultValue, $this->classOccurencies[$param]);
                         $this->classFullName = $this->arrayDiffKey($this->classFullName, $this->classOccurencies[$param]);
                         $this->className = $this->arrayDiffKey($this->className, $this->classOccurencies[$param]);
@@ -102,6 +94,25 @@
             return $a;
         }
         
+        public function checkNecessaryParamsInVeryFirstPositions(){
+            $noDefaultParams = array();
+            if($this->getCheck($this->isOptional)){
+                $noDefaultParams = array_values($this->isOptional);
+            }
+            if(count($noDefaultParams)>1){
+                $isOptionalPreviuos = array_shift($noDefaultParams);
+                foreach($noDefaultParams as $index => $isOptional){
+                    if($isOptionalPreviuos){
+                        if(!$isOptional){
+                            return (false);
+                        }
+                    }
+                    $isOptionalPreviuos = $isOptional;
+                }
+            }
+            return (true);
+        }
+        
         // GET FUNCTIONS
         public function getNameIndex($name){
             return (($this->getCheck($this->name)) ? array_search($name, $this->name) : false );
@@ -115,7 +126,9 @@
             }
             throw new Exception('Trying to get ' . $index . ' default value, it is not a value', 666);
         }
-        public function getDefaultValues(){return ($this->defaultValue);}
+        public function getDefaultValues(){
+            return ($this->getCheck($this->defaultValue) ? $this->defaultValue : array());
+        }
         public function getDefaultValue($index){
             if($this->getCheck($this->defaultValue, $index)){
                 return ($this->defaultValue[$index]);
@@ -124,6 +137,9 @@
         }
         public function getClassFullName($index){
             return (($this->getCheck($this->classFullName, $index)) ? $this->classFullName[$index] : false );
+        }
+        public function getClassNames(){
+            return ($this->getCheck($this->className) ? $this->className : array());
         }
         public function getClassName($index){
             return (($this->getCheck($this->className, $index)) ? $this->className[$index] : false );
@@ -134,6 +150,11 @@
         public function getClassNameCount($name){
             return (($this->getCheck($this->classNameCount, $name)) ? $this->classNameCount[$name] : 0 );
         }
+        /*
+        public function getClassOccurencies($name){
+            return (($this->getCheck($this->classOccurencies, $name)) ? $this->classOccurencies[$name] : false );
+        }
+        */
         public function getCount(){return ($this->countParams);}
         public function getCountNecessary(){return ($this->countNecessaryParams);}
         public function getCountOptional(){return ($this->countOptionalParams);}

@@ -2,6 +2,7 @@
     namespace application\controllers;
     use library\kernel\Controller;
     use library\kernel\View;
+    use library\plugin\Plugin;
     use application\models\Persona;
     
     class Personas extends Controller{
@@ -12,7 +13,7 @@
             $this->setTags('index', array('ANGELO','WORLD'));
         }
         
-        function index(){ //$plugins = null
+        function index(Plugin $plugin){
             /*
             $cookie = $plugins['cookie'];
             if($cookie::get('prova') === false){
