@@ -53,8 +53,12 @@
             }
             return (false);
         }
-        public static function attempt($params = false, $modelName = DBMODEL_USER){
-            $auth = new Auth($modelName);
+        public static function attempt($params = false, $modelName = DBMODEL_USER, Auth $auth = null){
+            if($auth === null){
+                $auth = new Auth($modelName);
+            }else if(!($auth instanceof Auth)){
+                throw new Exception('Wrong parameters, Auth instance required or less parameters', 666);
+            }
             if($params === false){
                 $auth->setParameters(Request::getParameters());
             }else if(is_array($params) && (count($params)>0)){
@@ -63,5 +67,19 @@
                 throw new Exception('Auth needs an Array Key/Value as Parameters, or no parameters', 666);
             }
             return ($auth->checkAuth());
+        }
+        public static function login($params = false, $modelName = DBMODEL_USER){
+            $auth = new Auth($modelName);
+            if(self::attempt($params, $modelName, $auth)){
+                $auth->doLogin();
+            }else{
+                // LOGIN FAILED, WHAT REDIRECT PAGE??
+            }
+        }
+        private function doLogin(){
+            
+        }
+        public static function logout(){
+            
         }
     }
