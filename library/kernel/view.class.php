@@ -48,7 +48,7 @@
             if(file_exists($this->getFilePath('body'))){
                 include($this->getFilePath('body'));
             }else{
-                // PAGE 404 OR THROW EXCEPTION??
+                throw Exception;
             }
             
             // FOOTER
