@@ -10,6 +10,8 @@
         // DB VARIABLES
         private $dbLink      = false;
         private $modelName   = false;
+        //CREDENTIAL VARIABLES
+        private $credentials = false;
         
         // CONSTRUCT AND DESTRUCT FUNCTIONS
         private function __construct($modelName){
@@ -49,7 +51,10 @@
                     ->whereArray($this->getParameters())
                     ->get()
                     ;
-                if(is_array($db) && (count($db)==1)){return (true);}
+                if(is_array($db) && (count($db)==1)){
+                    $this->credentials = $db;
+                    return (true);
+                }
             }
             return (false);
         }
@@ -77,9 +82,11 @@
             }
         }
         private function doLogin(){
-            
+            foreach($this->credentials[0] as $name => $value){
+                Session::set($value, $name);
+            }
         }
         public static function logout(){
-            
+            Session::destroy();
         }
     }
