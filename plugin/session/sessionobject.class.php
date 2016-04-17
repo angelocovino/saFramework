@@ -2,6 +2,9 @@
     namespace plugin\session;
     
     class SessionObject{
+                // SESSION CONSTANTS
+        const DEFAULT_FWSESS_NAME = SESSION_DEFAULT_NAME;
+        const DEFAULT_FWSESS_OBJ = SESSION_DEFAULT_NAME . '_obj';
         // SESSION OBJECT UNDEFINED CONSTANTS
         const USERID_UNDEFINED = -1;
         const SID_UNDEFINED = -1;
