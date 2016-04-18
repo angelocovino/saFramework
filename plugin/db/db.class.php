@@ -345,7 +345,7 @@
                 $stmt = $this->query("SHOW COLUMNS FROM {$table}");
                 $this->tableStructure = $stmt->fetchAll();
             }catch(PDOException $e){
-                echo "Error:  " . $e->getMessage();
+                throw $e;
             }
             return ($this);
 		}

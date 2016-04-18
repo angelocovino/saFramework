@@ -1,8 +1,9 @@
 <?php
     namespace plugin\session;
+    use plugin\session\Session;
     
     class SessionObject{
-                // SESSION CONSTANTS
+        // SESSION CONSTANTS
         const DEFAULT_FWSESS_NAME = SESSION_DEFAULT_NAME;
         const DEFAULT_FWSESS_OBJ = SESSION_DEFAULT_NAME . '_obj';
         // SESSION OBJECT UNDEFINED CONSTANTS

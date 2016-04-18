@@ -75,7 +75,7 @@
                     $this->dbConn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 					$this->dbIsConnActive = true;
                 }catch(PDOException $e){
-                    echo "Error:  " . $e->getMessage();
+                    throw $e;
                 }
 			}
 		}
@@ -133,7 +133,7 @@
             try{
                 $res = $this->dbConn->query($query, $pdoFetchType);
             }catch(PDOException $e){
-                echo "Error:  " . $e->getMessage();
+                throw $e;
             }
 			$this->disconnect();
             return ($res);
@@ -143,7 +143,7 @@
                 try{
                     $stmt = $this->dbConn->prepare($prepare);
                 }catch(PDOException $e){
-                    echo "Error:  " . $e->getMessage();
+                    throw $e;
                 }
                 return ($stmt);
             }
@@ -157,7 +157,7 @@
                         $stmt->bindParam(1, $params);
                     }
                 }catch(PDOException $e){
-                    echo "Error:  " . $e->getMessage();
+                    throw $e;
                 }
                 return ($stmt);
             }

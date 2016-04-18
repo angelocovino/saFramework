@@ -1,97 +1,84 @@
 <?php
     namespace plugin\session;
-    use plugin\session\SessionObject;
     use plugin\db\DB;
-
-     class Session{
+    
+    class Session{
         // DB VARIABLES
-        private $dbLink = false;
+        private $dbLink         = false;
         // SESSION VARIABLES
-        private $sessionID = false;
-        private static $alive=false;
+        private static $isOpen   = false;
         
-         private function __construct(){
-             
-         }
-        function __destruct(){
-            // CLOSE WRITING ON SESSION
-            session_write_close();
-        }
+        // CONSTRUCT AND DESTRUCT FUNCTIONS
+        private function __construct(){}
+        public function __destruct(){}
         
-        public static function open(){
+        // OPEN/CLOSE/DESTROY SESSION
+        public static function open($writing = true){
             if(SESSION_NEEDED){
-                $session = (new Session())->start();
-                return ($session);
+                return ((new Session())->start());
+            }
+            if($writing === false){
+                self::$close();
             }
             return (false);
         }
-        
+        public static function close(){
+            // CLOSE WRITING ON SESSION
+            session_write_close();
+        }
+        public static function destroy(){
+            session_unset();
+            session_destroy();
+        }
+
         // START SESSION
         private function start(){
             // START SESSION
-            if(!(self::$alive)){
+            if(!(self::$isOpen)){
                 session_start();
-                self::$alive=true;
-                $this->sessionID=session_id();
+                self::$isOpen=true;
                 //$this->dbLink=DB::open(session);
             }
-            return $this;
+            return ($this);
         }
-        
+
         // SESSION ID FUNCTIONS
-        public function setID($sid){
-            $this->sessionID = $sid;
-            session_id($this->sessionID);
-        }
-        public function getID($local = true){
-            return ($local?$this->sessionID:session_id());
-        }
-         
-        public function setDbLink($table){
-            $this->dbLink=$table;
-        }
-        
-        public function getDblink(){
-            return $this->dbLink;
-        }
-        
-        public function display(){
-            var_dump2($this);
-        }
-        
-        // GET/SET SESSION
-        public static function set($value, $key){
+        public function setSID($sid){session_id($sid);}
+        public function getSID(){return (session_id());}
+
+        public function setDBLink($dbLink){$this->dbLink = $dbLink;}
+        public function getDBLink(){return ($this->dbLink);}
+
+        // SESSION MANIPULATION
+        public static function set($key, $value){
+            if(func_num_args()>2){
+                $args = func_get_args();
+                $temp = &$_SESSION[$key];
+                for($i=2; $i<func_num_args(); $i++){
+                    $temp = &$temp[$args[$i]];
+                }
+                $temp = $value;
+            }else{
+                $_SESSION[$key] = $value;
+            }
+            /*
+            preg_match_all("^(.*?)\[(.*?)\]^", $key, $subArrays, PREG_PATTERN_ORDER);
+            if(is_array($subArrays) && !empty($subArrays[2])){
+                var_dump2($subArrays);
+            }
             $_SESSION[$key] = $value;
+            {'$_SESSION[' . $key . ']'} = $value;
+            */
         }
-        public function get($key){
-            return ($this->isSetted($key)?$_SESSION[$key]:false);
-        }
-         
+        public static function get($key){return (self::keyExists($key)?$_SESSION[$key]:false);}
         public static function remove($key){
-            if(self::isSetted($key)){
+            if(self::keyExists($key)){
                 unset($_SESSION[$key]);
                 return true;
             }
             return false;
-    
         }
-         
-        // CHECK FUNCTIONS
-        public static function isSetted($key){
-            return (array_key_exists($key, $_SESSION));
-        }
-        
-        public function check(){
-            return self::$alive;
-        }
-         
-         
-        // LOGIN FUNCTIONS
-        public static function close(){
-            session_unset();
-            session_destroy();
-        }
-        
+        public static function keyExists($key){return (array_key_exists($key, $_SESSION));}
     }
 
 /*
@@ -171,10 +158,7 @@
         
         
         public function compareSessions($sid1, $sid2){
-            if(strcmp($sid1, $sid2)==0){
-                return true;
-            }
-            return false;
+            return ((strcmp($sid1, $sid2)==0)?true:false);
         }
 
         public function generateUniqueSessionID(){

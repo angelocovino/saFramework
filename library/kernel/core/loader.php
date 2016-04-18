@@ -1,5 +1,6 @@
 <?php
     namespace library\kernel\core;
+    use plugin\session\Session;
     use library\kernel\core\Dispatcher;
     use library\kernel\core\Dispatch;
     
@@ -11,6 +12,8 @@
     }
 */
     
+    // SESSION OPENING
+    Session::open();
     
     // CREATE DISPATCHER
     $dispatch = Dispatch::create($url);
