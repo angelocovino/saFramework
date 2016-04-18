@@ -6,16 +6,16 @@
 	abstract class DBConnection{
         // DATABASE VARS
             // DATABASE TYPE VARS
-            protected $dbType       = false;
+            protected $dbType;
             // CREDENTIALS VARS
-            private $dbHost         = false;
-            private $dbPort         = false;
-            private $dbUser         = false;
-            private $dbPwd          = false;
-            private $dbName         = false;
+            private $dbHost = false;
+            private $dbPort = false;
+            private $dbUser = false;
+            private $dbPwd = false;
+            private $dbName = false;
             // CONNECTION VARS
-            private $dbConn         = false;
-            private $dbIsConnActive = false;
+            private $dbConn;
+            private $dbIsConnActive;
         
         /*
 		// VARIABILI STATICHE DI SUPPORTO
@@ -32,18 +32,25 @@
         */
         
 		// CONSTRUCT AND DESTRUCT FUNCTIONS
-		protected function __construct(){
+		function __construct(){
             // CREDENTIALS VARS
 			$this->dbHost = DB_HOST;
 			$this->dbPort = DB_PORT;
 			$this->dbUser = DB_USER;
 			$this->dbPwd = DB_PASSWORD;
 			$this->dbName = DB_NAME;
+
+            // CONNECTION VARS
+			$this->dbConn = false;
+			$this->dbIsConnActive = false;
 		}
-		protected function __destruct(){$this->disconnect();}
+		function __destruct(){
+            // DISCONNECTION
+			$this->disconnect();
+        }
 		
         // DATABASE CHOOSING
-        protected static function _chooseDatabase(){
+        protected static function chooseDatabase(){
             switch(DBTYPE){
                 default:
                 case 'mysql':
@@ -80,7 +87,7 @@
 		}
         
         // EXECUTE FUNCTIONS
-        protected function _executeRes($query, $params = false, $isBoolRes = true, $transaction = true, $isEmptyConnection = false){
+        protected function executeRes($query, $params = false, $isBoolRes = true, $transaction = true, $isEmptyConnection = false){
             $this->connect($isEmptyConnection);
             $res = false;
             try{
@@ -109,18 +116,18 @@
 			$this->disconnect();
             return $res;
         }
-        protected function _exec($query, $isEmptyConnection = false){
+        protected function exec($query, $isEmptyConnection = false){
             $this->connect($isEmptyConnection);
             $affectedRows = 0;
             try{
-                $affectedRows = $this->dbConn->_exec($query);
+                $affectedRows = $this->dbConn->exec($query);
             }catch(PDOException $e){
                 throw $e;
             }
 			$this->disconnect();
             return ($affectedRows);
         }
-        protected function _query($query, $pdoFetchType = PDO::FETCH_ASSOC){
+        protected function query($query, $pdoFetchType = PDO::FETCH_ASSOC){
             $this->connect();
             $res = false;
             try{
@@ -132,7 +139,7 @@
             return ($res);
         }
             // STATEMENT FUNCTIONS
-            private function prepareStmt($prepare){
+            protected function prepareStmt($prepare){
                 try{
                     $stmt = $this->dbConn->prepare($prepare);
                 }catch(PDOException $e){
@@ -140,7 +147,7 @@
                 }
                 return ($stmt);
             }
-            private function bindParams($stmt, $params){
+            protected function bindParams($stmt, $params){
                 try{
                     if(is_array($params)){
                         for($i=0;$i<count($params);$i++){

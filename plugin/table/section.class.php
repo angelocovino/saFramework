@@ -22,6 +22,18 @@ class Section extends TablePart{
         return $this->attribute;
     }
     
+    public function getTr($i=false){
+        if($i===false){
+            return ($this->tr);
+        }
+        else{
+            if(is_numeric($i)){
+                return ($this->tr[$i]);
+            }
+        }
+        return (false);
+    }
+    
     public function createTr($attr=false){
         $this->tr[]=new Tabletr($this->myTable,$attr);
         return end($this->tr);

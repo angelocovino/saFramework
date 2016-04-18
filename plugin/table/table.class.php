@@ -10,8 +10,6 @@ class Table extends Tablepart{
     private $thead=false;
     private $tbody=false;
     private $tfoot=false;
-    private $tr=array();
-    
     
     public function __construct($attr=false){
         $this->attribute=new AttributeTableTag($attr);
@@ -23,20 +21,20 @@ class Table extends Tablepart{
          switch ($sez) {
             case 'thead':
                  if($this->thead===false){
-                    $this->thead=new Section($this,$ar_attr=false);
+                    $this->thead=new Section($this,$attr);
                     $ref=$this->thead;
                  }
                 break;
             case 'tfoot':
                 if($this->tfoot===false){
-                    $this->tfoot=new Section($this,$ar_attr=false);
+                    $this->tfoot=new Section($this,$attr);
                     $ref=$this->tfoot;
                 }
                 break;
             default:
              case 'tbody':
                  if($this->tbody===false){
-                    $this->tbody=new Section($this,$ar_attr=false);
+                    $this->tbody=new Section($this,$attr);
                     $ref=$this->tbody;
                  }
                 break;
@@ -58,9 +56,9 @@ class Table extends Tablepart{
         return $this;
     }
     
-    public function createTr($attr=false){
-        $this->tr[]=new Tabletr($this,$attr);
-        return end($this->tr);
+    public function createTr($attr=false, $section ='tbody'){
+        $ref = $this->addSezione($section);
+        return ($ref->createTr($attr));
     }
     
     private function getRow($row)
@@ -86,7 +84,7 @@ class Table extends Tablepart{
             $sezione=$tbl->addSezione('thead');
             $row=$sezione->createTr();
             foreach($elemTh as $t){
-                 $row->createTh($t,'header');  
+                 $row->createTh($t);  
             }
         }
         
@@ -107,6 +105,18 @@ class Table extends Tablepart{
         }
         
         return $tbl;    
+    }
+    
+    public function addColumn($td,$name=false){
+        if(count($this->tbody->getTr())==count($td)){
+            if($this->thead!==false){
+                $myTr=$this->thead->getTr(0)->createTh($name);
+            }
+            foreach($this->tbody->getTr() as $i => $riga){
+                $riga->createTd($td[$i]);
+            }
+        }
+        return ($this);
     }
     
     protected function buildHtmlTr(){}

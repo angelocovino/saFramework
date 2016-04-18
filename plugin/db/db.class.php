@@ -21,25 +21,49 @@
             private $havingQuery = false;
             private $havingParams = array();
             private $havingParamsCount = 0;
-        
+        // LIMIT VARS
+        private $limitQuery=false;
         // WHERE VARS
         private $whereQuery = false;
         private $whereParams = array();
         private $whereParamsCount = 0;
         
 		// CONSTRUCT AND DESTRUCT FUNCTIONS
-        protected function __construct(){parent::__construct();}
-		protected function __destruct(){parent::__destruct();}
+        function __construct(){
+			parent::__construct();
+            $this->tableJoinsQuery = '';
+
+            // SELECT VARS
+            $this->selectQuery = false;
+                // ORDER BY VARS
+                $this->orderByQuery = '';
+                $this->orderByCount = 0;
+                // GROUP BY / HAVING VARS
+                $this->groupByQuery = '';
+                $this->groupByCount = 0;
+                $this->havingQuery = false;
+                $this->havingParams = array();
+                $this->havingParamsCount = 0;
+                // LIMIT VARS
+                $this->limitQuery = false;
+                // WHERE VARS
+                $this->whereQuery = false;
+                $this->whereParams = array();
+                $this->whereParamsCount = 0;
+        }
+		function __destruct(){
+            parent::__destruct();
+        }
         
         // NEW DB OPENING FUNCTION
-        public static function _open($tableName){
-            return (DBConnection::_chooseDatabase()->setTable($tableName));
+        public static function open($tableName){
+            return (DBConnection::chooseDatabase()->setTable($tableName));
         }
         
         // NOT NECESSARY FUNCTIONS
-		public function _getTableStructure($table){
+		public function getTableStructure($table){
 			$query = "SHOW COLUMNS FROM {$table}";
-            $res = $this->_executeRes($query, false, false);
+            $res = $this->executeRes($query, false, false);
 			if($res !== false){
                 /*
 				foreach($res as $res){
@@ -53,15 +77,19 @@
         
         
         // GENERAL FUNCTIONS
-        private function resetQuery($res = false){
+        private function resetQuery($res){
+            self::__construct($this->table);
+            return ($res);
+            /*
             if($res){
                 self::__construct($this->table);
             }
             return ($this);
+            */
         }
         
         // SELECT FUNCTIONS
-        public function _select(){
+        public function select(){
             $this->selectQuery = "SELECT ";
             for($i=0;$i<func_num_args();$i++){
                 if($i!=0){
@@ -90,22 +118,31 @@
             if($this->whereParamsCount>0){
                 $query .= $this->whereQuery;
             }
-            if($this->orderByCount>0){
-                $query .= $this->orderByQuery;
-            }
             if($this->groupByCount>0){
                 $query .= $this->groupByQuery;
                 if($this->havingParamsCount>0){
                     $query .= $this->havingQuery;
                 }
             }
-            $params = array_merge($this->whereParams, $this->havingParams);
-            $res = $this->_executeRes($query, $params, false);
-            if($res){
-                $this->resetQuery(true);
+            if($this->orderByCount>0){
+                $query .= $this->orderByQuery;
             }
-            //var_dump($res);
-            return ($res);
+            if($this->limitQuery!==false){
+                $query .= $this->limitQuery;
+            }
+            $params = array_merge($this->whereParams, $this->havingParams);
+            $res = $this->executeRes($query, $params, false);
+            return ($this->resetQuery($res));
+        }
+        
+        public function limit($offset,$from=false){
+            if(is_numeric($offset)){
+                $this->limitQuery= ' LIMIT ' . $offset;
+                if($from !==false && is_numeric($from)){
+                    $this->limitQuery .= ' OFFSET ' . $from;
+                }
+            }
+            return ($this);
         }
         
         /* */
@@ -230,7 +267,7 @@
                     }
                     $query .= ")";
                 }
-                $res = $this->_executeRes($query, $values);
+                $res = $this->executeRes($query, $values);
             }
             return ($this->resetQuery($res));
         }
@@ -241,13 +278,14 @@
             if($this->whereParamsCount>0){
                 $query .= $this->whereQuery;
             }
-            $res = $this->_executeRes($query, $this->whereParams);
+            $res = $this->executeRes($query, $this->whereParams);
+            return ($this->resetQuery($res));
         }
             // TRUNCATE FUNCTIONS
             public function truncate(){
                 $res = false;
                 $query = "TRUNCATE TABLE {$this->table}";
-                $affectedRows = $this->_exec($query);
+                $affectedRows = $this->exec($query);
                 if($affectedRows != 0){
                     $res = true;
                 }
@@ -273,7 +311,7 @@
                     $query .= $this->whereQuery;
                     $params = array_merge($params, $this->whereParams);
                 }
-                $res = $this->_executeRes($query, $params);
+                $res = $this->executeRes($query, $params);
             }
             return ($this->resetQuery($res));
         }
@@ -282,9 +320,9 @@
             $query = "UPDATE {$this->table} SET {$field} = {$field} + {$amount}";
             if($this->whereParamsCount>0){
                 $query .= $this->whereQuery;
-                $res = $this->_executeRes($query, $this->whereParams);
+                $res = $this->executeRes($query, $this->whereParams);
             }else{
-                $affectedRows = $this->_exec($query);
+                $affectedRows = $this->exec($query);
                 if($affectedRows != 0){
                     $res = true;
                 }
@@ -336,9 +374,9 @@
             return ($this);
         }
         /*
-        private function _getTableStructure($table){
+        private function getTableStructure($table){
             try{
-                $stmt = $this->_query("SHOW COLUMNS FROM {$table}");
+                $stmt = $this->query("SHOW COLUMNS FROM {$table}");
                 $this->tableStructure = $stmt->fetchAll();
             }catch(PDOException $e){
                 throw $e;

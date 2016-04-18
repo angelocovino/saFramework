@@ -20,6 +20,10 @@ class Tabletr extends TablePart{
         return $this->attribute;
     }
     
+    public function get(){
+        return ($this);
+    }
+    
     public function setAttribute($nameAttr,$val){
         $this->attribute->{"set".ucfirst($nameAttr)}($val);
         /*call_user_func_array(
