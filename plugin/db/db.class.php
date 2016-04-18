@@ -28,22 +28,18 @@
         private $whereParamsCount = 0;
         
 		// CONSTRUCT AND DESTRUCT FUNCTIONS
-        function __construct(){
-			parent::__construct();
-        }
-		function __destruct(){
-            parent::__destruct();
-        }
+        protected function __construct(){parent::__construct();}
+		protected function __destruct(){parent::__destruct();}
         
         // NEW DB OPENING FUNCTION
-        public static function open($tableName){
-            return (DBConnection::chooseDatabase()->setTable($tableName));
+        public static function _open($tableName){
+            return (DBConnection::_chooseDatabase()->setTable($tableName));
         }
         
         // NOT NECESSARY FUNCTIONS
-		public function getTableStructure($table){
+		public function _getTableStructure($table){
 			$query = "SHOW COLUMNS FROM {$table}";
-            $res = $this->executeRes($query, false, false);
+            $res = $this->_executeRes($query, false, false);
 			if($res !== false){
                 /*
 				foreach($res as $res){
@@ -65,7 +61,7 @@
         }
         
         // SELECT FUNCTIONS
-        public function select(){
+        public function _select(){
             $this->selectQuery = "SELECT ";
             for($i=0;$i<func_num_args();$i++){
                 if($i!=0){
@@ -104,7 +100,7 @@
                 }
             }
             $params = array_merge($this->whereParams, $this->havingParams);
-            $res = $this->executeRes($query, $params, false);
+            $res = $this->_executeRes($query, $params, false);
             if($res){
                 $this->resetQuery(true);
             }
@@ -234,7 +230,7 @@
                     }
                     $query .= ")";
                 }
-                $res = $this->executeRes($query, $values);
+                $res = $this->_executeRes($query, $values);
             }
             return ($this->resetQuery($res));
         }
@@ -245,13 +241,13 @@
             if($this->whereParamsCount>0){
                 $query .= $this->whereQuery;
             }
-            $res = $this->executeRes($query, $this->whereParams);
+            $res = $this->_executeRes($query, $this->whereParams);
         }
             // TRUNCATE FUNCTIONS
             public function truncate(){
                 $res = false;
                 $query = "TRUNCATE TABLE {$this->table}";
-                $affectedRows = $this->exec($query);
+                $affectedRows = $this->_exec($query);
                 if($affectedRows != 0){
                     $res = true;
                 }
@@ -277,7 +273,7 @@
                     $query .= $this->whereQuery;
                     $params = array_merge($params, $this->whereParams);
                 }
-                $res = $this->executeRes($query, $params);
+                $res = $this->_executeRes($query, $params);
             }
             return ($this->resetQuery($res));
         }
@@ -286,9 +282,9 @@
             $query = "UPDATE {$this->table} SET {$field} = {$field} + {$amount}";
             if($this->whereParamsCount>0){
                 $query .= $this->whereQuery;
-                $res = $this->executeRes($query, $this->whereParams);
+                $res = $this->_executeRes($query, $this->whereParams);
             }else{
-                $affectedRows = $this->exec($query);
+                $affectedRows = $this->_exec($query);
                 if($affectedRows != 0){
                     $res = true;
                 }
@@ -340,9 +336,9 @@
             return ($this);
         }
         /*
-        private function getTableStructure($table){
+        private function _getTableStructure($table){
             try{
-                $stmt = $this->query("SHOW COLUMNS FROM {$table}");
+                $stmt = $this->_query("SHOW COLUMNS FROM {$table}");
                 $this->tableStructure = $stmt->fetchAll();
             }catch(PDOException $e){
                 throw $e;

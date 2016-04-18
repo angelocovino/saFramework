@@ -22,7 +22,7 @@
         }
         
         // DATABASE CONNECTION
-        private function dbLinkOpen(){$this->dbLink = DB::open($this->modelName);}
+        private function dbLinkOpen(){$this->dbLink = DB::_open($this->modelName);}
         
         // SET FUNCTIONS
         private function setModelName($modelName){$this->modelName = $modelName;}
@@ -34,7 +34,7 @@
         private function checkAuth(){
             if($this->getParameters() !== false){
 // ##############################################################################
-                $table = $this->dbLink->getTableStructure($this->getModelName());
+                $table = $this->dbLink->_getTableStructure($this->getModelName());
                 $columns = array();
                 foreach($table as $column){
                     $columns[] = $column['Field'];
@@ -51,7 +51,7 @@
         }
         private function checkDB($arrayColumns){
             $db = $this->dbLink
-                ->select($arrayColumns)
+                ->_select($arrayColumns)
                 ->whereArray($this->getParameters())
                 ->get();
             if(is_array($db)){

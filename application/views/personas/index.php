@@ -107,5 +107,5 @@ var_dump2($tbl->build());
 //var_dump2(DDS::createTable($tbl));
 //var_dump2(DDS::dropDatabase("simonevolgare"));
 
-//$utenti=DB::open('user')->get();
+//$utenti=DB::_open('user')->get();
 //var_dump2($utenti);

@@ -11,7 +11,7 @@
             // GET THE CORRECT CLASSNAME, WITHOUT NAMESPACE
             $this->modelName = getClassFromNamespace(get_class($this)) . "s";
             // MAKE A NEW CONNECTION
-            $this->connection = DB::open($this->modelName);
+            $this->connection = DB::_open($this->modelName);
         }
         
         // TO USE DATABASE METHODS
