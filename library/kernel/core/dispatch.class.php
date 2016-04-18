@@ -27,11 +27,32 @@
         // PUBLIC CREATE/BUILD FUNCTIONS
         public static function create($url){
             $dispatch = new Dispatch();
+            
+            // CHECK FRAMEWORK INTEGRITY
             if(!class_exists($dispatch->getControllerDefault())){
-                throw new Exception('Main class not found', ERROR_FW_CONTROLLER_NOT_FOUND);
+                // CHECK IF DEFAULT CONTROLLER EXISTS
+                throw new Exception('Main controller not found', ERROR_FW_CONTROLLER_NOT_FOUND);
             }else if(!method_exists($dispatch->getControllerDefault(), strtolower(FRAMEWORK_NAME))){
-                throw new Exception('Non esiste una pagina home', 666);
+                // CHECK IF HOME ACTION EXISTS
+                throw new Exception('Main action not found', 666);
+            }else if(method_exists($dispatch->getControllerDefault(), $dispatch->getActionDefault())){
+                // CHECK IF CONTROLLER HAS INDEX ACTION
+                throw new Exception('Main controller can not have an index action', 666);
             }
+            
+            // CHECK MAIN CONTROLLER RULES
+            $mainMethods = array_diff(
+                get_class_methods($dispatch->getControllerDefault()),
+                get_class_methods('library\\kernel\\Controller'),
+                array(strtolower(FRAMEWORK_NAME))
+            );
+            // MAIN CONTROLLER CAN NOT HAVE ACTION NAMED LIKE EXISTING CONTROLLER
+            foreach($mainMethods as $mainMethod){
+                if(class_exists(NAMESPACE_CONTROLLERS . ucfirst($mainMethod))){
+                    throw new Exception('Main controller can not have an action named <b>' . $mainMethod . '</b> due to already existing controller with same name', 666);
+                }
+            }
+            
             return ($dispatch->build($url));
         }
         public function build($url){
@@ -47,7 +68,8 @@
             // CHOOSING RIGHT CONTROLLER/ACTION COMBINATION
             if($url === false){
                 // NO URL FOUND
-                $this->setController($this->controllerDefault);
+                $this->setControllerName(ucfirst(FRAMEWORK_NAME));
+                $this->setController($this->getControllerDefault());
                 $this->setAction(strtolower(FRAMEWORK_NAME));
                 return (true);
             }

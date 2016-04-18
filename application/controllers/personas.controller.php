@@ -16,7 +16,6 @@
         
         function index(Plugin $plugin, Request $request){
             $view = View::build('personas:index.php')
-                ->setVariables('title', 'titolo')
                 ->setVariables('pippo', 'SONO PERSONAS')
                 ->setVariables('pluto', 'dsa');
             return ($view);

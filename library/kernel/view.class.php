@@ -32,8 +32,22 @@
         public function setHeader($fileHeader){$this->fileHeader = File::pathParse($fileHeader);}
         public function setFooter($fileFooter){$this->fileFooter = File::pathParse($fileFooter);}
         
+        // VARIABLES FUNCTIONS
+        private function checkVariables(){
+            // CHECK NEEDED TITLE
+            $this->checkTitle();
+        }
+        private function checkTitle(){
+            if(!array_key_exists('title', $this->variables)){
+                $this->setVariables('title', $this->variables['controllerName'] . ucfirst($this->variables['actionName']));
+            }
+        }
+        
         // RENDER FUNCTIONS
         public function render(){
+            // CHECK VARIABLES
+            $this->checkVariables();
+            // EXTRACT VIEW USABLE VARIABLES
             extract($this->variables);
             
             // HEADER

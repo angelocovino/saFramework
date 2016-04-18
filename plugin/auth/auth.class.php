@@ -116,5 +116,6 @@
                 }
             }
             self::logout();
+            return (false);
         }
     }

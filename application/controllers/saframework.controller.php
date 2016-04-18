@@ -13,9 +13,6 @@
             // HERE YOU WILL INSTANTIATE YOUR MODELS LIKE:
             // $this->item = new Item();
         }
-        function index(){
-            
-        }
         function login(){
             $view = View::build('login.php')
                 ->setVariables('title', 'o mej framework into the world for PHP');

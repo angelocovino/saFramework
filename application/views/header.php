@@ -5,29 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="">
-    <style>
-        <?php
-        /*
-        body{
-            background-color:rgb(33,33,33);
-            color:white;
-        }
-        a, a:link, a:active, a:hover, a:visited{
-            color:white;
-        }
-        */
-        ?>
-    <?php
-        if(isset($styles)):
-            foreach($styles as $style):
-                include($style);
-                //echo "<link rel='stylesheet' type='text/css' href='/saFramework/application/views/items/style.css' />\n";
-                //echo "<link rel='stylesheet' type='text/css' href='{$style}' />\n";
-            endforeach;
-        endif;
-    ?>
-    </style>
+    <meta name="author" content="powcm">
     <title><?php echo $title; ?></title>
+    <?php
+        foreach(
+            array(
+            ) as $style
+        ){
+            echo "<link rel='stylesheet' type='text/css' href='\\public" . DS . 'css' . DS . $style . "' />\n";
+        }
+        
+        foreach(
+            array(
+            ) as $script
+        ){
+            echo "<script type='text/javascript' defer='defer' src='\\public" . DS . 'js' . DS . $script . "' ></script>\n";
+        }
+    ?>
 </head>
 <body>

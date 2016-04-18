@@ -15,28 +15,35 @@
         // OPEN/CLOSE/DESTROY SESSION
         public static function open($writing = true){
             if(SESSION_NEEDED){
-                return ((new Session())->start());
-            }
-            if($writing === false){
-                self::$close();
+                return ((new Session())->start($writing));
             }
             return (false);
         }
         public static function close(){
-            // CLOSE WRITING ON SESSION
-            session_write_close();
+            if(self::isOpen()){
+                // CLOSE WRITING ON SESSION
+                session_write_close();
+            }
         }
         public static function destroy(){
-            session_unset();
-            session_destroy();
+            if(self::isOpen()){
+                session_unset();
+                session_destroy();
+            }
         }
+        
+        // MANAGEMENT FUNCTIONS
+        private static function isOpen(){return (self::$isOpen);}
 
         // START SESSION
-        private function start(){
+        private function start($writing){
             // START SESSION
-            if(!(self::$isOpen)){
+            if(!self::isOpen()){
                 session_start();
                 self::$isOpen=true;
+                if($writing === false){
+                    self::$close();
+                }
                 //$this->dbLink=DB::open(session);
             }
             return ($this);
@@ -51,34 +58,30 @@
 
         // SESSION MANIPULATION
         public static function set($key, $value){
-            if(func_num_args()>2){
-                $args = func_get_args();
-                $temp = &$_SESSION[$key];
-                for($i=2; $i<func_num_args(); $i++){
-                    $temp = &$temp[$args[$i]];
+            if(self::isOpen()){
+                if(func_num_args()>2){
+                    $args = func_get_args();
+                    $temp = &$_SESSION[$key];
+                    for($i=2; $i<func_num_args(); $i++){
+                        $temp = &$temp[$args[$i]];
+                    }
+                    $temp = $value;
+                }else{
+                    $_SESSION[$key] = $value;
                 }
-                $temp = $value;
-            }else{
-                $_SESSION[$key] = $value;
+                return (true);
             }
-            /*
-            preg_match_all("^(.*?)\[(.*?)\]^", $key, $subArrays, PREG_PATTERN_ORDER);
-            if(is_array($subArrays) && !empty($subArrays[2])){
-                var_dump2($subArrays);
-            }
-            $_SESSION[$key] = $value;
-            {'$_SESSION[' . $key . ']'} = $value;
-            */
+            return (false);
         }
-        public static function get($key){return (self::keyExists($key)?$_SESSION[$key]:false);}
+        public static function get($key){return ((self::isOpen() && self::keyExists($key))?$_SESSION[$key]:false);}
         public static function remove($key){
-            if(self::keyExists($key)){
+            if(self::isOpen() && self::keyExists($key)){
                 unset($_SESSION[$key]);
-                return true;
+                return (true);
             }
-            return false;
+            return (false);
         }
-        public static function keyExists($key){return (array_key_exists($key, $_SESSION));}
+        public static function keyExists($key){return (self::isOpen()?array_key_exists($key, $_SESSION):false);}
     }
 
 /*
